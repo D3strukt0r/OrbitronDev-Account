@@ -1,0 +1,65 @@
+security:
+    # https://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
+    providers:
+        #chain_provider:
+        #    chain:
+        #        providers: [in_memory, user_db]
+        #in_memory:
+        #    memory:
+        #        users:
+        #            admin: { password: $2a$12$cyTWeE9kpq1PjqKFiWUZFuCRPwVyAZwm4XzMZ1qPUFl7/flCM3V0G, roles: [ 'ROLE_ADMIN' ] }
+        user_db:
+            entity:
+                class: App\Entity\User
+                #property: email
+                # if you're using multiple entity managers
+                # manager_name: customer
+
+    encoders:
+        #Symfony\Component\Security\Core\User\User:
+        #    algorithm: bcrypt
+        #    cost: 12
+        App\Entity\User:
+            algorithm: bcrypt
+            cost: 11
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+            anonymous: ~
+
+            pattern:    ^/
+            provider: user_db
+
+            http_basic: ~
+            # https://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
+
+            form_login:
+                login_path: login
+                check_path: login
+                default_target_path: panel
+                use_referer: true
+                csrf_token_generator: security.csrf.token_manager
+            # https://symfony.com/doc/current/cookbook/security/form_login_setup.html
+
+            logout:
+                path:   logout
+                target: index
+
+            remember_me:
+                secret:   '%kernel.secret%'
+                lifetime: 604800 # 1 week in seconds
+                path:     /
+
+    role_hierarchy:
+        ROLE_ADMIN:      [ROLE_USER]
+        ROLE_SUPERADMIN: [ROLE_ADMIN]
+
+    access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/forgot, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/p/, roles: ROLE_USER }

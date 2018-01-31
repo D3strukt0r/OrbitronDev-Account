@@ -1,0 +1,36 @@
+<h1>{{ 'panel.page.dev_list_apps.title'|trans }}</h1>
+<hr />
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ path('panel', {'page': 'developer-applications'}) }}">{{ 'panel.page.dev_list_apps.breadcrumb_link'|trans }}</a></li>
+    <li class="breadcrumb-item active">{{ 'panel.page.dev_list_apps.breadcrumb_link2'|trans }}</li>
+</ol>
+<hr />
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+            <tr>
+                <th>{{ 'panel.page.dev_list_apps.table.id'|trans }}</th>
+                <th>{{ 'panel.page.dev_list_apps.table.key'|trans }}</th>
+                <th>{{ 'panel.page.dev_list_apps.table.redirect'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if current_user_dev_apps|length > 0 %}
+                {% for app in current_user_dev_apps %}
+                    <tr>
+                        <td><a href="{{ path('panel', {'page': 'developer-show-application', 'app': app.clientIdentifier }) }}">{{ app.clientIdentifier }}</a></td>
+                        <td>{{ app.clientSecret }}</td>
+                        <td>{{ app.redirectUri }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+<p class="mt-1"><a class="btn btn-primary" href="{{ path('panel', {'page': 'developer-create-application'}) }}">{{ 'panel.page.dev_list_apps.create_app'|trans }}</a></p>
+<br />
+<p>
+    {{ 'panel.page.dev_show_app.dev_note'|trans }}
+    <a href="https://developer.orbitrondev.org/oauth/unauthorized.php">https://developer.orbitrondev.org/oauth/unauthorized.php</a>
+</p>

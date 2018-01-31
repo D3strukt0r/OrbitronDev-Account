@@ -1,0 +1,108 @@
+<h1>{{ 'panel.page.account.title'|trans }}</h1>
+<hr />
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item active">{{ 'panel.page.account.breadcrumb_link'|trans }}</li>
+</ol>
+<hr />
+<div class="row">
+    <div class="col-lg-6">
+        {{ form_start(edit_account_form, {'attr': {'class': 'card'}}) }}
+            <div class="card-header">{{ 'panel.page.account.block1.title'|trans }}</div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <label class="col-sm-4">{{ 'panel.id'|trans }}</label>
+                    <div class="col-sm-8">
+                        <p>{{ current_user.id }}</p>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    {{ form_label(edit_account_form.new_username, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+                    <div class="col-sm-8">
+                        <div class="input-group mb-2 mb-sm-0">
+                            <div class="input-group-addon"><i class="icon-prepend fa fa-user"></i></div>
+                            {{ form_widget(edit_account_form.new_username, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <small class="form-text text-danger">{{ form_errors(edit_account_form.new_username) }}</small>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    {{ form_label(edit_account_form.new_password, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+                    <div class="col-sm-8">
+                        <div class="input-group mb-2 mb-sm-0">
+                            <div class="input-group-addon"><i class="icon-prepend fa fa-lock"></i></div>
+                            {{ form_widget(edit_account_form.new_password, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <small class="form-text text-danger">{{ form_errors(edit_account_form.new_password) }}</small>
+                        <div class="input-group mb-2 mb-sm-0">
+                            <div class="input-group-addon"><i class="icon-prepend fa fa-lock"></i></div>
+                            {{ form_widget(edit_account_form.new_password_verify, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <small class="form-text text-danger">{{ form_errors(edit_account_form.new_password_verify) }}</small>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    {{ form_label(edit_account_form.new_email, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+                    <div class="col-sm-8">
+                        <div class="input-group mb-2 mb-sm-0">
+                            <div class="input-group-addon"><i class="icon-prepend fa fa-envelope"></i></div>
+                            {{ form_widget(edit_account_form.new_email, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <small class="form-text text-danger">{{ form_errors(edit_account_form.new_email) }}</small>
+                        {% if current_user.emailVerified %}
+                            <small class="form-text pull-right">
+                                <span class="text-success">{{ 'panel.verified'|trans }}</span>&nbsp;&nbsp;
+                            </small>
+                        {% else %}
+                            <small class="form-text pull-right">
+                                <span class="text-danger">{{ 'panel.not_verified'|trans }}</span>&nbsp;&nbsp;
+                                <a href="{{ path('confirm') }}" class="btn btn-warning btn-sm" role="button">{{ 'panel.activate'|trans }}</a>
+                            </small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="form-row">
+                    <div class="col">
+                        {{ form_widget(edit_account_form.password_verify, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                    {{ form_widget(edit_account_form.send, {'attr': {'class': 'btn btn-primary'}}) }}
+                    <small class="form-text text-danger">{{ form_errors(edit_account_form.password_verify) }}</small>
+                </div>
+            </div>
+        {{ form_end(edit_account_form) }}
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">{{ 'panel.page.account.block2.title'|trans }}</div>
+            <div class="card-body">
+                <div class="row">
+                    <label class="col-sm-4 col-form-label" for="payment_methods">{{ 'panel.page.account.block2.payment_method'|trans }}</label>
+                    <div class="col-sm-8">
+                        {# TODO: Add Braintree #}
+                        <input id="payment_methods" type="text" readonly class="form-control-plaintext" value="{{ 'panel.page.account.block2.soon'|trans }}" />
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col-sm-4 col-form-label" for="subscription_type">{{ 'panel.subscription.title'|trans }}</label>
+                    <div class="col-sm-8">
+                        {% if current_user.subscription.subscription.id == 1 %}
+                            {% set subscription_name = 'panel.subscription.normal'|trans %}
+                        {% elseif current_user.subscription.subscription.id == 2 %}
+                            {% set subscription_name = 'panel.subscription.premium'|trans %}
+                        {% elseif current_user.subscription.subscription.id == 3 %}
+                            {% set subscription_name = 'panel.subscription.enterprise'|trans %}
+                        {% endif %}
+                        <input id="subscription_type" type="text" readonly class="form-control-plaintext" value="{{ subscription_name }}" />
+                        <span class="pull-right"><a href="{{ path('panel', {'page': 'plans'}) }}" class="btn btn-primary btn-sm">{{ 'panel.subscription.change'|trans }}</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

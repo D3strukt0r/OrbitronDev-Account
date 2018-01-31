@@ -1,0 +1,15 @@
+<h1>{{ 'panel.page.developer_register.title'|trans }}</h1>
+<hr />
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="#">{{ 'panel.page.developer_register.breadcrumb_link'|trans }}</a></li>
+    <li class="breadcrumb-item active">{{ 'panel.page.developer_register.breadcrumb_link2'|trans }}</li>
+</ol>
+<hr />
+{% if not current_user.developerStatus == 1 %}
+    {{ form_start(developer_form) }}
+        {{ form_widget(developer_form.send, {'attr': {'class': 'btn btn-success'}}) }}
+    {{ form_end(developer_form) }}
+{% else %}
+    <div class="alert alert-danger" role="alert">{{ 'panel.page.developer_register.already_developer'|trans }}</div>
+{% endif %}

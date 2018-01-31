@@ -1,0 +1,48 @@
+<h1>{{ 'panel.page.home.title'|trans }}</h1>
+<hr />
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item active">{{ 'panel.page.home.breadcrumb_link'|trans }}</li>
+</ol>
+<hr />
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">{{ 'panel.page.home.block1.title'|trans }}</div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <td><b>{{ 'panel.id'|trans }}</b></td>
+                                <td>{{ user.id }}</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><b>{{ 'panel.username'|trans }}</b></td>
+                                <td>{{ user.username }}</td>
+                                <td><a href="{{ path('panel', {'page': 'account'}) }}" class="btn btn-primary btn-sm">{{ 'panel.edit'|trans }}</a></td>
+                            </tr>
+                            <tr>
+                                <td><b>{{ 'panel.password'|trans }}</b></td>
+                                <td>**********</td>
+                                <td><a href="{{ path('panel', {'page': 'account'}) }}" class="btn btn-primary btn-sm">{{ 'panel.edit'|trans }}</a></td>
+                            </tr>
+                            <tr>
+                                <td><b>{{ 'panel.email'|trans }}</b></td>
+                                <td>{{ user.email }}</td>
+                                <td><a href="{{ path('panel', {'page': 'account'}) }}" class="btn btn-primary btn-sm">{{ 'panel.edit'|trans }}</a></td>
+                            </tr>
+                            <tr>
+                                <td><b>{{ 'panel.page.home.block1.activated'|trans }}</b></td>
+                                <td>{% if user.emailVerified == 1 %}{{ 'panel.yes'|trans }}{% else %}{{ 'panel.no'|trans }}{% endif %}</td>
+                                <td>{% if not user.emailVerified %}<a href="{{ path('confirm') }}" class="btn btn-warning btn-sm">{{ 'panel.activate'|trans }}</a>{% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table><!-- /.table .table-hover -->
+                </div><!-- /.table-responsive -->
+            </div>
+        </div>
+    </div>
+</div><!-- /#page -->

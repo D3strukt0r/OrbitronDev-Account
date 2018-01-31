@@ -1,0 +1,331 @@
+login:
+    title: 'Login'
+    form:
+        email:
+            label: 'E-Mail:'
+            placeholder: 'johndoe@gmail.com'
+            constraints:
+                not_blank: 'Please enter your email address'
+                valid: 'Please enter a VALID email address'
+            error:
+                insert_username: 'Please enter your username'
+                user_does_not_exist: "This user doesn't exist"
+        password:
+            label: 'Password:'
+            placeholder: 'Password'
+            constraints:
+                not_blank: 'Please enter your password'
+            error:
+                insert_password: 'Please enter your password'
+                wrong_password: 'Incorrect password'
+        remember: 'Keep signed in'
+        login: 'Login'
+    message_close: 'Close'
+    unknown_error: 'Unknown error'
+    forgot: 'Forgot password?'
+    footer:
+        text: "Don't have an account?"
+        register: 'register'
+register:
+    title: 'Register'
+    form:
+        username:
+            label: 'Username'
+            placeholder: 'JohnDoe'
+            constraints:
+                not_blank: 'You have to insert an username'
+                username_short: 'Your username must be between 3 and 20 letters/numbers etc'
+                username_long: 'Your username must be between 3 and 20 letters/numbers etc'
+            error:
+                user_exists: 'This user is already in use'
+                blocked_name: 'This username has been blocked by an administrator'
+        email:
+            label: 'E-mail'
+            placeholder: 'johndoe@gmail.com'
+            constraints:
+                not_blank: 'You have to insert an email'
+                valid: 'This E-Mail is not valid. The format has to be example@example.com'
+        password:
+            label: 'Password'
+            placeholder: 'Password'
+            constraints:
+                not_blank: 'You have to insert a password'
+                password_too_short: 'Your password is too short (min. 7 characters)'
+        password_verify:
+            label: 'Repeat Password'
+            placeholder: 'Password'
+            constraints:
+                not_blank: 'You have to repeat your password'
+            error:
+                passwords_do_not_match: "Your passwords don't match"
+        terms:
+            label: 'I accept the %link%Terms and Conditions%/link%'
+            constraints:
+                not_blank: 'Please accept the terms'
+        send:
+            label: 'Register'
+    unknown_error: 'Unknown error'
+    confirmation_mail:
+        sent: 'Your confirmation email has been send! Also check your Junk-Folder!'
+        not_sent: 'Could not send confirmation email. Please send the confirmation mail for you E-Mail address again trough your account settings'
+    footer:
+        text: 'Already have an account?'
+        login: 'log in'
+forgot:
+    title: 'Forgot password'
+    title_reset: 'Reset password'
+    form:
+        email:
+            label: 'E-mail'
+            placeholder: 'johndoe@gmail.com'
+            constraints:
+                not_blank: 'Please enter your email address'
+                valid: 'Please enter a VALID email address'
+        send:
+            label: 'Send'
+    form_reset:
+        password:
+            label: 'Password'
+            placeholder: 'Password'
+            constraints:
+                not_blank: 'Please enter your password'
+        password_verify:
+            label: 'Repeat password'
+            placeholder: 'Password'
+            constraints:
+                not_blank: 'Please enter your password'
+        send:
+            label: 'Change password'
+confirm:
+    title: 'Confirm Email'
+    form:
+        send:
+            label: 'Send Email'
+oauth_authorize:
+    title: 'Authorize access'
+    text1: 'Do You Authorize <br /><b>%client_id%</b>?'
+    text2: '<b>%client_id%</b> wants access to:'
+    yes: 'Yes'
+    no: 'No'
+panel:
+    nav:
+        title: 'Account'
+        toggle: 'Toggle navigation'
+    nav_link:
+        user: 'User'
+        profile: 'User Profile'
+        settings: 'Settings'
+        logout: 'Logout'
+    message:
+        close: 'Close'
+    copyright: 'Copyright © OrbitronDev 2017'
+    edit: 'Edit'
+    yes: 'Yes'
+    no: 'No'
+    activate: 'Activate'
+    verified: 'Verified'
+    not_verified: 'Not verified'
+    id: 'User ID'
+    username: 'Username'
+    email: 'Email'
+    password: 'Password'
+    subscription:
+        title: 'Subscription'
+        normal: 'Normal'
+        premium: 'Premium'
+        enterprise: 'Enterprise'
+        change: 'Change plan'
+    form:
+        update_account:
+            new_username:
+                label: 'Username'
+                constraints:
+                    not_blank: 'You have to insert an username'
+                    username_short: 'Your username must be between 3 and 20 letters/numbers etc'
+                    username_long: 'Your username must be between 3 and 20 letters/numbers etc'
+                    username_exists: 'This username is already in use'
+                    blocked_username: 'This username has been blocked by an administrator'
+                    not_valid: 'This username is not valid.'
+            new_password:
+                label: 'Password'
+                placeholder: 'Enter your new password'
+                constraints:
+                    not_blank: 'You have to insert a password'
+                    password_too_short: 'Your password is too short (min. 7 characters)'
+            new_password_verify:
+                label: 'Repeat Password'
+                placeholder: 'Confirm new password'
+                constraints:
+                    passwords_do_not_match: "Your inserted password do not match the password verifier"
+            new_email:
+                label: 'Email'
+                constraints:
+                    not_blank: 'You have to insert an email'
+                    valid: 'Please enter a VALID email address'
+            password_verify:
+                label: 'Current Password'
+                placeholder: 'Enter your current password'
+                constraints:
+                    not_blank: 'Please enter your password'
+                    wrong_password: 'Your inserted password is not your current'
+            send:
+                label: 'Submit'
+        update_profile:
+            first_name:
+                label: 'First name'
+            last_name:
+                label: 'Last name'
+            gender:
+                label: 'Gender'
+                option:
+                    none: 'None'
+                    male: 'Male'
+                    female: 'Female'
+            birthday:
+                label: 'Birthday'
+                constraints:
+                    date_not_created: "Your birthday couldn't be saved"
+            website:
+                label: 'Website'
+            password_verify:
+                label: 'Current Password'
+                placeholder: 'Enter your current password'
+                constraints:
+                    not_blank: 'Please enter your password'
+                    wrong_password: 'Your inserted password is not your current'
+            send:
+                label: 'Submit'
+        add_address:
+            location_street:
+                label: 'Location'
+                placeholder: 'Street'
+            location_street_number:
+                label: 'Location'
+                placeholder: 'Street Number'
+            location_postal_code:
+                label: 'Location'
+                placeholder: 'Post Code'
+            location_city:
+                label: 'Location'
+                placeholder: 'City'
+            location_country:
+                label: 'Location'
+                placeholder: 'Country'
+            password_verify:
+                label: 'Current Password'
+                placeholder: 'Enter your current password'
+                constraints:
+                    not_blank: 'Please enter your password'
+                    wrong_password: 'Your inserted password is not your current'
+            send:
+                label: 'Add address'
+        delete_account:
+            send:
+                label: 'Delete account'
+        create_dev_account:
+            send:
+                label: 'Register developer account'
+        create_dev_app:
+            client_name:
+                label: 'Name'
+                constraints:
+                    not_blank: 'Please enter the Public client name'
+            redirect_uri:
+                label: 'Redirect URI'
+                constraints:
+                    not_blank: 'Please enter a redirect URI'
+            scopes:
+                label: 'Scopes'
+            send:
+                label: 'Create new Oauth2 App'
+    page:
+        not_found:
+            title: '404 Error'
+            text: 'Page not found'
+        home:
+            title: 'Main dashboard'
+            breadcrumb_link: 'Home'
+            block1:
+                title: 'User data'
+                activated: 'Email Activated'
+        account:
+            title: 'User Info'
+            breadcrumb_link: 'Account'
+            block1:
+                title: 'Account information'
+            block2:
+                title: 'Financial information'
+                payment_method: 'Payment methods'
+                soon: 'Methods (Coming Soon)'
+        profile:
+            title: 'Profile info'
+            breadcrumb_link: 'Profile'
+            block1:
+                title: 'Profile information'
+                addresses: 'Addresses'
+                add_address: 'Add address'
+            block2:
+                title: 'Profile picture'
+                upload: 'Upload file...'
+        add_address:
+            title: 'Profile info'
+            breadcrumb_link: 'Profile'
+            breadcrumb_link2: 'Add address'
+            block1:
+                title: 'Address'
+                address: 'Enter your address (Autocomplete)'
+        plans:
+            title: 'Pricing'
+            breadcrumb_link: 'Account'
+            breadcrumb_link2: 'Pricing'
+            block_info:
+                info1: 'Use account feature'
+                info2: 'Use our whole service'
+                info3: 'Create multiple services (e.g. 2 Blogs)'
+                info4: 'Technical Support'
+            your_plan: 'Your plan'
+            set_new_plan: 'Set this plan'
+            block1:
+                title: 'Basic'
+                price: 'Free / forever'
+            block2:
+                title: 'Premium'
+                price: '9.99$ / month'
+            block3:
+                title: 'Enterprise'
+                price: '29.99$ / month'
+        delete_account:
+            title: 'Delete account'
+            breadcrumb_link: 'Account'
+            breadcrumb_link2: 'Delete account'
+        developer_register:
+            title: 'Register account'
+            breadcrumb_link: 'Developer'
+            breadcrumb_link2: 'Register account'
+            already_developer: 'You are already a developer'
+        dev_list_apps:
+            title: 'List Applications'
+            breadcrumb_link: 'Developer'
+            breadcrumb_link2: 'Applications'
+            table:
+                id: 'App ID'
+                key: 'Secret Key'
+                redirect: 'Redirect URI'
+            create_app: 'Create application'
+        dev_create_app:
+            title: 'Create new applications'
+            breadcrumb_link: 'Developer'
+            breadcrumb_link2: 'Applications'
+            no_dev: 'You are not a developer'
+        dev_show_app:
+            title: 'Show Application'
+            breadcrumb_link: 'Developer'
+            breadcrumb_link2: 'Applications'
+            table:
+                id: 'App ID'
+                key: 'Secret Key'
+                redirect: 'Redirect URI'
+                permissions: 'Permissions'
+            dev_note: 'Check out this page to learn how to integrate Oauth2:'
+        dev_app_not_found:
+            title: "App doesn't exist"

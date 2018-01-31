@@ -1,0 +1,43 @@
+{% extends 'layout_clean.html.twig' %}
+
+{% block title %}{{ 'oauth_authorize.title'|trans }} | {{ parent() }}{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            background: url(/img/background.jpg) fixed 50% 50%;
+            background-size: cover;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section class="container g-py-100">
+        <div class="row justify-content-center">
+            <div class="col-sm-8 col-lg-5">
+                <div class="g-brd-around g-brd-gray-light-v4 rounded g-py-40 g-px-30 g-bg-white">
+                    <header class="text-center mb-4">
+                        <h2 class="h2 g-color-black g-font-weight-600">{{ 'oauth_authorize.text1'|trans({'%client_id%': client_info.clientIdentifier})|raw }}</h2>
+                    </header>
+
+                    <h4>{{ 'oauth_authorize.text2'|trans({'%client_id%': client_info.clientIdentifier})|raw }}</h4>
+                    <ul>
+                        {% for scope in scopes %}
+                            <li>{{ scope }}</li>
+                        {% endfor %}
+                    </ul>
+
+                    <footer class="text-center">
+                        <form method="post">
+                            <button type="submit" name="not_authorized" class="btn btn-md u-btn-red rounded">{{ 'oauth_authorize.no'|trans }}</button>
+                            <button type="submit" name="authorized" class="btn btn-md u-btn-primary rounded">{{ 'oauth_authorize.yes'|trans }}</button>
+                        </form>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

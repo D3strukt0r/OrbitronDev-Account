@@ -1,0 +1,15 @@
+<h1>{{ 'panel.page.delete_account.title'|trans }}</h1>
+<hr />
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ path('panel', {'page': 'account'}) }}">{{ 'panel.page.delete_account.breadcrumb_link'|trans }}</a></li>
+    <li class="breadcrumb-item active">{{ 'panel.page.delete_account.breadcrumb_link2'|trans }}</li>
+</ol>
+<hr />
+<div class="row">
+    <div class="col-lg-6">
+        {{ form_start(delete_account_form) }}
+            {{ form_widget(delete_account_form.send, {'attr': {'class': 'btn btn-danger'}}) }}
+        {{ form_end(delete_account_form) }}
+    </div>
+</div>

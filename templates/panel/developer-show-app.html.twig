@@ -1,0 +1,41 @@
+<h1>{{ 'panel.page.dev_show_app.title'|trans }}</h1>
+<hr />
+<!-- Breadcrumbs-->
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ path('panel', {'page': 'developer-applications'}) }}">{{ 'panel.page.dev_show_app.breadcrumb_link'|trans }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ path('panel', {'page': 'developer-applications'}) }}">{{ 'panel.page.dev_show_app.breadcrumb_link2'|trans }}</a></li>
+    <li class="breadcrumb-item active">{{ app.clientIdentifier }}</li>
+</ol>
+<hr />
+<h4>{{ app.clientIdentifier }}</h4>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover">
+        <tbody>
+            <tr>
+                <td>{{ 'panel.page.dev_show_app.table.id'|trans }}</td>
+                <td><code>{{ app.clientIdentifier }}</code></td>
+            </tr>
+            <tr>
+                <td>{{ 'panel.page.dev_show_app.table.key'|trans }}</td>
+                <td><code>{{ app.clientSecret }}</code></td>
+            </tr>
+            <tr>
+                <td>{{ 'panel.page.dev_show_app.table.redirect'|trans }}</td>
+                <td>{{ app.redirectUri }}</td>
+            </tr>
+            <tr>
+                <td>{{ 'panel.page.dev_show_app.table.permissions'|trans }}</td>
+                <td>
+                    {% for scope in app.scopes %}
+                        {{ scope }}{% if not loop.last %} |{% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<br />
+<p>
+    {{ 'panel.page.dev_show_app.dev_note'|trans }}
+    <a href="https://developer.orbitrondev.org/oauth/unauthorized.php">https://developer.orbitrondev.org/oauth/unauthorized.php</a>
+</p>
