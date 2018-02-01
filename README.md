@@ -27,7 +27,7 @@ git clone https://github.com/OrbitronDev/service-account
 Setup the project with composer
 
 ```bash
-php composer.phar update
+composer install --no-dev --optimize-autoloader
 ```
 
 Next, rename `.env.dist` to `.env` and change following parameters:
@@ -43,6 +43,7 @@ MAILER_URL=... (To send emails)
 ## Built With
 
 * [Composer](https://getcomposer.org/) - PHP Package manager
+* [Symfony](https://symfony.com/) - PHP Framework
 * [Bootstrap](https://getbootstrap.com/) - Template used in this service
 
 ## Contributing
