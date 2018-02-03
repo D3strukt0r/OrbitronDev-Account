@@ -100,11 +100,11 @@ class OAuthController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $requestOAuth = OAuthRequest::createFromGlobals();
-        $response = new Response();
+        $responseOAuth = new Response();
 
         // validate the authorize request
-        if (!$this->oauthServer->validateAuthorizeRequest($requestOAuth, $response)) {
-            $response->send();
+        if (!$this->oauthServer->validateAuthorizeRequest($requestOAuth, $responseOAuth)) {
+            $responseOAuth->send();
             exit;
         }
         // display an authorization form
@@ -113,7 +113,9 @@ class OAuthController extends Controller
         $clientInfo = $em->getRepository(OAuthClient::class)->findOneBy(['client_identifier' => $request->query->get('client_id')]);
 
         $scopes = [];
-        foreach ($clientInfo->getScopes() as $scope) {
+        $scopeList = $request->query->has('scope') ? $request->query->get('scope') : null;
+        $scopeList = explode(' ', $scopeList);
+        foreach ($scopeList as $scope) {
             /** @var \App\Entity\OAuthScope $getScope */
             $getScope = $em->getRepository(OAuthScope::class)->findOneBy(['scope' => $scope]);
             if (!is_null($getScope)) {
@@ -129,13 +131,13 @@ class OAuthController extends Controller
 
         // print the authorization code if the user has authorized your client
         $is_authorized = $request->request->has('authorized');
-        $this->oauthServer->handleAuthorizeRequest($requestOAuth, $response, $is_authorized, $user->getId());
+        $this->oauthServer->handleAuthorizeRequest($requestOAuth, $responseOAuth, $is_authorized, $user->getId());
         // if ($is_authorized) {
         //     // this is only here so that you get to see your code in the cURL request. Otherwise, we'd redirect back to the client
-        //     $code = substr($response->getHttpHeader('Location'), strpos($response->getHttpHeader('Location'), 'code=') + 5, 40);
+        //     $code = substr($responseOAuth->getHttpHeader('Location'), strpos($responseOAuth->getHttpHeader('Location'), 'code=') + 5, 40);
         //     exit("SUCCESS! Authorization Code: $code");
         // }
-        $response->send();
+        $responseOAuth->send();
         exit;
     }
 
