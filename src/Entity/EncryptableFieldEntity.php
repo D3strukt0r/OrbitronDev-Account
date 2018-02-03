@@ -25,7 +25,7 @@ class EncryptableFieldEntity
      *
      * @return bool
      */
-    protected function verifyEncryptedFieldValue($encryptedValue, $value)
+    protected function verifyEncryptedFieldValue($encryptedValue, $value): bool
     {
         return password_verify($value, $encryptedValue);
     }

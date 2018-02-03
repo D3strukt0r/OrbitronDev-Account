@@ -82,7 +82,7 @@ class UserProfiles
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -90,7 +90,7 @@ class UserProfiles
     /**
      * @return \App\Entity\User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
@@ -100,7 +100,7 @@ class UserProfiles
      *
      * @return $this
      */
-    public function setUser(User $user)
+    public function setUser(User $user): self
     {
         $this->user = $user;
 
@@ -110,7 +110,7 @@ class UserProfiles
     /**
      * @return null|string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -120,7 +120,7 @@ class UserProfiles
      *
      * @return $this
      */
-    public function setName($name)
+    public function setName(string $name = null): self
     {
         $this->name = $name;
 
@@ -130,7 +130,7 @@ class UserProfiles
     /**
      * @return null|string
      */
-    public function getSurname()
+    public function getSurname(): ?string
     {
         return $this->surname;
     }
@@ -140,7 +140,7 @@ class UserProfiles
      *
      * @return $this
      */
-    public function setSurname($surname)
+    public function setSurname(string $surname = null): self
     {
         $this->surname = $surname;
 
@@ -150,7 +150,7 @@ class UserProfiles
     /**
      * @return null|int
      */
-    public function getGender()
+    public function getGender(): ?int
     {
         return $this->gender;
     }
@@ -160,7 +160,7 @@ class UserProfiles
      *
      * @return $this
      */
-    public function setGender($gender)
+    public function setGender(int $gender = null): self
     {
         $this->gender = $gender;
 
@@ -170,7 +170,7 @@ class UserProfiles
     /**
      * @return null|\DateTime
      */
-    public function getBirthday()
+    public function getBirthday(): ?\DateTime
     {
         return $this->birthday;
     }
@@ -180,7 +180,7 @@ class UserProfiles
      *
      * @return $this
      */
-    public function setBirthday($birthday)
+    public function setBirthday(\DateTime $birthday = null): self
     {
         $this->birthday = $birthday;
 
@@ -190,7 +190,7 @@ class UserProfiles
     /**
      * @return null|string
      */
-    public function getWebsite()
+    public function getWebsite(): ?string
     {
         return $this->website;
     }
@@ -200,7 +200,7 @@ class UserProfiles
      *
      * @return $this
      */
-    public function setWebsite($website)
+    public function setWebsite(string $website = null): self
     {
         $this->website = $website;
 
@@ -210,7 +210,7 @@ class UserProfiles
     /**
      * @return null|string
      */
-    public function getPicture()
+    public function getPicture(): ?string
     {
         return $this->picture;
     }
@@ -220,7 +220,7 @@ class UserProfiles
      *
      * @return $this
      */
-    public function setPicture($picture)
+    public function setPicture(string $picture = null): self
     {
         $this->picture = $picture;
 
@@ -230,7 +230,7 @@ class UserProfiles
     /**
      * @return null|int
      */
-    public function getActiveAddress()
+    public function getActiveAddress(): ?int
     {
         return $this->active_address;
     }
@@ -240,7 +240,7 @@ class UserProfiles
      *
      * @return $this
      */
-    public function setActiveAddress($activeAddress)
+    public function setActiveAddress(int $activeAddress = null): self
     {
         $this->active_address = $activeAddress;
 
@@ -250,7 +250,7 @@ class UserProfiles
     /**
      * @return \App\Entity\UserAddress[]
      */
-    public function getAddresses()
+    public function getAddresses(): array
     {
         return $this->addresses->toArray();
     }
@@ -260,7 +260,7 @@ class UserProfiles
      *
      * @return $this
      */
-    public function addAddress(UserAddress $address)
+    public function addAddress(UserAddress $address): self
     {
         $this->addresses->add($address);
         $address->setUserProfile($this);
@@ -273,7 +273,7 @@ class UserProfiles
      *
      * @return $this
      */
-    public function removeAddress(UserAddress $address)
+    public function removeAddress(UserAddress $address): self
     {
         if ($this->addresses->contains($address)) {
             $this->addresses->removeElement($address);
@@ -285,7 +285,7 @@ class UserProfiles
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'user_id'        => $this->id,

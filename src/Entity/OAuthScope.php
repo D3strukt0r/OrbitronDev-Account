@@ -42,7 +42,7 @@ class OAuthScope
      *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -52,7 +52,7 @@ class OAuthScope
      *
      * @return string
      */
-    public function getScope()
+    public function getScope(): string
     {
         return $this->scope;
     }
@@ -64,7 +64,7 @@ class OAuthScope
      *
      * @return $this
      */
-    public function setScope($scope)
+    public function setScope(string $scope): self
     {
         $this->scope = $scope;
 
@@ -76,7 +76,7 @@ class OAuthScope
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -88,7 +88,7 @@ class OAuthScope
      *
      * @return $this
      */
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -100,7 +100,7 @@ class OAuthScope
      *
      * @return bool
      */
-    public function isDefault()
+    public function isDefault(): bool
     {
         return $this->is_default;
     }
@@ -112,14 +112,17 @@ class OAuthScope
      *
      * @return $this
      */
-    public function setDefault($is_default)
+    public function setDefault(bool $is_default): self
     {
         $this->is_default = $is_default;
 
         return $this;
     }
 
-    public function toArray()
+    /**
+     * @return array
+     */
+    public function toArray(): array
     {
         return [
             'id'         => $this->id,
@@ -129,7 +132,12 @@ class OAuthScope
         ];
     }
 
-    public static function fromArray($params)
+    /**
+     * @param $params
+     *
+     * @return self
+     */
+    public static function fromArray($params): self
     {
         $token = new self();
         foreach ($params as $property => $value) {

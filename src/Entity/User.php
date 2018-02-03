@@ -82,8 +82,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
 
     /**
      * @var \Doctrine\Common\Collections\Collection
-     * @ORM\OneToMany(targetEntity="UserPaymentMethods", mappedBy="user", cascade={"persist", "remove"},
-     *                                                   orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="UserPaymentMethods", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected $paymentMethods;
 
@@ -95,8 +94,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
 
     /**
      * @var \App\Entity\UserSubscription
-     * @ORM\OneToOne(targetEntity="UserSubscription", mappedBy="user", cascade={"persist", "remove"},
-     *                                                orphanRemoval=true)
+     * @ORM\OneToOne(targetEntity="UserSubscription", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected $subscription;
 
@@ -135,7 +133,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -143,7 +141,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     /**
      * @return string
      */
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->username;
     }
@@ -153,7 +151,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
      *
      * @return $this
      */
-    public function setUsername($username)
+    public function setUsername(string $username): self
     {
         $this->username = $username;
 
@@ -163,7 +161,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     /**
      * @return string
      */
-    public function getPassword()
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -174,7 +172,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
      * @return $this
      * @throws \Exception
      */
-    public function setPassword($password)
+    public function setPassword(string $password): self
     {
         $newPassword = $this->encryptField($password);
 
@@ -192,7 +190,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
      *
      * @return bool
      */
-    public function verifyPassword($password)
+    public function verifyPassword(string $password): bool
     {
         return $this->verifyEncryptedFieldValue($this->getPassword(), $password);
     }
@@ -200,7 +198,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     /**
      * @return string
      */
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -210,7 +208,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
      *
      * @return $this
      */
-    public function setEmail($email)
+    public function setEmail($email): self
     {
         $this->email = $email;
 
@@ -220,7 +218,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     /**
      * @return bool
      */
-    public function isEmailVerified()
+    public function isEmailVerified(): bool
     {
         return $this->email_verified;
     }
@@ -230,7 +228,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
      *
      * @return $this
      */
-    public function setEmailVerified($emailVerified)
+    public function setEmailVerified(bool $emailVerified): self
     {
         $this->email_verified = $emailVerified;
 
@@ -240,7 +238,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     /**
      * @return \DateTime
      */
-    public function getCreatedOn()
+    public function getCreatedOn(): \DateTime
     {
         return $this->created_on;
     }
@@ -250,7 +248,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
      *
      * @return $this
      */
-    public function setCreatedOn(\DateTime $createdOn)
+    public function setCreatedOn(\DateTime $createdOn): self
     {
         $this->created_on = $createdOn;
 
@@ -260,7 +258,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     /**
      * @return string
      */
-    public function getCreatedIp()
+    public function getCreatedIp(): string
     {
         return $this->created_ip;
     }
@@ -270,7 +268,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
      *
      * @return $this
      */
-    public function setCreatedIp($createdIp)
+    public function setCreatedIp($createdIp): self
     {
         $this->created_ip = $createdIp;
 
@@ -280,7 +278,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     /**
      * @return \DateTime
      */
-    public function getLastOnlineAt()
+    public function getLastOnlineAt(): \DateTime
     {
         return $this->last_online_at;
     }
@@ -290,7 +288,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
      *
      * @return $this
      */
-    public function setLastOnlineAt(\DateTime $lastOnlineAt)
+    public function setLastOnlineAt(\DateTime $lastOnlineAt): self
     {
         $this->last_online_at = $lastOnlineAt;
 
@@ -300,7 +298,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     /**
      * @return string
      */
-    public function getLastIp()
+    public function getLastIp(): string
     {
         return $this->last_ip;
     }
@@ -310,7 +308,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
      *
      * @return $this
      */
-    public function setLastIp($lastIp)
+    public function setLastIp(string $lastIp): self
     {
         $this->last_ip = $lastIp;
 
@@ -320,7 +318,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     /**
      * @return bool
      */
-    public function getDeveloperStatus()
+    public function getDeveloperStatus(): bool
     {
         return $this->developer_status;
     }
@@ -330,7 +328,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
      *
      * @return $this
      */
-    public function setDeveloperStatus($developerStatus)
+    public function setDeveloperStatus(bool $developerStatus): self
     {
         $this->developer_status = $developerStatus;
 
@@ -338,19 +336,19 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return null|int
+     * @return int|null
      */
-    public function getPreferredPaymentMethod()
+    public function getPreferredPaymentMethod(): ?int
     {
         return $this->preferred_payment_method;
     }
 
     /**
-     * @param null|int $preferredPaymentMethod
+     * @param int|null $preferredPaymentMethod
      *
      * @return $this
      */
-    public function setPreferredPaymentMethod($preferredPaymentMethod)
+    public function setPreferredPaymentMethod(int $preferredPaymentMethod = null): self
     {
         $this->preferred_payment_method = $preferredPaymentMethod;
 
@@ -360,7 +358,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     /**
      * @return \App\Entity\UserPaymentMethods[]
      */
-    public function getPaymentMethods()
+    public function getPaymentMethods(): array
     {
         return $this->paymentMethods->toArray();
     }
@@ -370,7 +368,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
      *
      * @return $this
      */
-    public function addPaymentMethod(UserPaymentMethods $paymentMethod)
+    public function addPaymentMethod(UserPaymentMethods $paymentMethod): self
     {
         $this->paymentMethods->add($paymentMethod);
         $paymentMethod->setUser($this);
@@ -383,7 +381,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
      *
      * @return $this
      */
-    public function removePaymentMethod(UserPaymentMethods $paymentMethod)
+    public function removePaymentMethod(UserPaymentMethods $paymentMethod): self
     {
         if ($this->paymentMethods->contains($paymentMethod)) {
             $this->paymentMethods->removeElement($paymentMethod);
@@ -395,7 +393,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     /**
      * @return \App\Entity\UserProfiles
      */
-    public function getProfile()
+    public function getProfile(): UserProfiles
     {
         return $this->profile;
     }
@@ -405,7 +403,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
      *
      * @return $this
      */
-    public function setProfile(UserProfiles $profile)
+    public function setProfile(UserProfiles $profile): self
     {
         $this->profile = $profile;
 
@@ -415,7 +413,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     /**
      * @return \App\Entity\UserSubscription
      */
-    public function getSubscription()
+    public function getSubscription(): UserSubscription
     {
         return $this->subscription;
     }
@@ -425,7 +423,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
      *
      * @return $this
      */
-    public function setSubscription(UserSubscription $subscription)
+    public function setSubscription(UserSubscription $subscription): self
     {
         $this->subscription = $subscription;
 
@@ -435,15 +433,17 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     /**
      * @return \App\Entity\User[]
      */
-    public function getFriends()
+    public function getFriends(): array
     {
         return $this->myFriends->toArray();
     }
 
     /**
      * @param \App\Entity\User $user
+     *
+     * @return void
      */
-    public function addFriend(User $user)
+    public function addFriend(User $user): null
     {
         if ($this->myFriends->contains($user)) {
             return;
@@ -454,8 +454,10 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
 
     /**
      * @param \App\Entity\User $user
+     *
+     * @return void
      */
-    public function removeFriend(User $user)
+    public function removeFriend(User $user): null
     {
         if (!$this->myFriends->contains($user)) {
             return;
@@ -467,7 +469,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     /**
      * @return bool
      */
-    public function isOnline()
+    public function isOnline(): bool
     {
         return $this->online;
     }
@@ -477,21 +479,27 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
      *
      * @return $this
      */
-    public function setOnline(bool $online)
+    public function setOnline(bool $online): self
     {
         $this->online = $online;
 
         return $this;
     }
 
-    public function getSalt()
+    /**
+     * @return string|null
+     */
+    public function getSalt(): ?string
     {
         // you *may* need a real salt depending on your encoder
         // see section on salt below
         return null;
     }
 
-    public function getRoles()
+    /**
+     * @return array
+     */
+    public function getRoles(): array
     {
         return ['ROLE_USER'];
     }
@@ -505,7 +513,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
      *
      * @return string
      */
-    public function serialize()
+    public function serialize(): string
     {
         return serialize([
             $this->id,
@@ -535,7 +543,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'user_id'                  => $this->id,

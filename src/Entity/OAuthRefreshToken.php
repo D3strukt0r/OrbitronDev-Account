@@ -55,7 +55,7 @@ class OAuthRefreshToken
      *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -65,7 +65,7 @@ class OAuthRefreshToken
      *
      * @return string
      */
-    public function getRefreshToken()
+    public function getRefreshToken(): string
     {
         return $this->refresh_token;
     }
@@ -77,7 +77,7 @@ class OAuthRefreshToken
      *
      * @return $this
      */
-    public function setRefreshToken($refresh_token)
+    public function setRefreshToken(string $refresh_token): self
     {
         $this->refresh_token = $refresh_token;
 
@@ -89,7 +89,7 @@ class OAuthRefreshToken
      *
      * @return string
      */
-    public function getClientId()
+    public function getClientId(): string
     {
         return $this->client->getId();
     }
@@ -99,7 +99,7 @@ class OAuthRefreshToken
      *
      * @return string
      */
-    public function getUserId()
+    public function getUserId(): string
     {
         return $this->user->getId();
     }
@@ -109,7 +109,7 @@ class OAuthRefreshToken
      *
      * @return \DateTime
      */
-    public function getExpires()
+    public function getExpires(): \DateTime
     {
         return $this->expires;
     }
@@ -121,7 +121,7 @@ class OAuthRefreshToken
      *
      * @return $this
      */
-    public function setExpires($expires)
+    public function setExpires(\DateTime $expires): self
     {
         $this->expires = $expires;
 
@@ -133,7 +133,7 @@ class OAuthRefreshToken
      *
      * @return string
      */
-    public function getScope()
+    public function getScope(): string
     {
         return $this->scope;
     }
@@ -145,7 +145,7 @@ class OAuthRefreshToken
      *
      * @return $this
      */
-    public function setScope($scope)
+    public function setScope(string $scope): self
     {
         $this->scope = $scope;
 
@@ -157,7 +157,7 @@ class OAuthRefreshToken
      *
      * @return \App\Entity\OAuthClient
      */
-    public function getClient()
+    public function getClient(): OAuthClient
     {
         return $this->client;
     }
@@ -169,7 +169,7 @@ class OAuthRefreshToken
      *
      * @return $this
      */
-    public function setClient(OAuthClient $client = null)
+    public function setClient(OAuthClient $client = null): self
     {
         $this->client = $client;
 
@@ -181,7 +181,7 @@ class OAuthRefreshToken
      *
      * @return User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
@@ -189,18 +189,21 @@ class OAuthRefreshToken
     /**
      * Set user
      *
-     * @param \App\Entity\User $user
+     * @param \App\Entity\User|null $user
      *
      * @return $this
      */
-    public function setUser(User $user = null)
+    public function setUser(User $user = null): self
     {
         $this->user = $user;
 
         return $this;
     }
 
-    public function toArray()
+    /**
+     * @return array
+     */
+    public function toArray(): array
     {
         return [
             'refresh_token' => $this->refresh_token,
@@ -211,7 +214,12 @@ class OAuthRefreshToken
         ];
     }
 
-    public static function fromArray($params)
+    /**
+     * @param $params
+     *
+     * @return self
+     */
+    public static function fromArray($params): self
     {
         $token = new self();
         foreach ($params as $property => $value) {

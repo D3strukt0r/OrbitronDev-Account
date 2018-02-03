@@ -55,7 +55,7 @@ class OAuthAccessToken
      *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -65,7 +65,7 @@ class OAuthAccessToken
      *
      * @return string
      */
-    public function getToken()
+    public function getToken(): string
     {
         return $this->token;
     }
@@ -77,7 +77,7 @@ class OAuthAccessToken
      *
      * @return $this
      */
-    public function setToken($token)
+    public function setToken(string $token): self
     {
         $this->token = $token;
 
@@ -89,7 +89,7 @@ class OAuthAccessToken
      *
      * @return string
      */
-    public function getClientId()
+    public function getClientId(): string
     {
         return $this->client->getId();
     }
@@ -99,7 +99,7 @@ class OAuthAccessToken
      *
      * @return int
      */
-    public function getUserId()
+    public function getUserId(): int
     {
         return $this->user->getId();
     }
@@ -109,7 +109,7 @@ class OAuthAccessToken
      *
      * @return \DateTime
      */
-    public function getExpires()
+    public function getExpires(): \DateTime
     {
         return $this->expires;
     }
@@ -121,7 +121,7 @@ class OAuthAccessToken
      *
      * @return $this
      */
-    public function setExpires($expires)
+    public function setExpires(\DateTime $expires): self
     {
         $this->expires = $expires;
 
@@ -133,7 +133,7 @@ class OAuthAccessToken
      *
      * @return string
      */
-    public function getScope()
+    public function getScope(): string
     {
         return $this->scope;
     }
@@ -145,7 +145,7 @@ class OAuthAccessToken
      *
      * @return $this
      */
-    public function setScope($scope)
+    public function setScope(string $scope): self
     {
         $this->scope = $scope;
 
@@ -157,7 +157,7 @@ class OAuthAccessToken
      *
      * @return \App\Entity\OAuthClient
      */
-    public function getClient()
+    public function getClient(): OAuthClient
     {
         return $this->client;
     }
@@ -169,7 +169,7 @@ class OAuthAccessToken
      *
      * @return $this
      */
-    public function setClient(OAuthClient $client = null)
+    public function setClient(OAuthClient $client = null): self
     {
         $this->client = $client;
 
@@ -181,7 +181,7 @@ class OAuthAccessToken
      *
      * @return \App\Entity\User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
@@ -193,7 +193,7 @@ class OAuthAccessToken
      *
      * @return $this
      */
-    public function setUser(User $user = null)
+    public function setUser(User $user = null): self
     {
         $this->user = $user;
 
@@ -203,7 +203,7 @@ class OAuthAccessToken
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'token'     => $this->token,
@@ -217,9 +217,9 @@ class OAuthAccessToken
     /**
      * @param $params
      *
-     * @return \App\Entity\OAuthAccessToken
+     * @return self
      */
-    public static function fromArray($params)
+    public static function fromArray($params): self
     {
         $token = new self();
         foreach ($params as $property => $value) {

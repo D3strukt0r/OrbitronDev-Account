@@ -38,9 +38,9 @@ class UserPaymentMethods
     protected $data;
 
     /**
-     * @return integer
+     * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -48,7 +48,7 @@ class UserPaymentMethods
     /**
      * @return \App\Entity\User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
@@ -58,7 +58,7 @@ class UserPaymentMethods
      *
      * @return $this
      */
-    public function setUser(User $user)
+    public function setUser(User $user): self
     {
         $this->user = $user;
 
@@ -68,7 +68,7 @@ class UserPaymentMethods
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->payment_type;
     }
@@ -78,7 +78,7 @@ class UserPaymentMethods
      *
      * @return $this
      */
-    public function setType($type)
+    public function setType(string $type): self
     {
         $this->payment_type = $type;
 
@@ -88,7 +88,7 @@ class UserPaymentMethods
     /**
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
         return $this->data;
     }
@@ -98,7 +98,7 @@ class UserPaymentMethods
      *
      * @return $this
      */
-    public function setData($data)
+    public function setData(array $data): self
     {
         $this->data = $data;
 
@@ -108,7 +108,7 @@ class UserPaymentMethods
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id'           => $this->id,

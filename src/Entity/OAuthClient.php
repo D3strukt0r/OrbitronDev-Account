@@ -46,7 +46,7 @@ class OAuthClient extends EncryptableFieldEntity
      *
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->getClientIdentifier();
     }
@@ -56,7 +56,7 @@ class OAuthClient extends EncryptableFieldEntity
      *
      * @return string
      */
-    public function getClientIdentifier()
+    public function getClientIdentifier(): string
     {
         return $this->client_identifier;
     }
@@ -68,7 +68,7 @@ class OAuthClient extends EncryptableFieldEntity
      *
      * @return $this
      */
-    public function setClientIdentifier($clientIdentifier)
+    public function setClientIdentifier(string $clientIdentifier): self
     {
         $this->client_identifier = $clientIdentifier;
 
@@ -80,7 +80,7 @@ class OAuthClient extends EncryptableFieldEntity
      *
      * @return string
      */
-    public function getClientSecret()
+    public function getClientSecret(): string
     {
         return $this->client_secret;
     }
@@ -94,7 +94,7 @@ class OAuthClient extends EncryptableFieldEntity
      * @return \App\Entity\OAuthClient
      * @throws \Exception
      */
-    public function setClientSecret($clientSecret, $encrypt = false)
+    public function setClientSecret(string $clientSecret, bool $encrypt = false): self
     {
         if ($encrypt) {
             $newSecret = $this->encryptField($clientSecret);
@@ -119,7 +119,7 @@ class OAuthClient extends EncryptableFieldEntity
      *
      * @return bool
      */
-    public function verifyClientSecret($clientSecret, $encrypt = false)
+    public function verifyClientSecret(string $clientSecret, bool $encrypt = false): bool
     {
         if ($encrypt) {
             return $this->verifyEncryptedFieldValue($this->getClientSecret(), $clientSecret);
@@ -133,7 +133,7 @@ class OAuthClient extends EncryptableFieldEntity
      *
      * @return string
      */
-    public function getRedirectUri()
+    public function getRedirectUri(): string
     {
         return $this->redirect_uri;
     }
@@ -145,7 +145,7 @@ class OAuthClient extends EncryptableFieldEntity
      *
      * @return $this
      */
-    public function setRedirectUri($redirectUri)
+    public function setRedirectUri(string $redirectUri): self
     {
         $this->redirect_uri = $redirectUri;
 
@@ -157,7 +157,7 @@ class OAuthClient extends EncryptableFieldEntity
      *
      * @return array
      */
-    public function getScopes()
+    public function getScopes(): array
     {
         $scopes = explode(' ', $this->scope);
 
@@ -171,7 +171,7 @@ class OAuthClient extends EncryptableFieldEntity
      *
      * @return $this
      */
-    public function setScopes($scopes)
+    public function setScopes(array $scopes): self
     {
         $this->scope = implode(' ', $scopes);
 
@@ -183,7 +183,7 @@ class OAuthClient extends EncryptableFieldEntity
      *
      * @return $this
      */
-    public function addScope($scope)
+    public function addScope(string $scope): self
     {
         $scopes = $this->getScopes();
         $scopes[] = $scope;
@@ -197,7 +197,7 @@ class OAuthClient extends EncryptableFieldEntity
      *
      * @return $this
      */
-    public function removeScope($scope)
+    public function removeScope(string $scope): self
     {
         $scopes = $this->getScopes();
         if (in_array($scope, $scopes)) {
@@ -213,7 +213,7 @@ class OAuthClient extends EncryptableFieldEntity
      *
      * @return int
      */
-    public function getUsers()
+    public function getUsers(): int
     {
         return $this->user_id;
     }
@@ -225,14 +225,17 @@ class OAuthClient extends EncryptableFieldEntity
      *
      * @return $this
      */
-    public function setUsers($users)
+    public function setUsers(int $users): self
     {
         $this->user_id = $users;
 
         return $this;
     }
 
-    public function toArray()
+    /**
+     * @return array
+     */
+    public function toArray(): array
     {
         return [
             'client_id'     => $this->client_identifier,

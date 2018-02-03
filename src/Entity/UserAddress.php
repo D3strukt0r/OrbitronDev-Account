@@ -58,7 +58,7 @@ class UserAddress
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -66,7 +66,7 @@ class UserAddress
     /**
      * @return \App\Entity\UserProfiles
      */
-    public function getUserProfile()
+    public function getUserProfile(): UserProfiles
     {
         return $this->userProfile;
     }
@@ -76,7 +76,7 @@ class UserAddress
      *
      * @return $this
      */
-    public function setUserProfile(UserProfiles $userProfile)
+    public function setUserProfile(UserProfiles $userProfile): self
     {
         $this->userProfile = $userProfile;
 
@@ -86,7 +86,7 @@ class UserAddress
     /**
      * @return null|string
      */
-    public function getStreet()
+    public function getStreet(): ?string
     {
         return $this->street;
     }
@@ -96,7 +96,7 @@ class UserAddress
      *
      * @return $this
      */
-    public function setStreet($street)
+    public function setStreet(string $street = null): self
     {
         $this->street = $street;
 
@@ -106,7 +106,7 @@ class UserAddress
     /**
      * @return null|string
      */
-    public function getHouseNumber()
+    public function getHouseNumber(): ?string
     {
         return $this->house_number;
     }
@@ -116,7 +116,7 @@ class UserAddress
      *
      * @return $this
      */
-    public function setHouseNumber($houseNumber)
+    public function setHouseNumber(string $houseNumber = null): self
     {
         $this->house_number = $houseNumber;
 
@@ -126,7 +126,7 @@ class UserAddress
     /**
      * @return null|string
      */
-    public function getZipCode()
+    public function getZipCode(): ?string
     {
         return $this->zip_code;
     }
@@ -136,7 +136,7 @@ class UserAddress
      *
      * @return $this
      */
-    public function setZipCode($zipCode)
+    public function setZipCode(string $zipCode = null): self
     {
         $this->zip_code = $zipCode;
 
@@ -146,7 +146,7 @@ class UserAddress
     /**
      * @return null|string
      */
-    public function getCity()
+    public function getCity(): ?string
     {
         return $this->city;
     }
@@ -156,7 +156,7 @@ class UserAddress
      *
      * @return $this
      */
-    public function setCity($city)
+    public function setCity(string $city = null): self
     {
         $this->city = $city;
 
@@ -166,7 +166,7 @@ class UserAddress
     /**
      * @return null|string
      */
-    public function getCountry()
+    public function getCountry(): ?string
     {
         return $this->country;
     }
@@ -176,7 +176,7 @@ class UserAddress
      *
      * @return $this
      */
-    public function setCountry($country)
+    public function setCountry(string $country = null): self
     {
         $this->country = $country;
 
@@ -186,7 +186,7 @@ class UserAddress
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id'           => $this->id,

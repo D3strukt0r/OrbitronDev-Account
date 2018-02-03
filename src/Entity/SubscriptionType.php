@@ -39,7 +39,7 @@ class SubscriptionType
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -47,7 +47,7 @@ class SubscriptionType
     /**
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -57,7 +57,7 @@ class SubscriptionType
      *
      * @return $this
      */
-    public function setTitle($title)
+    public function setTitle(string $title): self
     {
         $this->title = $title;
 
@@ -67,7 +67,7 @@ class SubscriptionType
     /**
      * @return int
      */
-    public function getPrice()
+    public function getPrice(): int
     {
         return $this->price;
     }
@@ -77,7 +77,7 @@ class SubscriptionType
      *
      * @return $this
      */
-    public function setPrice($price)
+    public function setPrice(int $price): self
     {
         $this->price = $price;
 
@@ -87,7 +87,7 @@ class SubscriptionType
     /**
      * @return array
      */
-    public function getPermissions()
+    public function getPermissions(): array
     {
         return $this->permissions;
     }
@@ -97,7 +97,7 @@ class SubscriptionType
      *
      * @return $this
      */
-    public function setPermissions($permissions)
+    public function setPermissions(array $permissions): self
     {
         $this->permissions = $permissions;
 
@@ -107,7 +107,7 @@ class SubscriptionType
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'id'          => $this->id,

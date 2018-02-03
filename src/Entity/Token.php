@@ -45,7 +45,7 @@ class Token
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -53,7 +53,7 @@ class Token
     /**
      * @return string
      */
-    public function getToken()
+    public function getToken(): string
     {
         return $this->token;
     }
@@ -63,7 +63,7 @@ class Token
      *
      * @return $this
      */
-    public function setToken(string $token)
+    public function setToken(string $token): self
     {
         $this->token = $token;
 
@@ -73,7 +73,7 @@ class Token
     /**
      * @return string
      */
-    public function getJob()
+    public function getJob(): string
     {
         return $this->job;
     }
@@ -83,7 +83,7 @@ class Token
      *
      * @return $this
      */
-    public function setJob(string $job)
+    public function setJob(string $job): self
     {
         $this->job = $job;
 
@@ -93,7 +93,7 @@ class Token
     /**
      * @return \DateTime|null
      */
-    public function getExpires()
+    public function getExpires(): ?\DateTime
     {
         return $this->expires;
     }
@@ -103,7 +103,7 @@ class Token
      *
      * @return $this
      */
-    public function setExpires($expires)
+    public function setExpires(\DateTime $expires = null): self
     {
         $this->expires = $expires;
 
@@ -113,7 +113,7 @@ class Token
     /**
      * @return array|null
      */
-    public function getOptionalInfo()
+    public function getOptionalInfo(): ?array
     {
         return $this->optional_info;
     }
@@ -123,7 +123,7 @@ class Token
      *
      * @return $this
      */
-    public function setOptionalInfo($optional_info)
+    public function setOptionalInfo(array $optional_info = null): self
     {
         $this->optional_info = $optional_info;
 

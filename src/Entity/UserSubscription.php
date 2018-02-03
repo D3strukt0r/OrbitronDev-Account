@@ -45,9 +45,9 @@ class UserSubscription
     protected $expires_at;
 
     /**
-     * @return integer
+     * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -55,7 +55,7 @@ class UserSubscription
     /**
      * @return \App\Entity\User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
@@ -65,7 +65,7 @@ class UserSubscription
      *
      * @return $this
      */
-    public function setUser(User $user)
+    public function setUser(User $user): self
     {
         $this->user = $user;
 
@@ -75,7 +75,7 @@ class UserSubscription
     /**
      * @return \App\Entity\SubscriptionType
      */
-    public function getSubscription()
+    public function getSubscription(): SubscriptionType
     {
         return $this->subscription;
     }
@@ -85,7 +85,7 @@ class UserSubscription
      *
      * @return $this
      */
-    public function setSubscription(SubscriptionType $subscription)
+    public function setSubscription(SubscriptionType $subscription): self
     {
         $this->subscription = $subscription;
 
@@ -95,7 +95,7 @@ class UserSubscription
     /**
      * @return \DateTime
      */
-    public function getActivatedAt()
+    public function getActivatedAt(): \DateTime
     {
         return $this->activated_at;
     }
@@ -105,7 +105,7 @@ class UserSubscription
      *
      * @return $this
      */
-    public function setActivatedAt(\DateTime $activatedAt)
+    public function setActivatedAt(\DateTime $activatedAt): self
     {
         $this->activated_at = $activatedAt;
 
@@ -115,7 +115,7 @@ class UserSubscription
     /**
      * @return null|\DateTime
      */
-    public function getExpiresAt()
+    public function getExpiresAt(): ?\DateTime
     {
         return $this->expires_at;
     }
@@ -125,7 +125,7 @@ class UserSubscription
      *
      * @return $this
      */
-    public function setExpiresAt(\DateTime $expiresAt)
+    public function setExpiresAt(\DateTime $expiresAt = null): self
     {
         $this->expires_at = $expiresAt;
 
@@ -133,9 +133,9 @@ class UserSubscription
     }
 
     /**
-     * @return float|int|null
+     * @return int|null
      */
-    public function getRemainingDays()
+    public function getRemainingDays(): ?int
     {
         if (is_null($this->getExpiresAt())) {
             return null;
@@ -146,13 +146,13 @@ class UserSubscription
             return 0;
         }
 
-        return ceil($difference / 86400);
+        return (int)ceil($difference / 86400);
     }
 
     /**
      * @return bool
      */
-    public function hasSubscription()
+    public function hasSubscription(): bool
     {
         if (is_null($days = $this->getRemainingDays()) || $days > 0) {
             return true;
@@ -164,7 +164,7 @@ class UserSubscription
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'user_id'      => $this->id,

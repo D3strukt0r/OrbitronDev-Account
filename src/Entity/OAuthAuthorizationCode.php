@@ -61,7 +61,7 @@ class OAuthAuthorizationCode
      *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -71,7 +71,7 @@ class OAuthAuthorizationCode
      *
      * @return string
      */
-    public function getCode()
+    public function getCode(): string
     {
         return $this->code;
     }
@@ -83,7 +83,7 @@ class OAuthAuthorizationCode
      *
      * @return $this
      */
-    public function setCode($code)
+    public function setCode(string $code): self
     {
         $this->code = $code;
 
@@ -95,7 +95,7 @@ class OAuthAuthorizationCode
      *
      * @return string
      */
-    public function getClientId()
+    public function getClientId(): string
     {
         return $this->client->getId();
     }
@@ -105,7 +105,7 @@ class OAuthAuthorizationCode
      *
      * @return int
      */
-    public function getUserId()
+    public function getUserId(): int
     {
         return $this->user->getId();
     }
@@ -115,7 +115,7 @@ class OAuthAuthorizationCode
      *
      * @return \DateTime
      */
-    public function getExpires()
+    public function getExpires(): \DateTime
     {
         return $this->expires;
     }
@@ -127,7 +127,7 @@ class OAuthAuthorizationCode
      *
      * @return $this
      */
-    public function setExpires($expires)
+    public function setExpires(\DateTime $expires): self
     {
         $this->expires = $expires;
 
@@ -139,7 +139,7 @@ class OAuthAuthorizationCode
      *
      * @return string
      */
-    public function getRedirectUri()
+    public function getRedirectUri(): string
     {
         return $this->redirect_uri;
     }
@@ -151,7 +151,7 @@ class OAuthAuthorizationCode
      *
      * @return $this
      */
-    public function setRedirectUri($redirectUri)
+    public function setRedirectUri(string $redirectUri): self
     {
         $this->redirect_uri = $redirectUri;
 
@@ -163,7 +163,7 @@ class OAuthAuthorizationCode
      *
      * @return string
      */
-    public function getScope()
+    public function getScope(): string
     {
         return $this->scope;
     }
@@ -175,7 +175,7 @@ class OAuthAuthorizationCode
      *
      * @return $this
      */
-    public function setScope($scope)
+    public function setScope(string $scope): self
     {
         $this->scope = $scope;
 
@@ -187,7 +187,7 @@ class OAuthAuthorizationCode
      *
      * @return \App\Entity\OAuthClient
      */
-    public function getClient()
+    public function getClient(): OAuthClient
     {
         return $this->client;
     }
@@ -195,11 +195,11 @@ class OAuthAuthorizationCode
     /**
      * Set client
      *
-     * @param \App\Entity\OAuthClient $client
+     * @param \App\Entity\OAuthClient|null $client
      *
      * @return $this
      */
-    public function setClient(OAuthClient $client = null)
+    public function setClient(OAuthClient $client = null): self
     {
         $this->client = $client;
 
@@ -211,7 +211,7 @@ class OAuthAuthorizationCode
      *
      * @return \App\Entity\User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
@@ -219,11 +219,11 @@ class OAuthAuthorizationCode
     /**
      * Set user
      *
-     * @param \App\Entity\User $user
+     * @param \App\Entity\User|null $user
      *
      * @return $this
      */
-    public function setUser(User $user = null)
+    public function setUser(User $user = null): self
     {
         $this->user = $user;
 
@@ -233,7 +233,7 @@ class OAuthAuthorizationCode
     /**
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         return [
             'code'      => $this->code,
@@ -245,11 +245,11 @@ class OAuthAuthorizationCode
     }
 
     /**
-     * @param array $params
+     * @param $params
      *
      * @return self
      */
-    public static function fromArray($params)
+    public static function fromArray($params): self
     {
         $code = new self();
         foreach ($params as $property => $value) {
