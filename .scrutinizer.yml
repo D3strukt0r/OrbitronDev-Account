@@ -1,0 +1,9 @@
+filter:
+    excluded_paths:
+        - 'bin/*'
+        - 'public/vendor/*'
+        - '*.min.js'
+checks:
+    php: true
+    javascript: true
+build: true
