@@ -114,7 +114,11 @@ class OAuthController extends Controller
 
         $scopes = [];
         $scopeList = $request->query->has('scope') ? $request->query->get('scope') : null;
-        $scopeList = explode(' ', $scopeList);
+        if (is_null($scopeList)) {
+            $scopeList = $clientInfo->getScopes();
+        } else {
+            $scopeList = explode(' ', $scopeList);
+        }
         foreach ($scopeList as $scope) {
             /** @var \App\Entity\OAuthScope $getScope */
             $getScope = $em->getRepository(OAuthScope::class)->findOneBy(['scope' => $scope]);
@@ -198,6 +202,16 @@ class OAuthController extends Controller
             }
         }
         return new JsonResponse($responseData);
+    }
+
+    /**
+     * @param \App\Entity\User $user
+     *
+     * @return array
+     */
+    private function scopeUserId($user)
+    {
+        return ['id' => $user->getId()];
     }
 
     /**
