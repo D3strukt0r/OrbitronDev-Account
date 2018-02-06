@@ -140,10 +140,10 @@ class AccountHelper
     public static function userExists(ObjectManager $em, $usernameOrEmail)
     {
         /** @var User $user */
-        $user = $em->getRepository(User::class)->findOneBy(array('username' => $usernameOrEmail));
+        $user = $em->getRepository(User::class)->findOneBy(['username' => $usernameOrEmail]);
         if (is_null($user)) {
             /** @var User $user */
-            $user = $em->getRepository(User::class)->findOneBy(array('email' => $usernameOrEmail));
+            $user = $em->getRepository(User::class)->findOneBy(['email' => $usernameOrEmail]);
             if (is_null($user)) {
                 return false;
             }
@@ -162,7 +162,7 @@ class AccountHelper
      */
     public static function usernameExists(ObjectManager $em, $username)
     {
-        $user = $em->getRepository(User::class)->findOneBy(array('username' => $username));
+        $user = $em->getRepository(User::class)->findOneBy(['username' => $username]);
 
         if (is_null($user)) {
             return false;
@@ -221,7 +221,7 @@ class AccountHelper
      */
     public static function emailExists(ObjectManager $em, $email)
     {
-        $user = $em->getRepository(User::class)->findOneBy(array('email' => $email));
+        $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
 
         if (is_null($user)) {
             return false;
@@ -273,39 +273,61 @@ class AccountHelper
 
     public static function addDefaultSubscriptionTypes(ObjectManager $em)
     {
-        $basicSubscription = new SubscriptionType();
-        $basicSubscription
+        $subscriptions = [];
+        $subscriptions[] = (new SubscriptionType())
             ->setTitle('Basic')
             ->setPrice('0')
-            ->setPermissions(array());
-
-        $premiumSubscription = new SubscriptionType();
-        $premiumSubscription
+            ->setPermissions([]);
+        $subscriptions[] = (new SubscriptionType())
             ->setTitle('Premium')
             ->setPrice('10')
-            ->setPermissions(array('web_service', 'support'));
-
-        $enterpriseSubscription = new SubscriptionType();
-        $enterpriseSubscription
+            ->setPermissions(['web_service', 'support']);
+        $subscriptions[] = (new SubscriptionType())
             ->setTitle('Enterprise')
             ->setPrice('30')
-            ->setPermissions(array('web_service', 'web_service_multiple', 'support'));
+            ->setPermissions(['web_service', 'web_service_multiple', 'support']);
 
-        $em->persist($basicSubscription);
-        $em->persist($premiumSubscription);
-        $em->persist($enterpriseSubscription);
+        foreach ($subscriptions as $item) {
+            $em->persist($item);
+        }
         $em->flush();
     }
 
     public static function addDefaultScopes(ObjectManager $em)
     {
-        $scope1 = new OAuthScope();
-        $scope1
-            ->setScope('user_info')
-            ->setName('User info\'s')
+        $scope = [];
+        $scope[] = (new OAuthScope())
+            ->setScope('user:id')
+            ->setName('User ID')
+            ->setDefault(false);
+        $scope[] = (new OAuthScope())
+            ->setScope('user:username')
+            ->setName('Username')
+            ->setDefault(false);
+        $scope[] = (new OAuthScope())
+            ->setScope('user:email')
+            ->setName('Email address')
             ->setDefault(true);
+        $scope[] = (new OAuthScope())
+            ->setScope('user:name')
+            ->setName('First name')
+            ->setDefault(false);
+        $scope[] = (new OAuthScope())
+            ->setScope('user:surname')
+            ->setName('Surname')
+            ->setDefault(false);
+        $scope[] = (new OAuthScope())
+            ->setScope('user:birthday')
+            ->setName('Birthday')
+            ->setDefault(false);
+        $scope[] = (new OAuthScope())
+            ->setScope('user:subscription')
+            ->setName('Subscription')
+            ->setDefault(false);
 
-        $em->persist($scope1);
+        foreach ($scope as $item) {
+            $em->persist($item);
+        }
         $em->flush();
     }
 }
