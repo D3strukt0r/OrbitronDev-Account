@@ -443,7 +443,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
      *
      * @return void
      */
-    public function addFriend(User $user)
+    public function addFriend(User $user): void
     {
         if ($this->myFriends->contains($user)) {
             return;
@@ -457,7 +457,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
      *
      * @return void
      */
-    public function removeFriend(User $user)
+    public function removeFriend(User $user): void
     {
         if (!$this->myFriends->contains($user)) {
             return;
