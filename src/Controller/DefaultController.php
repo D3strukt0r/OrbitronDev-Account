@@ -13,14 +13,9 @@ use App\Helper\AccountHelper;
 use App\Helper\TokenGenerator;
 use Swift_Mailer;
 use Swift_Message;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -100,8 +95,7 @@ class DefaultController extends Controller
                     ->setSubject('[Account] Email activation')
                     ->setFrom(['no-reply-account@orbitrondev.org' => 'OrbitronDev'])
                     ->setTo([$registerData['email']])
-                    ->setBody($this->renderView('mail/register.html.twig', [
-                        'username' => $registerData['username'],
+                    ->setBody($this->renderView('mail/confirm-email.html.twig', [
                         'email'    => $registerData['email'],
                         'token'    => $token,
                     ]), 'text/html');
@@ -357,7 +351,6 @@ class DefaultController extends Controller
                     ->setFrom(['no-reply-account@orbitrondev.org' => 'OrbitronDev'])
                     ->setTo([$user->getEmail()])
                     ->setBody($this->renderView('mail/confirm-email.html.twig', [
-                        'username' => $user->getUsername(),
                         'email'    => $user->getEmail(),
                         'token'    => $token,
                     ]), 'text/html');
@@ -370,62 +363,5 @@ class DefaultController extends Controller
                 'send_email_form' => $sendEmailForm->createView(),
             ]);
         }
-    }
-
-    public function oneTimeSetup(Request $request, KernelInterface $kernel)
-    {
-        if ($request->query->get('key') == $this->getParameter('setup_key')) {
-
-            // Create database entities
-            $application = new Application($kernel);
-            $application->setAutoExit(false);
-
-            if ($request->query->get('action') == 'drop-schema') {
-                $input = new ArrayInput([
-                    'command' => 'doctrine:schema:drop',
-                ]);
-                try {
-                    $application->run($input, new NullOutput());
-                } catch (\Exception $exception) {
-                    return new Response('Database schema NOT dropped. <br/>'.$exception->getMessage());
-                }
-                return new Response('Database schema dropped');
-            }
-            if ($request->query->get('action') == 'create-schema') {
-                $input = new ArrayInput([
-                    'command' => 'doctrine:schema:create',
-                ]);
-                try {
-                    $application->run($input, new NullOutput());
-                } catch (\Exception $exception) {
-                    return new Response('Database schema NOT created. <br/>'.$exception->getMessage());
-                }
-                return new Response('Database schema created');
-            }
-            if ($request->query->get('action') == 'update-schema') {
-                $input = new ArrayInput([
-                    'command' => 'doctrine:schema:update',
-                ]);
-                try {
-                    $application->run($input, new NullOutput());
-                } catch (\Exception $exception) {
-                    return new Response('Database schema NOT updated. <br/>'.$exception->getMessage());
-                }
-                return new Response('Database schema updated');
-            }
-            if ($request->query->get('action') == 'add-default-entries') {
-                // Add default values
-                $em = $this->getDoctrine()->getManager();
-                $text = '';
-                AccountHelper::addDefaultSubscriptionTypes($em);
-                $text .= 'Subscription types added<br />';
-                AccountHelper::addDefaultScopes($em);
-                $text .= 'Scopes added<br />';
-
-                return new Response($text);
-            }
-        }
-
-        return null;
     }
 }
