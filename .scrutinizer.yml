@@ -6,4 +6,10 @@ filter:
 checks:
     php: true
     javascript: true
-build: true
+build:
+    nodes:
+        analysis:
+            project_setup:
+                override: true
+            tests:
+                override: [php-scrutinizer-run]
