@@ -2,9 +2,9 @@
 
 namespace App\AdminAddons;
 
-use Psr\Container\ContainerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class AdminDefault
+class AdminDefault extends Controller
 {
     public static function __setupNavigation()
     {
@@ -22,11 +22,11 @@ class AdminDefault
         return 0;
     }
 
-    public static function notFound(ContainerInterface $container)
+    public function notFound($navigation)
     {
-        $twig = $container->get('twig');
-
-        return $twig->render('panel/not-found.html.twig');
+        return $this->render('panel/not-found.html.twig', [
+            'navigation_links' => $navigation,
+        ]);
     }
 
 }

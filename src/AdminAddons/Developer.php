@@ -8,8 +8,10 @@ use App\Form\CreateDevAccount;
 use App\Form\CreateDevApp;
 use App\Helper\TokenGenerator;
 use Psr\Container\ContainerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
-class Developer
+class Developer extends Controller
 {
     public static function __setupNavigation(ContainerInterface $container)
     {
@@ -18,11 +20,11 @@ class Developer
 
         return [
             [
-                'type'   => 'group',
-                'parent' => 'root',
-                'id'     => 'developer',
-                'title'  => 'Developer',
-                'icon'   => 'fa fa-fw fa-code',
+                'type'    => 'group',
+                'parent'  => 'root',
+                'id'      => 'developer',
+                'title'   => 'Developer',
+                'icon'    => 'fa fa-fw fa-code',
                 'display' => $currentUser->getDeveloperStatus() ? true : false,
             ],
             [
@@ -66,22 +68,18 @@ class Developer
         return 40;
     }
 
-    public static function createApplication(ContainerInterface $container)
+    public function createApplication(Request $request, $navigation)
     {
-        $em = $container->get('doctrine')->getManager();
-        $router = $container->get('router');
-        $form = $container->get('form.factory');
-        $request = $container->get('request_stack')->getCurrentRequest();
-        $twig = $container->get('twig');
+        $em = $this->getDoctrine()->getManager();
         /** @var \App\Entity\User $user */
-        $user = $container->get('security.token_storage')->getToken()->getUser();
+        $user = $this->getUser();
 
         if ((int)$user->getDeveloperStatus() != 1) {
-            header('Location: '.$router->generate('panel', ['p' => 'developer-register']));
+            header('Location: '.$this->generateUrl('panel', ['p' => 'developer-register']));
             exit;
         }
 
-        $createAppForm = $form->create(CreateDevApp::class, null, ['entity_manager' => $em]);
+        $createAppForm = $this->createForm(CreateDevApp::class, null, ['entity_manager' => $em]);
 
         $createAppForm->handleRequest($request);
         if ($createAppForm->isSubmitted() && $createAppForm->isValid()) {
@@ -95,96 +93,93 @@ class Developer
                 $user->getId()
             );
 
-            header('Location: '.$router->generate('panel', ['page' => 'developer-applications']));
+            header('Location: '.$this->generateUrl('panel', ['page' => 'developer-applications']));
             exit;
         }
 
-        return $twig->render('panel/developer-create-applications.html.twig', array(
-            'create_app_form' => $createAppForm->createView(),
-            'current_user'    => $user,
-        ));
+        return $this->render('panel/developer-create-applications.html.twig', [
+            'navigation_links' => $navigation,
+            'create_app_form'  => $createAppForm->createView(),
+            'current_user'     => $user,
+        ]);
     }
 
-    public static function applicationList(ContainerInterface $container)
+    public function applicationList($navigation)
     {
-        $em = $container->get('doctrine')->getManager();
-        $router = $container->get('router');
-        $twig = $container->get('twig');
+        $em = $this->getDoctrine()->getManager();
         /** @var \App\Entity\User $user */
-        $user = $container->get('security.token_storage')->getToken()->getUser();
+        $user = $this->getUser();
 
         if ((int)$user->getDeveloperStatus() != 1) {
-            header('Location: '.$router->generate('panel', ['p' => 'developer-register']));
+            header('Location: '.$this->generateUrl('panel', ['p' => 'developer-register']));
             exit;
         }
 
         /** @var \App\Entity\OAuthClient[] $apps */
         $apps = $em->getRepository(OAuthClient::class)->findBy(['user_id' => $user->getId()]);
 
-        return $twig->render('panel/developer-list-applications.html.twig', array(
+        return $this->render('panel/developer-list-applications.html.twig', [
+            'navigation_links'      => $navigation,
             'current_user_dev_apps' => $apps,
-        ));
+        ]);
     }
 
-    public static function showApplication(ContainerInterface $container)
+    public function showApplication(Request $request, $navigation)
     {
-        $em = $container->get('doctrine')->getManager();
-        $router = $container->get('router');
-        $twig = $container->get('twig');
-        $request = $container->get('request_stack')->getCurrentRequest();
+        $em = $this->getDoctrine()->getManager();
         /** @var \App\Entity\User $user */
-        $user = $container->get('security.token_storage')->getToken()->getUser();
+        $user = $this->getUser();
 
         if ((int)$user->getDeveloperStatus() != 1) {
-            header('Location: '.$router->generate('panel', ['p' => 'developer-register']));
+            header('Location: '.$this->generateUrl('panel', ['p' => 'developer-register']));
             exit;
         }
 
         if (!$request->query->has('app')) {
-            header('Location: '.$router->generate('panel', ['p' => 'developer-applications']));
+            header('Location: '.$this->generateUrl('panel', ['p' => 'developer-applications']));
             exit;
         }
         $appId = $request->query->get('app');
         /** @var \App\Entity\OAuthClient $appData */
-        $appData = $em->getRepository(OAuthClient::class)->findOneBy(array('client_identifier' => $appId));
+        $appData = $em->getRepository(OAuthClient::class)->findOneBy(['client_identifier' => $appId]);
 
         if (is_null($appData)) {
-            return $twig->render('panel/developer-app-not-found.html.twig');
+            return $this->render('panel/developer-app-not-found.html.twig', [
+                'navigation_links' => $navigation,
+            ]);
         }
 
-        return $twig->render('panel/developer-show-app.html.twig', array(
-            'app' => $appData,
-        ));
+        return $this->render('panel/developer-show-app.html.twig', [
+            'navigation_links' => $navigation,
+            'app_data'         => $appData,
+        ]);
     }
 
-    public static function register(ContainerInterface $container)
+    public function register(Request $request, $navigation)
     {
-        $em = $container->get('doctrine')->getManager();
-        $router = $container->get('router');
-        $form = $container->get('form.factory');
-        $request = $container->get('request_stack')->getCurrentRequest();
-        $twig = $container->get('twig');
+        $em = $this->getDoctrine()->getManager();
         /** @var \App\Entity\User $user */
-        $user = $container->get('security.token_storage')->getToken()->getUser();
+        $user = $this->getUser();
 
         if ((int)$user->getDeveloperStatus() == 1) {
-            header('Location: '.$router->generate('panel', ['p' => 'developer-applications']));
+            header('Location: '.$this->generateUrl('panel', ['p' => 'developer-applications']));
             exit;
         }
 
-        $developerForm = $form->create(CreateDevAccount::class);
+        $developerForm = $this->createForm(CreateDevAccount::class);
 
         $developerForm->handleRequest($request);
         if ($developerForm->isSubmitted()) {
             $user->setDeveloperStatus(true);
             $em->flush();
-            header('Location: '.$router->generate('panel', ['page' => 'developer-applications']));
+            header('Location: '.$this->generateUrl('panel', ['page' => 'developer-applications']));
             exit;
         }
 
-        return $twig->render('panel/developer-register.html.twig', array(
-            'developer_form' => $developerForm->createView(),
-            'current_user'   => $user,
-        ));
+        return $this->render('panel/developer-register.html.twig', [
+            'navigation_links' => $navigation,
+            'developer_form'   => $developerForm->createView(),
+            'current_user'     => $user,
+        ]);
     }
 }

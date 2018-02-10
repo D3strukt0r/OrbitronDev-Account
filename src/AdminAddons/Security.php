@@ -2,12 +2,13 @@
 
 namespace App\AdminAddons;
 
-use App\Entity\User;
 use App\Form\DeleteAccountType;
 use App\Helper\AccountHelper;
-use Psr\Container\ContainerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-class Security
+class Security extends Controller
 {
     public static function __setupNavigation()
     {
@@ -51,37 +52,34 @@ class Security
         return 30;
     }
 
-    public static function inactivity(ContainerInterface $container)
+    public function inactivity()
     {
-        return '';
+        return new Response();
     }
 
-    public static function loginLog(ContainerInterface $container)
+    public function loginLog()
     {
-        return '';
+        return new Response();
     }
 
-    public static function deleteAccount(ContainerInterface $container)
+    public function deleteAccount(Request $request, $navigation)
     {
-        $em = $container->get('doctrine')->getManager();
-        $form = $container->get('form.factory');
-        $request = $container->get('request_stack')->getCurrentRequest();
-        $twig = $container->get('twig');
-        $router = $container->get('router');
+        $em = $this->getDoctrine()->getManager();
         /** @var \App\Entity\User $user */
-        $user = $container->get('security.token_storage')->getToken()->getUser();
+        $user = $this->getUser();
 
-        $deleteAccountForm = $form->create(DeleteAccountType::class);
+        $deleteAccountForm = $this->createForm(DeleteAccountType::class);
 
         $deleteAccountForm->handleRequest($request);
         if ($deleteAccountForm->isSubmitted() && $deleteAccountForm->isValid()) {
             AccountHelper::removeUser($em, $user);
-            header('Location: '.$router->generate('logout'));
+            header('Location: '.$this->generateUrl('logout'));
             exit;
         }
 
-        return $twig->render('panel/delete-account.html.twig', array(
+        return $this->render('panel/delete-account.html.twig', [
+            'navigation_links'    => $navigation,
             'delete_account_form' => $deleteAccountForm->createView(),
-        ));
+        ]);
     }
 }

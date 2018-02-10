@@ -2,9 +2,10 @@
 
 namespace App\AdminAddons;
 
-use Psr\Container\ContainerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
-class Payment
+class Payment extends Controller
 {
     public static function __setupNavigation()
     {
@@ -40,19 +41,16 @@ class Payment
         return 20;
     }
 
-    public static function plans(ContainerInterface $container)
+    public function plans($navigation)
     {
-        $twig = $container->get('twig');
-        /** @var \App\Entity\User $user */
-        $user = $container->get('security.token_storage')->getToken()->getUser();
-
-        return $twig->render('panel/plans.html.twig', array(
-            'current_user' => $user,
-        ));
+        return $this->render('panel/plans.html.twig', [
+            'navigation_links' => $navigation,
+            'current_user'     => $this->getUser(),
+        ]);
     }
 
-    public static function payment(ContainerInterface $container)
+    public function payment()
     {
-        return '';
+        return new Response();
     }
 }

@@ -136,7 +136,7 @@ class DefaultController extends Controller
         ]);
     }
 
-    public function panel($page)
+    public function panel(Request $request, $page)
     {
         // If user is logged in, redirect to panel
         /** @var \App\Entity\User $user */
@@ -145,14 +145,9 @@ class DefaultController extends Controller
             return $this->redirectToRoute('login');
         }
 
-        $params = [];
-        $params['user_id'] = $user->getId();
-        $params['current_user'] = $user;
-        $params['view_navigation'] = '';
-
         AdminControlPanel::loadLibs($this->get('kernel')->getProjectDir(), $this->container);
 
-        $params['view_navigation'] = AdminControlPanel::getTree();
+        $navigationLinks = AdminControlPanel::getTree();
 
         $view = 'AdminDefault::notFound';
 
@@ -171,12 +166,11 @@ class DefaultController extends Controller
                 $view = $list[$key]['view'];
             }
         }
-        $response = call_user_func('\\App\\AdminAddons\\'.$view, $this->container);
-        if (is_string($response)) {
-            $params['view_body'] = $response;
-        }
-
-        return $this->render('panel.html.twig', $params);
+        $response = $this->forward('App\\AdminAddons\\'.$view, [
+            'navigation' => $navigationLinks,
+            'request'    => $request,
+        ]);
+        return $response;
     }
 
     public function api($function)

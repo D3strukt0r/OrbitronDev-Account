@@ -2,9 +2,9 @@
 
 namespace App\AdminAddons;
 
-use Psr\Container\ContainerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class Home
+class Home extends Controller
 {
     public static function __setupNavigation()
     {
@@ -24,13 +24,11 @@ class Home
         return 1;
     }
 
-    public static function home(ContainerInterface $container)
+    public function home($navigation)
     {
-        /** @var \App\Entity\User $user */
-        $user = $container->get('security.token_storage')->getToken()->getUser();
-
-        return $container->get('twig')->render('panel/home.html.twig', array(
-            'user' => $user,
+        return $this->render('panel/home.html.twig', array(
+            'navigation_links' => $navigation,
+            'user'             => $this->getUser(),
         ));
     }
 

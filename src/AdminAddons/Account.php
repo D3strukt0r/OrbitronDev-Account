@@ -7,10 +7,12 @@ use App\Entity\UserAddress;
 use App\Form\AddAddressType;
 use App\Form\EditAccountType;
 use App\Form\EditProfileType;
-use Psr\Container\ContainerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Translation\TranslatorInterface;
 
-class Account
+class Account extends Controller
 {
     public static function __setupNavigation()
     {
@@ -54,17 +56,13 @@ class Account
         return 10;
     }
 
-    public static function account(ContainerInterface $container)
+    public function account(Request $request, TranslatorInterface $translator, $navigation)
     {
-        $em = $container->get('doctrine')->getManager();
-        $form = $container->get('form.factory');
-        $request = $container->get('request_stack')->getCurrentRequest();
-        $translator = $container->get('translator');
-        $twig = $container->get('twig');
+        $em = $this->getDoctrine()->getManager();
         /** @var \App\Entity\User $user */
-        $user = $container->get('security.token_storage')->getToken()->getUser();
+        $user = $this->getUser();
 
-        $editAccountForm = $form->create(EditAccountType::class, null, ['user' => $user]);
+        $editAccountForm = $this->createForm(EditAccountType::class, null, ['user' => $user]);
 
         $editAccountForm->handleRequest($request);
         if ($editAccountForm->isSubmitted() && $editAccountForm->isValid()) {
@@ -147,30 +145,26 @@ class Account
             }
         }
 
-        return $twig->render('panel/account.html.twig', array(
+        return $this->render('panel/account.html.twig', [
+            'navigation_links'  => $navigation,
             'edit_account_form' => $editAccountForm->createView(),
             'current_user'      => $user,
-        ));
+        ]);
     }
 
-    public static function profile(ContainerInterface $container)
+    public function profile(Request $request, TranslatorInterface $translator, $navigation)
     {
-        $em = $container->get('doctrine')->getManager();
-        $form = $container->get('form.factory');
-        $request = $container->get('request_stack')->getCurrentRequest();
-        $translator = $container->get('translator');
-        $twig = $container->get('twig');
-        $router = $container->get('router');
+        $em = $this->getDoctrine()->getManager();
         /** @var \App\Entity\User $user */
-        $user = $container->get('security.token_storage')->getToken()->getUser();
+        $user = $this->getUser();
 
-        $editProfileForm = $form->create(EditProfileType::class, null, ['user' => $user]);
+        $editProfileForm = $this->createForm(EditProfileType::class, null, ['user' => $user]);
 
         $editProfileForm->handleRequest($request);
         if ($editProfileForm->isSubmitted()) {
             $formData = $editProfileForm->getData();
 
-            $errorMessages = array();
+            $errorMessages = [];
             if ($user->verifyPassword($formData['password_verify'])) {
                 $user->getProfile()->setName($formData['first_name']);
                 $user->getProfile()->setSurname($formData['last_name']);
@@ -184,7 +178,7 @@ class Account
 
                 $em->flush();
 
-                header('Location: '.$router->generate('panel', ['page' => 'profile']));
+                header('Location: '.$this->generateUrl('panel', ['page' => 'profile']));
                 exit;
             } else {
                 $errorMessages['password_verify'] = $translator->trans('panel.form.update_profile.password_verify.constraints.wrong_password');
@@ -202,24 +196,20 @@ class Account
             }
         }
 
-        return $twig->render('panel/profile.html.twig', array(
+        return $this->render('panel/profile.html.twig', [
+            'navigation_links'  => $navigation,
             'edit_profile_form' => $editProfileForm->createView(),
             'current_user'      => $user,
-        ));
+        ]);
     }
 
-    public static function addAddress(ContainerInterface $container)
+    public function addAddress(Request $request, TranslatorInterface $translator, $navigation)
     {
-        $em = $container->get('doctrine')->getManager();
-        $form = $container->get('form.factory');
-        $request = $container->get('request_stack')->getCurrentRequest();
-        $translator = $container->get('translator');
-        $twig = $container->get('twig');
-        $router = $container->get('router');
+        $em = $this->getDoctrine()->getManager();
         /** @var \App\Entity\User $user */
-        $user = $container->get('security.token_storage')->getToken()->getUser();
+        $user = $this->getUser();
 
-        $addAddressForm = $form->create(AddAddressType::class);
+        $addAddressForm = $this->createForm(AddAddressType::class);
 
         $addAddressForm->handleRequest($request);
         if ($addAddressForm->isSubmitted()) {
@@ -239,16 +229,17 @@ class Account
 
                 $em->flush();
 
-                header('Location: '.$router->generate('panel', ['page' => 'profile']));
+                header('Location: '.$this->generateUrl('panel', ['page' => 'profile']));
                 exit;
             } else {
                 $errorMessage['password_verify'] = $translator->trans('panel.form.add_address.password_verify.constraints.wrong_password');
             }
         }
 
-        return $twig->render('panel/add-address.html.twig', array(
+        return $this->render('panel/add-address.html.twig', [
+            'navigation_links' => $navigation,
             'add_address_form' => $addAddressForm->createView(),
             'current_user'     => $user,
-        ));
+        ]);
     }
 }
