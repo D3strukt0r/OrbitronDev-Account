@@ -19,7 +19,7 @@ class ReCaptchaTrueValidator extends ConstraintValidator
     /**
      * Recaptcha Private Key.
      *
-     * @var bool
+     * @var string
      */
     protected $privateKey;
 
