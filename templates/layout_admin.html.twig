@@ -1,35 +1,118 @@
 {% macro categoryItem(item, level) %}
     {% import _self as self %}
-    <li class="nav-item" data-toggle="tooltip" data-placement="right" title="{{ item.title|default('') }}">
-        <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapse_{{ item.id }}" data-parent="#menu">
-            <i class="{{ item.icon|default('') }}"></i>
-            <span class="nav-link-text">{{ item.title|default('') }}</span>
-        </a>
-        <ul class="{% if level|default(2) == 2 %}sidenav-second-level{% elseif level|default(2) == 3 %}sidenav-third-level{% endif %}  collapse" id="collapse_{{ item.id }}">
-            {% if item.children is defined and item.children|length %}
-                {% for child in item.children %}
-                    {% if child.type == 'group' %}
-                        {% if child.display is not defined or (child.display is defined and child.display == true) %}
-                            {{ self.categoryItem(child, level|default(2) + 1) }}
+    {% set level = level|default(1) %}
+    {% set id = 'subMenu' ~ item.title|default('')|striptags ~ item.id %}
+    {% set icon = item.icon|default('') %}
+    {% set title = item.title|default('')|raw %}
+
+    {% if level == 1 %}
+        <li class="u-sidebar-navigation-v1-menu-item u-side-nav--has-sub-menu u-side-nav--top-level-menu-item">
+            <a class="media u-side-nav--top-level-menu-link u-side-nav--hide-on-hidden g-px-15 g-py-12" href="#!" data-hssm-target="#{{ id }}">
+                <span class="d-flex align-self-center g-pos-rel g-font-size-18 g-mr-18"><i class="{{ icon }}"></i></span>
+                <span class="media-body align-self-center">{{ title }}</span>
+                <span class="d-flex align-self-center u-side-nav--control-icon"><i class="hs-admin-angle-right"></i></span>
+                <span class="u-side-nav--has-sub-menu__indicator"></span>
+            </a>
+            <ul id="{{ id }}" class="u-sidebar-navigation-v1-menu u-side-nav--second-level-menu mb-0">
+                {% if item.children is defined and item.children|length %}
+                    {% for child in item.children %}
+                        {% if child.type == 'group' %}
+                            {% if child.display is not defined or (child.display is defined and child.display == true) %}
+                                {{ self.categoryItem(child, level + 1) }}
+                            {% endif %}
+                        {% elseif child.type == 'link' %}
+                            {% if child.display is not defined or (child.display is defined and child.display == true) %}
+                                {{ self.linkItem(child, level + 1) }}
+                            {% endif %}
                         {% endif %}
-                    {% elseif child.type == 'link' %}
-                        {% if child.display is not defined or (child.display is defined and child.display == true) %}
-                            {{ self.linkItem(child) }}
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </li>
+    {% elseif level == 2 %}
+        <li class="u-sidebar-navigation-v1-menu-item u-side-nav--has-sub-menu u-side-nav--second-level-menu-item">
+            <a class="media u-side-nav--second-level-menu-link g-px-15 g-py-12" href="#!" data-hssm-target="#{{ id }}">
+                <span class="d-flex align-self-center g-mr-15 g-mt-minus-1"><i class="{{ icon }}"></i></span>
+                <span class="media-body align-self-center">{{ title }}</span>
+                <span class="d-flex align-self-center u-side-nav--control-icon"><i class="hs-admin-angle-right"></i></span>
+            </a>
+            <ul id="{{ id }}" class="u-side-nav--third-level-menu">
+                {% if item.children is defined and item.children|length %}
+                    {% for child in item.children %}
+                        {% if child.type == 'group' %}
+                            {% if child.display is not defined or (child.display is defined and child.display == true) %}
+                                {{ self.categoryItem(child, level + 1) }}
+                            {% endif %}
+                        {% elseif child.type == 'link' %}
+                            {% if child.display is not defined or (child.display is defined and child.display == true) %}
+                                {{ self.linkItem(child, level + 1) }}
+                            {% endif %}
                         {% endif %}
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        </ul>
-    </li>
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </li>
+    {% elseif level == 3 %}
+        <li class="u-side-nav--third-level-menu-item u-side-nav--has-sub-menu">
+            <a class="media d-flex u-side-nav--third-level-menu-link u-side-nav--hide-on-hidden g-pl-8 g-pr-15 g-py-6" href="#!" data-hssm-target="#{{ id }}">
+                <span class="media-body align-self-center">{{ title }}</span>
+                <span class="d-flex align-self-center u-side-nav--control-icon"><i class="hs-admin-angle-right"></i></span>
+            </a>
+            <ul id="{{ id }}" class="u-side-nav--fourth-level-menu">
+                {% if item.children is defined and item.children|length %}
+                    {% for child in item.children %}
+                        {% if child.type == 'group' %}
+                            {% if child.display is not defined or (child.display is defined and child.display == true) %}
+                                {{ self.categoryItem(child, level + 1) }}
+                            {% endif %}
+                        {% elseif child.type == 'link' %}
+                            {% if child.display is not defined or (child.display is defined and child.display == true) %}
+                                {{ self.linkItem(child, level + 1) }}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </ul>
+        </li>
+    {% endif %}
 {% endmacro %}
-{% macro linkItem(item) %}
+
+{% macro linkItem(item, level) %}
     {% import _self as self %}
-    <li class="nav-item {% if app.request.get('page') == item.href %}active{% endif %}" data-toggle="tooltip" data-placement="right" title="{{ item.title|default('')|striptags }}">
-        <a class="nav-link" href="{{ path('panel', {'page': item.href}) }}">
-            <i class="{{ item.icon|default('') }}"></i>
-            <span class="nav-link-text">{{ item.title|default('')|raw }}</span>
-        </a>
-    </li>
+    {% set level = level|default(1) %}
+    {% set link = path('panel', {'page': item.href}) %}
+    {% set icon = item.icon|default('') %}
+    {% set title = item.title|default('') %}
+
+    {% if level == 1 %}
+        <li class="u-sidebar-navigation-v1-menu-item u-side-nav--top-level-menu-item">
+            <a class="media u-side-nav--top-level-menu-link u-side-nav--hide-on-hidden g-px-15 g-py-12 {% if app.request.get('page') == item.href %}active{% endif %}" href="{{ link }}">
+                <span class="d-flex align-self-center g-font-size-18 g-mr-18">
+                    <i class="{{ icon }}"></i>
+                </span>
+                <span class="media-body align-self-center">{{ title|raw }}</span>
+            </a>
+        </li>
+    {% elseif level == 2 %}
+        <li class="u-sidebar-navigation-v1-menu-item u-side-nav--second-level-menu-item">
+            <a class="media u-side-nav--second-level-menu-link g-px-15 g-py-12 {% if app.request.get('page') == item.href %}active{% endif %}" href="{{ link }}">
+                <span class="d-flex align-self-center g-mr-15 g-mt-minus-1">
+                    <i class="{{ icon }}"></i>
+                </span>
+                <span class="media-body align-self-center">{{ title|raw }}</span>
+            </a>
+        </li>
+    {% elseif level == 3 %}
+        <li class="u-side-nav--third-level-menu-item">
+            <a class="u-side-nav--third-level-menu-link u-side-nav--hide-on-hidden g-pl-8 g-pr-15 g-py-6 {% if app.request.get('page') == item.href %}active{% endif %}" href="{{ link }}">{{ title|raw }}</a>
+        </li>
+    {% elseif level == 4 %}
+        <li class="u-side-nav--fourth-level-menu-item">
+            <a class="u-side-nav--fourth-level-menu-link g-px-15 g-py-6 {% if app.request.get('page') == item.href %}active{% endif %}" href="{{ link }}">
+                <span class="media-body align-self-center">{{ title|raw }}</span>
+            </a>
+        </li>
+    {% endif %}
 {% endmacro %}
 {% from _self import categoryItem %}
 {% from _self import linkItem %}
@@ -63,6 +146,10 @@
 
     <!-- CSS Implementing Plugins -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css" />
+    <link rel="stylesheet" href="https://web-assets.orbitrondev.org/unify-2.5/vendor/icon-etlinefont/style.css" />
+    <link rel="stylesheet" href="https://web-assets.orbitrondev.org/unify-2.5/vendor/icon-line-pro/style.css" />
+    <link rel="stylesheet" href="https://web-assets.orbitrondev.org/unify-2.5/vendor/icon-hs/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.4/cookieconsent.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
@@ -70,95 +157,213 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css" />
 
     <!-- CSS Admin -->
-    <link rel="stylesheet" href="https://web-assets.orbitrondev.org/vendor/sb-admin/css/sb-admin.min.css" />
+    <link rel="stylesheet" href="https://web-assets.orbitrondev.org/unify-admin-2.5/vendor/hs-admin-icons/hs-admin-icons.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.3.2/flatpickr.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.11.0/chartist.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hamburgers/0.9.3/hamburgers.min.css" />
+
+    <!-- CSS Unify -->
+    <link rel="stylesheet" href="https://web-assets.orbitrondev.org/unify-admin-2.5/css/unify-admin.css">
 
     <!-- CSS Customization -->
     {% block stylesheets %}{% endblock %}
 
     <!-- JS Global Compulsory -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 
-<body class="fixed-nav sticky-footer bg-dark" id="page-top">
-{% block navigation %}
+<body>
+<main>
     <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-        <a class="navbar-brand" href="{{ path('panel', {'page': 'home'}) }}">{{ 'panel.nav.title'|trans }}</a>
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="{{ 'panel.nav.toggle'|trans }}">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav navbar-sidenav" id="menu">
-                {% for item in view_navigation %}
-                    {% if item.type == 'group' %}
-                        {% if item.display is not defined or (item.display is defined and item.display == true) %}
-                            {{ categoryItem(item, 2) }}
-                        {% endif %}
-                    {% elseif item.type == 'link' %}
-                        {% if item.display is not defined or (item.display is defined and item.display == true) %}
-                            {{ linkItem(item) }}
-                        {% endif %}
-                    {% endif %}
-                {% endfor %}
-            </ul>
-            <ul class="navbar-nav sidenav-toggler">
-                <li class="nav-item">
-                    <a class="nav-link text-center" id="sidenavToggler">
-                        <i class="fa fa-fw fa-angle-left"></i>
+    <header id="js-header" class="u-header u-header--sticky-top">
+        <div class="u-header__section u-header__section--admin-dark g-min-height-65">
+            <nav class="navbar no-gutters g-pa-0">
+                <div class="col-auto d-flex flex-nowrap u-header-logo-toggler g-py-12">
+                    <!-- Logo -->
+                    <a href="{{ path('panel', {'page': 'home'}) }}" class="navbar-brand d-flex align-self-center g-hidden-xs-down g-line-height-1 py-0 g-mt-5">
+                        {{ 'panel.nav.title'|trans }}
                     </a>
-                </li>
-            </ul>
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle mr-lg-2" id="userDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa fa-fw fa-user"></i>
-                        <span class="d-lg-none">{{ 'panel.nav_link.user'|trans }}</span>
+                    <!-- End Logo -->
+                    <!-- Sidebar Toggler -->
+                    <a class="js-side-nav u-header__nav-toggler d-flex align-self-center ml-auto" href="#!" data-hssm-class="u-side-nav--mini u-sidebar-navigation-v1--mini" data-hssm-body-class="u-side-nav-mini" data-hssm-is-close-all-except-this="true" data-hssm-target="#sideNav">
+                        <i class="hs-admin-align-left"></i>
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="{{ path('panel', {'page': 'profile'}) }}">{{ 'panel.nav_link.settings'|trans }}</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{{ path('logout') }}"><i class="fa fa-fw fa-sign-out"></i> {{ 'panel.nav_link.logout'|trans }}</a>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </nav>
-{% endblock %}
-
-<div class="content-wrapper">
-    {% for message in app.session.flashbag.get('successful') %}
-        <div class="container-fluid">
-            <div id="successful" class="alert alert-success alert-dismissible mb-3" role="alert">
-                <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">{{ 'panel.message.close'|trans }}</span></button>
-                {{ message|trans }}
-            </div>
-        </div>
-    {% endfor %}
-    {% for message in app.session.flashbag.get('failed') %}
-        <div class="container-fluid">
-            <div id="failed" class="alert alert-danger alert-dismissible mb-3" role="alert">
-                <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">{{ 'panel.message.close'|trans }}</span></button>
-                {{ message|trans }}
-            </div>
-        </div>
-    {% endfor %}
-    {% block content %}
-        <div class="container-fluid mb-3">
-            {{ view_body|raw }}
-        </div>
-        <footer class="sticky-footer">
-            <div class="container">
-                <div class="text-center">
-                    <small>{{ 'panel.copyright'|trans }}</small>
+                    <!-- End Sidebar Toggler -->
                 </div>
+
+                <!-- Messages/Notifications/Top Search Bar/Top User -->
+                <div class="col-auto d-flex g-py-12 g-pl-40--lg ml-auto">
+
+                    <!-- Top User -->
+                    <div class="col-auto d-flex g-pt-5 g-pt-0--sm g-pl-10 g-pl-20--sm">
+                        <div class="g-pos-rel g-px-10--lg">
+                            <a id="profileMenuInvoker" class="d-block" href="#!" aria-controls="profileMenu" aria-haspopup="true" aria-expanded="false" data-dropdown-event="click" data-dropdown-target="#profileMenu" data-dropdown-type="css-animation" data-dropdown-duration="300" data-dropdown-animation-in="fadeIn" data-dropdown-animation-out="fadeOut">
+                                <span class="g-pos-rel">
+                                    <span class="u-badge-v2--xs u-badge--top-right g-hidden-sm-up g-bg-lightblue-v5 g-mr-5"></span>
+                                    <img class="g-width-30 g-width-40--md g-height-30 g-height-40--md rounded-circle g-mr-10--sm" src="{{ path('api', {'function': 'get_img', 'user_id': app.user.id}) }}" alt="Image description">
+                                </span>
+                                <span class="g-pos-rel g-top-2">
+                                    <span class="g-hidden-sm-down">{{ app.user.username }}</span>
+                                    <i class="hs-admin-angle-down g-pos-rel g-top-2 g-ml-10"></i>
+                                </span>
+                            </a>
+
+                            <!-- Top User Menu -->
+                            <ul id="profileMenu" class="g-pos-abs g-left-0 g-width-100x--lg g-nowrap g-font-size-14 g-py-20 g-mt-17 rounded" aria-labelledby="profileMenuInvoker">
+                                <li class="g-hidden-sm-up g-mb-10">
+                                    <a class="media g-py-5 g-px-20" href="#!">
+                                        <span class="d-flex align-self-center g-pos-rel g-mr-12">
+                                            <span class="u-badge-v1 g-top-minus-3 g-right-minus-3 g-width-18 g-height-18 g-bg-lightblue-v5 g-font-size-10 g-color-white rounded-circle p-0">10</span>
+                                            <i class="hs-admin-comment-alt"></i>
+                                        </span>
+                                        <span class="media-body align-self-center">Unread Messages</span>
+                                    </a>
+                                </li>
+                                <li class="g-hidden-sm-up g-mb-10">
+                                    <a class="media g-py-5 g-px-20" href="#!">
+                                        <span class="d-flex align-self-center g-mr-12">
+                                            <i class="hs-admin-bell"></i>
+                                        </span>
+                                        <span class="media-body align-self-center">Notifications</span>
+                                    </a>
+                                </li>
+                                <li class="g-mb-10">
+                                    <a class="media g-color-lightred-v2--hover g-py-5 g-px-20" href="{{ path('panel', {'page': 'profile'}) }}">
+                                        <span class="d-flex align-self-center g-mr-12">
+                                          <i class="hs-admin-user"></i>
+                                        </span>
+                                        <span class="media-body align-self-center">{{ 'panel.nav_link.settings'|trans }}</span>
+                                    </a>
+                                </li>
+                                <li class="mb-0">
+                                    <a class="media g-color-lightred-v2--hover g-py-5 g-px-20" href="{{ path('logout') }}">
+                                        <span class="d-flex align-self-center g-mr-12">
+                                          <i class="hs-admin-shift-right"></i>
+                                        </span>
+                                        <span class="media-body align-self-center">{{ 'panel.nav_link.logout'|trans }}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- End Top User Menu -->
+                        </div>
+                    </div>
+                    <!-- End Top User -->
+                </div>
+                <!-- End Messages/Notifications/Top Search Bar/Top User -->
+            </nav>
+        </div>
+    </header>
+    <!-- End Header -->
+
+    <section class="container-fluid px-0 g-pt-65">
+        <div class="row no-gutters g-pos-rel">
+            <!-- Sidebar Nav -->
+            <div id="sideNav" class="col-auto u-sidebar-navigation-v1 u-sidebar-navigation--dark">
+                <ul id="sideNavMenu" class="u-sidebar-navigation-v1-menu u-side-nav--top-level-menu g-min-height-100vh mb-0">
+                    {% for item in navigation_links %}
+                        {% if item.type == 'group' %}
+                            {% if item.display is not defined or (item.display is defined and item.display == true) %}
+                                {{ categoryItem(item) }}
+                            {% endif %}
+                        {% elseif item.type == 'link' %}
+                            {% if item.display is not defined or (item.display is defined and item.display == true) %}
+                                {{ linkItem(item) }}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </ul>
             </div>
-        </footer>
-        <!-- Scroll to Top Button-->
-        <a class="scroll-to-top rounded" href="#page-top">
-            <i class="fa fa-angle-up"></i>
-        </a>
-    {% endblock %}
-</div>
+            <!-- End Sidebar Nav -->
+
+            <div class="col g-ml-45 g-ml-0--lg g-pb-65--md">
+
+                {% block breadcrumb %}{% endblock %}
+
+                {% for message in app.session.flashbag.get('successful') %}
+                    <div class="container-fluid">
+                        <div id="successful" class="alert alert-success alert-dismissible mb-3" role="alert">
+                            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">{{ 'panel.message.close'|trans }}</span></button>
+                            {{ message|trans }}
+                        </div>
+                    </div>
+                {% endfor %}
+                {% for message in app.session.flashbag.get('failed') %}
+                    <div class="container-fluid">
+                        <div id="failed" class="alert alert-danger alert-dismissible mb-3" role="alert">
+                            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">{{ 'panel.message.close'|trans }}</span></button>
+                            {{ message|trans }}
+                        </div>
+                    </div>
+                {% endfor %}
+
+                {% block content %}{% endblock %}
+
+                <!-- Footer -->
+                <footer id="footer" class="u-footer--bottom-sticky g-bg-white g-color-gray-dark-v6 g-brd-top g-brd-gray-light-v7 g-pa-20">
+                    <div class="row align-items-center">
+                        <!-- Footer Nav -->
+                        <div class="col-md-4 g-mb-10 g-mb-0--md">
+                            <ul class="list-inline text-center text-md-left mb-0">
+                                <li class="list-inline-item">
+                                    <a class="g-color-gray-dark-v6 g-color-lightblue-v3--hover" href="#!">FAQ</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <span class="g-color-gray-dark-v6">|</span>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a class="g-color-gray-dark-v6 g-color-lightblue-v3--hover" href="#!">Support</a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <span class="g-color-gray-dark-v6">|</span>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a class="g-color-gray-dark-v6 g-color-lightblue-v3--hover" href="#!">Contact Us</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- End Footer Nav -->
+
+                        <!-- Footer Socials -->
+                        <div class="col-md-4 g-mb-10 g-mb-0--md">
+                            <ul class="list-inline g-font-size-16 text-center mb-0">
+                                <li class="list-inline-item g-mx-10">
+                                    <a href="#!" class="g-color-facebook g-color-lightblue-v3--hover">
+                                        <i class="fa fa-facebook-square"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item g-mx-10">
+                                    <a href="#!" class="g-color-twitter g-color-lightblue-v3--hover">
+                                        <i class="fa fa-twitter"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item g-mx-10">
+                                    <a href="#!" class="g-color-google-plus g-color-lightblue-v3--hover">
+                                        <i class="fa fa-google-plus"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item g-mx-10">
+                                    <a href="https://github.com/OrbitronDev/service-account" class="g-color-black g-color-lightblue-v3--hover">
+                                        <i class="fa fa-github"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- End Footer Socials -->
+
+                        <!-- Footer Copyrights -->
+                        <div class="col-md-4 text-center text-md-right">
+                            <small class="d-block g-font-size-default">{{ 'panel.copyright'|trans }}</small>
+                        </div>
+                        <!-- End Footer Copyrights -->
+                    </div>
+                </footer>
+                <!-- End Footer -->
+            </div>
+        </div>
+    </section>
+</main>
 
 <!-- JS Google Analytics -->
 <script>
@@ -180,18 +385,53 @@
 </script>
 
 <!-- JS Global Compulsory -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.0.1/jquery-migrate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.13.0/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://web-assets.orbitrondev.org/unify-2.5/vendor/cookiejs/jquery.cookie.js"></script>
+<script src="https://web-assets.orbitrondev.org/unify-2.5/vendor/appear.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.3.2/flatpickr.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.11.0/chartist.min.js"></script>
 
-<!-- JS Implementing Plugins -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.4/cookieconsent.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/smoothscroll/1.4.6/SmoothScroll.min.js"></script>
+<!-- JS Unify -->
+<script src="https://web-assets.orbitrondev.org/unify-2.5/js/hs.core.js"></script>
+<script src="https://web-assets.orbitrondev.org/unify-2.5/js/components/hs.scrollbar.js"></script>
+<script src="https://web-assets.orbitrondev.org/unify-2.5/js/components/hs.dropdown.js"></script>
+<script src="https://web-assets.orbitrondev.org/unify-2.5/js/helpers/hs.hamburgers.js"></script>
+<script src="https://web-assets.orbitrondev.org/unify-admin-2.5/js/components/hs.side-nav.js"></script>
+<script src="https://web-assets.orbitrondev.org/unify-admin-2.5/js/components/hs.range-datepicker.js"></script>
+<script src="https://web-assets.orbitrondev.org/unify-admin-2.5/js/components/hs.bar-chart.js"></script>
 
-<!-- JS Admin -->
-<script src="https://web-assets.orbitrondev.org/vendor/sb-admin/js/sb-admin.min.js"></script>
+<!-- JS Custom -->
+<script src="/js/custom.js?v=10-02-2018"></script>
+
+<!-- JS Plugins Init. -->
+<script>
+    $(document).on('ready', function () {
+        // initialization of custom scrollbar
+        $.HSCore.components.HSScrollBar.init($('.js-custom-scroll'));
+
+        // initialization of HSDropdown component
+        $.HSCore.components.HSDropdown.init($('[data-dropdown-target]'), {dropdownHideOnScroll: false});
+
+        // initialization of hamburger
+        $.HSCore.helpers.HSHamburgers.init('.hamburger');
+
+        // initialization of sidebar navigation component
+        $.HSCore.components.HSSideNav.init('.js-side-nav');
+
+        // initialization of custom select
+        $('.js-select').selectpicker();
+
+        // initialization of range datepicker
+        $.HSCore.components.HSRangeDatepicker.init('#rangeDatepicker, #rangeDatepicker2');
+
+        // initialization of charts
+        $.HSCore.components.HSBarChart.init('.js-bar-chart');
+    });
+</script>
 
 <!-- JS Plugins Init. -->
 <script>
