@@ -7,39 +7,45 @@ index:
     controller: App\Controller\DefaultController::index
 
 login:
-    path:     /login
+    path: /login
     controller: App\Controller\DefaultController::login
-    #schemes:  [https]
+    #schemes: [https]
 register:
-    path:     /register
+    path: /register
     controller: App\Controller\DefaultController::register
-    #schemes:  [https]
+    #schemes: [https]
 forgot:
-    path:     /forgot
+    path: /forgot
     controller: App\Controller\DefaultController::forgot
 logout:
-    path:     /logout
+    path: /logout
 confirm:
-    path:     /confirm-email
+    path: /confirm-email
     controller: App\Controller\DefaultController::confirm
 
-panel:
-    path:     /p/{page}
-    controller: App\Controller\DefaultController::panel
+
+panel_default:
+    path: /p
+    controller: FrameworkBundle:Redirect:redirect
     defaults:
+        route: panel
+        permanent: true
         page: home
+panel:
+    path: /p/{page}
+    controller: App\Controller\DefaultController::panel
 
 api:
-    path:     /api/{function}
+    path: /api/{function}
     controller: App\Controller\DefaultController::api
 
 oauth_authorize:
-    path:     /oauth/authorize
+    path: /oauth/authorize
     controller: App\Controller\OAuthController::authorize
-    #schemes:  [https]
+    #schemes: [https]
 oauth_token:
-    path:     /oauth/token
+    path: /oauth/token
     controller: App\Controller\OAuthController::token
 oauth_resource:
-    path:     /oauth/resource
+    path: /oauth/resource
     controller: App\Controller\OAuthController::resource

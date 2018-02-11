@@ -47,8 +47,8 @@ class ApiController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        /** @var \App\Entity\User $current_user */
-        $current_user = $em->find(User::class, $request->query->getInt('user_id'));
+        /** @var \App\Entity\User $user */
+        $user = $em->find(User::class, $request->query->getInt('user_id'));
 
         /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $file */
         $file = $request->files->get('files');
@@ -71,14 +71,14 @@ class ApiController extends Controller
         $file->move($directory, $fileName);
 
         // Remove old picture
-        $oldPictureName = $current_user->getProfile()->getPicture();
+        $oldPictureName = $user->getProfile()->getPicture();
         $oldPicture = realpath($directory.'/'.$oldPictureName);
         if ((!is_null($oldPictureName) || (is_string($oldPictureName) && $oldPictureName > 0)) && file_exists($oldPicture) && is_writable($oldPicture)) {
             unlink($oldPicture);
         }
 
         // Update db with new picture
-        $current_user->getProfile()->setPicture($fileName);
+        $user->getProfile()->setPicture($fileName);
         $em->flush();
 
         return new JsonResponse(['files' => ['name' => $fileName]]);

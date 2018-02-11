@@ -75,7 +75,7 @@ class DeveloperController extends Controller
         $user = $this->getUser();
 
         if ((int)$user->getDeveloperStatus() != 1) {
-            header('Location: '.$this->generateUrl('panel', ['p' => 'developer-register']));
+            header('Location: '.$this->generateUrl('panel', ['page' => 'developer-register']));
             exit;
         }
 
@@ -109,8 +109,8 @@ class DeveloperController extends Controller
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
-        if ((int)$user->getDeveloperStatus() != 1) {
-            header('Location: '.$this->generateUrl('panel', ['p' => 'developer-register']));
+        if (!$user->getDeveloperStatus()) {
+            header('Location: '.$this->generateUrl('panel', ['page' => 'developer-register']));
             exit;
         }
 
@@ -118,8 +118,8 @@ class DeveloperController extends Controller
         $apps = $em->getRepository(OAuthClient::class)->findBy(['user_id' => $user->getId()]);
 
         return $this->render('panel/developer-list-applications.html.twig', [
-            'navigation_links'      => $navigation,
-            'current_user_dev_apps' => $apps,
+            'navigation_links' => $navigation,
+            'app_list'         => $apps,
         ]);
     }
 
@@ -130,12 +130,12 @@ class DeveloperController extends Controller
         $user = $this->getUser();
 
         if ((int)$user->getDeveloperStatus() != 1) {
-            header('Location: '.$this->generateUrl('panel', ['p' => 'developer-register']));
+            header('Location: '.$this->generateUrl('panel', ['page' => 'developer-register']));
             exit;
         }
 
         if (!$request->query->has('app')) {
-            header('Location: '.$this->generateUrl('panel', ['p' => 'developer-applications']));
+            header('Location: '.$this->generateUrl('panel', ['page' => 'developer-applications']));
             exit;
         }
         $appId = $request->query->get('app');
@@ -161,7 +161,7 @@ class DeveloperController extends Controller
         $user = $this->getUser();
 
         if ((int)$user->getDeveloperStatus() == 1) {
-            header('Location: '.$this->generateUrl('panel', ['p' => 'developer-applications']));
+            header('Location: '.$this->generateUrl('panel', ['page' => 'developer-applications']));
             exit;
         }
 

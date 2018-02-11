@@ -29,7 +29,7 @@ class DefaultController extends Controller
         // If user is logged in, redirect to panel
         $user = $this->getUser();
         if ($user instanceof UserInterface) {
-            return $this->redirectToRoute('panel', ['page' => 'home']);
+            return $this->redirectToRoute('panel_default');
         } else {
             return $this->redirectToRoute('login');
         }
@@ -40,7 +40,7 @@ class DefaultController extends Controller
         // If user is logged in, redirect to panel
         $user = $this->getUser();
         if ($user instanceof UserInterface) {
-            return $this->redirectToRoute('panel', ['page' => 'home']);
+            return $this->redirectToRoute('panel_default');
         }
 
         $redirectUrl = $request->query->has('_target_path') ? $request->query->get('_target_path') : $this->generateUrl('panel', ['page' => 'home']);
@@ -64,7 +64,7 @@ class DefaultController extends Controller
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
         if ($user instanceof UserInterface) {
-            return $this->redirectToRoute('panel', ['page' => 'home']);
+            return $this->redirectToRoute('panel_default');
         }
 
         $registerForm = $this->createForm(RegisterType::class);
@@ -196,7 +196,7 @@ class DefaultController extends Controller
         // If user is logged in, redirect to panel
         $user = $this->getUser();
         if ($user instanceof UserInterface) {
-            return $this->redirectToRoute('panel', ['page' => 'home']);
+            return $this->redirectToRoute('panel_default');
         }
 
         $forgotForm = $this->createForm(ForgotType::class);
