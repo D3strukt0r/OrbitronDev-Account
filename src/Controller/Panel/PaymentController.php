@@ -1,11 +1,11 @@
 <?php
 
-namespace App\AdminAddons;
+namespace App\Controller\Panel;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
-class Payment extends Controller
+class PaymentController extends Controller
 {
     public static function __setupNavigation()
     {
@@ -23,7 +23,7 @@ class Payment extends Controller
                 'id'     => 'plans',
                 'title'  => 'Plans',
                 'href'   => 'plans',
-                'view'   => 'Payment::plans',
+                'view'   => 'PaymentController::plans',
             ],
             [
                 'type'   => 'link',
@@ -31,7 +31,7 @@ class Payment extends Controller
                 'id'     => 'payment_methods',
                 'title'  => 'Payment methods',
                 'href'   => 'payment',
-                'view'   => 'Payment::payment',
+                'view'   => 'PaymentController::payment',
             ],
         ];
     }
@@ -45,7 +45,6 @@ class Payment extends Controller
     {
         return $this->render('panel/plans.html.twig', [
             'navigation_links' => $navigation,
-            'current_user'     => $this->getUser(),
         ]);
     }
 

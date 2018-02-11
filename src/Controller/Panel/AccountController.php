@@ -1,6 +1,6 @@
 <?php
 
-namespace App\AdminAddons;
+namespace App\Controller\Panel;
 
 use App\Helper\AccountHelper;
 use App\Entity\UserAddress;
@@ -12,7 +12,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Translation\TranslatorInterface;
 
-class Account extends Controller
+class AccountController extends Controller
 {
     public static function __setupNavigation()
     {
@@ -30,7 +30,7 @@ class Account extends Controller
                 'id'     => 'account_account',
                 'title'  => 'Account details',
                 'href'   => 'account',
-                'view'   => 'Account::account',
+                'view'   => 'AccountController::account',
             ],
             [
                 'type'   => 'link',
@@ -38,7 +38,7 @@ class Account extends Controller
                 'id'     => 'account_profile',
                 'title'  => 'Personal information',
                 'href'   => 'profile',
-                'view'   => 'Account::profile',
+                'view'   => 'AccountController::profile',
             ],
             [
                 'type'   => 'link',
@@ -46,7 +46,7 @@ class Account extends Controller
                 'id'     => 'account_add_address',
                 'title'  => 'Add new address',
                 'href'   => 'add-address',
-                'view'   => 'Account::addAddress',
+                'view'   => 'AccountController::addAddress',
             ],
         ];
     }
@@ -62,7 +62,7 @@ class Account extends Controller
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
-        $editAccountForm = $this->createForm(EditAccountType::class, null, ['user' => $user]);
+        $editAccountForm = $this->createForm(EditAccountType::class);
 
         $editAccountForm->handleRequest($request);
         if ($editAccountForm->isSubmitted() && $editAccountForm->isValid()) {
@@ -148,7 +148,6 @@ class Account extends Controller
         return $this->render('panel/account.html.twig', [
             'navigation_links'  => $navigation,
             'edit_account_form' => $editAccountForm->createView(),
-            'current_user'      => $user,
         ]);
     }
 
@@ -199,7 +198,6 @@ class Account extends Controller
         return $this->render('panel/profile.html.twig', [
             'navigation_links'  => $navigation,
             'edit_profile_form' => $editProfileForm->createView(),
-            'current_user'      => $user,
         ]);
     }
 
@@ -239,7 +237,6 @@ class Account extends Controller
         return $this->render('panel/add-address.html.twig', [
             'navigation_links' => $navigation,
             'add_address_form' => $addAddressForm->createView(),
-            'current_user'     => $user,
         ]);
     }
 }

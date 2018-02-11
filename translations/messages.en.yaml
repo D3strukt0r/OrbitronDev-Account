@@ -135,10 +135,12 @@ panel:
         premium: 'Premium'
         enterprise: 'Enterprise'
         change: 'Change plan'
+    currently: 'Currently: %value%'
     form:
         update_account:
             new_username:
                 label: 'Username'
+                placeholder: 'Enter your new username'
                 constraints:
                     not_blank: 'You have to insert an username'
                     username_short: 'Your username must be between 3 and 20 letters/numbers etc'
@@ -159,6 +161,7 @@ panel:
                     passwords_do_not_match: "Your inserted password do not match the password verifier"
             new_email:
                 label: 'Email'
+                placeholder: 'Enter your new email'
                 constraints:
                     not_blank: 'You have to insert an email'
                     valid: 'Please enter a VALID email address'

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\AdminAddons;
+namespace App\Controller\Panel;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class Home extends Controller
+class HomeController extends Controller
 {
     public static function __setupNavigation()
     {
@@ -15,7 +15,7 @@ class Home extends Controller
             'title'  => 'Overview',
             'href'   => 'home',
             'icon'   => 'fa fa-fw fa-home',
-            'view'   => 'Home::home',
+            'view'   => 'HomeController::home',
         ];
     }
 

@@ -22,17 +22,16 @@
                         <div class="form-group row">
                             <label class="col-sm-4">{{ 'panel.id'|trans }}</label>
                             <div class="col-sm-8">
-                                <p>{{ current_user.id }}</p>
+                                <p>{{ app.user.id }}</p>
                             </div>
                         </div>
 
                         <div class="form-group row">
                             {{ form_label(edit_account_form.new_username, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
                             <div class="col-sm-8">
-                                <div class="input-group mb-2 mb-sm-0">
-                                    <div class="input-group-addon"><i class="icon-prepend fa fa-user"></i></div>
-                                    {{ form_widget(edit_account_form.new_username, {'attr': {'class': 'form-control'}}) }}
-                                </div>
+                                {{ form_widget(edit_account_form.new_username, {'attr': {'class': 'form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10'}}) }}
+                                <small class="g-font-weight-300 g-font-size-12 g-color-gray-dark-v6 g-pt-5">{{ 'panel.currently'|trans({'%value%': app.user.username}) }}</small>
+                                <br />
                                 <small class="form-text text-danger">{{ form_errors(edit_account_form.new_username) }}</small>
                             </div>
                         </div>
@@ -40,15 +39,9 @@
                         <div class="form-group row">
                             {{ form_label(edit_account_form.new_password, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
                             <div class="col-sm-8">
-                                <div class="input-group mb-2 mb-sm-0">
-                                    <div class="input-group-addon"><i class="icon-prepend fa fa-lock"></i></div>
-                                    {{ form_widget(edit_account_form.new_password, {'attr': {'class': 'form-control'}}) }}
-                                </div>
+                                {{ form_widget(edit_account_form.new_password, {'attr': {'class': 'form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10'}}) }}
                                 <small class="form-text text-danger">{{ form_errors(edit_account_form.new_password) }}</small>
-                                <div class="input-group mb-2 mb-sm-0">
-                                    <div class="input-group-addon"><i class="icon-prepend fa fa-lock"></i></div>
-                                    {{ form_widget(edit_account_form.new_password_verify, {'attr': {'class': 'form-control'}}) }}
-                                </div>
+                                {{ form_widget(edit_account_form.new_password_verify, {'attr': {'class': 'form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10'}}) }}
                                 <small class="form-text text-danger">{{ form_errors(edit_account_form.new_password_verify) }}</small>
                             </div>
                         </div>
@@ -56,12 +49,11 @@
                         <div class="form-group row">
                             {{ form_label(edit_account_form.new_email, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
                             <div class="col-sm-8">
-                                <div class="input-group mb-2 mb-sm-0">
-                                    <div class="input-group-addon"><i class="icon-prepend fa fa-envelope"></i></div>
-                                    {{ form_widget(edit_account_form.new_email, {'attr': {'class': 'form-control'}}) }}
-                                </div>
+                                {{ form_widget(edit_account_form.new_email, {'attr': {'class': 'form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10'}}) }}
+                                <small class="g-font-weight-300 g-font-size-12 g-color-gray-dark-v6 g-pt-5">{{ 'panel.currently'|trans({'%value%': app.user.email}) }}</small>
+                                <br />
                                 <small class="form-text text-danger">{{ form_errors(edit_account_form.new_email) }}</small>
-                                {% if current_user.emailVerified %}
+                                {% if app.user.emailVerified %}
                                     <small class="form-text pull-right">
                                         <span class="text-success">{{ 'panel.verified'|trans }}</span>&nbsp;&nbsp;
                                     </small>
@@ -77,7 +69,7 @@
                     <div class="card-footer">
                         <div class="form-row">
                             <div class="col">
-                                {{ form_widget(edit_account_form.password_verify, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_widget(edit_account_form.password_verify, {'attr': {'class': 'form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10'}}) }}
                             </div>
                             {{ form_widget(edit_account_form.send, {'attr': {'class': 'btn u-btn-blue'}}) }}
                             <small class="form-text text-danger">{{ form_errors(edit_account_form.password_verify) }}</small>
@@ -100,11 +92,11 @@
                         <div class="row">
                             <label class="col-sm-4 col-form-label" for="subscription_type">{{ 'panel.subscription.title'|trans }}</label>
                             <div class="col-sm-8">
-                                {% if current_user.subscription.subscription.id == 1 %}
+                                {% if app.user.subscription.subscription.id == 1 %}
                                     {% set subscription_name = 'panel.subscription.normal'|trans %}
-                                {% elseif current_user.subscription.subscription.id == 2 %}
+                                {% elseif app.user.subscription.subscription.id == 2 %}
                                     {% set subscription_name = 'panel.subscription.premium'|trans %}
-                                {% elseif current_user.subscription.subscription.id == 3 %}
+                                {% elseif app.user.subscription.subscription.id == 3 %}
                                     {% set subscription_name = 'panel.subscription.enterprise'|trans %}
                                 {% endif %}
                                 <input id="subscription_type" type="text" readonly class="form-control-plaintext" value="{{ subscription_name }}" />

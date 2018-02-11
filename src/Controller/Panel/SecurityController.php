@@ -1,6 +1,6 @@
 <?php
 
-namespace App\AdminAddons;
+namespace App\Controller\Panel;
 
 use App\Form\DeleteAccountType;
 use App\Helper\AccountHelper;
@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class Security extends Controller
+class SecurityController extends Controller
 {
     public static function __setupNavigation()
     {
@@ -26,7 +26,7 @@ class Security extends Controller
                 'id'     => 'inactivity',
                 'title'  => 'Inactivity',
                 'href'   => 'inactivity',
-                'view'   => 'Security::inactivity',
+                'view'   => 'SecurityController::inactivity',
             ],
             [
                 'type'   => 'link',
@@ -34,7 +34,7 @@ class Security extends Controller
                 'id'     => 'log',
                 'title'  => 'Login log',
                 'href'   => 'login-log',
-                'view'   => 'Security::loginLog',
+                'view'   => 'SecurityController::loginLog',
             ],
             [
                 'type'   => 'link',
@@ -42,7 +42,7 @@ class Security extends Controller
                 'id'     => 'delete',
                 'title'  => sprintf('%sDelete Account%s', '<b><span class="text-danger">', '</span></b>'),
                 'href'   => 'delete-account',
-                'view'   => 'Security::deleteAccount',
+                'view'   => 'SecurityController::deleteAccount',
             ],
         ];
     }

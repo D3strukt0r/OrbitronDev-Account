@@ -1,6 +1,6 @@
 <?php
 
-namespace App\AdminAddons;
+namespace App\Controller\Panel;
 
 use App\Entity\OAuthClient;
 use App\Helper\AccountHelper;
@@ -11,7 +11,7 @@ use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-class Developer extends Controller
+class DeveloperController extends Controller
 {
     public static function __setupNavigation(ContainerInterface $container)
     {
@@ -33,7 +33,7 @@ class Developer extends Controller
                 'id'     => 'developer_create_application',
                 'title'  => 'Create new application',
                 'href'   => 'developer-create-application',
-                'view'   => 'Developer::createApplication',
+                'view'   => 'DeveloperController::createApplication',
             ],
             [
                 'type'   => 'link',
@@ -41,7 +41,7 @@ class Developer extends Controller
                 'id'     => 'developer_applications',
                 'title'  => 'Your applications',
                 'href'   => 'developer-applications',
-                'view'   => 'Developer::applicationList',
+                'view'   => 'DeveloperController::applicationList',
             ],
             [
                 'type'   => 'link',
@@ -49,7 +49,7 @@ class Developer extends Controller
                 'id'     => 'developer_show_application',
                 'title'  => 'Show application',
                 'href'   => 'developer-show-application',
-                'view'   => 'Developer::showApplication',
+                'view'   => 'DeveloperController::showApplication',
             ],
             [
                 'type'    => 'link',
@@ -57,7 +57,7 @@ class Developer extends Controller
                 'id'      => 'create_developer_account',
                 'title'   => 'Create developer account',
                 'href'    => 'developer-register',
-                'view'    => 'Developer::register',
+                'view'    => 'DeveloperController::register',
                 'display' => $currentUser->getDeveloperStatus() ? false : true,
             ],
         ];
@@ -100,7 +100,6 @@ class Developer extends Controller
         return $this->render('panel/developer-create-applications.html.twig', [
             'navigation_links' => $navigation,
             'create_app_form'  => $createAppForm->createView(),
-            'current_user'     => $user,
         ]);
     }
 
@@ -179,7 +178,6 @@ class Developer extends Controller
         return $this->render('panel/developer-register.html.twig', [
             'navigation_links' => $navigation,
             'developer_form'   => $developerForm->createView(),
-            'current_user'     => $user,
         ]);
     }
 }

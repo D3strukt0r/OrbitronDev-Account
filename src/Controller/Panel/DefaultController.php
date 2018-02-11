@@ -1,10 +1,10 @@
 <?php
 
-namespace App\AdminAddons;
+namespace App\Controller\Panel;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class AdminDefault extends Controller
+class DefaultController extends Controller
 {
     public static function __setupNavigation()
     {

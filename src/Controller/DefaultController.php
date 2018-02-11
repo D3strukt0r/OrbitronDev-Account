@@ -149,7 +149,7 @@ class DefaultController extends Controller
 
         $navigationLinks = AdminControlPanel::getTree();
 
-        $view = 'AdminDefault::notFound';
+        $view = 'DefaultController::notFound';
 
         $list = AdminControlPanel::getFlatTree();
 
@@ -162,18 +162,18 @@ class DefaultController extends Controller
         }
 
         if (!is_null($key)) {
-            if (is_callable('\\App\\AdminAddons\\'.$list[$key]['view'])) {
+            if (is_callable('\\App\\Controller\\Panel\\'.$list[$key]['view'])) {
                 $view = $list[$key]['view'];
             }
         }
-        $response = $this->forward('App\\AdminAddons\\'.$view, [
+        $response = $this->forward('App\\Controller\\Panel\\'.$view, [
             'navigation' => $navigationLinks,
             'request'    => $request,
         ]);
         return $response;
     }
 
-    public function api($function)
+    public function api(Request $request, $function)
     {
         // Get function name
         $functionProcess = explode('_', $function);
@@ -183,12 +183,10 @@ class DefaultController extends Controller
         $function = implode('', $functionProcess);
         $function = lcfirst($function);
 
-        $result = AccountApi::$function($this->container);
-        if (is_array($result)) {
-            return $this->json($result);
-        } else {
-            return $result;
-        }
+        $result = $this->forward('App\\Controller\\ApiController::'.$function, [
+            'request' => $request,
+        ]);
+        return $result;
     }
 
     public function forgot(Request $request)

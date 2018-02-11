@@ -30,11 +30,11 @@
                 </thead>
                 <tbody>
                     {% if current_user_dev_apps|length > 0 %}
-                        {% for app in current_user_dev_apps %}
+                        {% for app_data in current_user_dev_apps %}
                             <tr>
-                                <td><a href="{{ path('panel', {'page': 'developer-show-application', 'app': app.clientIdentifier }) }}">{{ app.clientIdentifier }}</a></td>
-                                <td>{{ app.clientSecret }}</td>
-                                <td>{{ app.redirectUri }}</td>
+                                <td><a href="{{ path('panel', {'page': 'developer-show-application', 'app': app_data.clientIdentifier }) }}">{{ app_data.clientIdentifier }}</a></td>
+                                <td>{{ app_data.clientSecret }}</td>
+                                <td>{{ app_data.redirectUri }}</td>
                             </tr>
                         {% endfor %}
                     {% endif %}

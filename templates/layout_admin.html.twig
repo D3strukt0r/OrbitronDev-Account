@@ -202,7 +202,7 @@
                             <a id="profileMenuInvoker" class="d-block" href="#!" aria-controls="profileMenu" aria-haspopup="true" aria-expanded="false" data-dropdown-event="click" data-dropdown-target="#profileMenu" data-dropdown-type="css-animation" data-dropdown-duration="300" data-dropdown-animation-in="fadeIn" data-dropdown-animation-out="fadeOut">
                                 <span class="g-pos-rel">
                                     <span class="u-badge-v2--xs u-badge--top-right g-hidden-sm-up g-bg-lightblue-v5 g-mr-5"></span>
-                                    <img class="g-width-30 g-width-40--md g-height-30 g-height-40--md rounded-circle g-mr-10--sm" src="{{ path('api', {'function': 'get_img', 'user_id': app.user.id}) }}" alt="Image description">
+                                    <img class="g-width-30 g-width-40--md g-height-30 g-height-40--md rounded-circle g-mr-10--sm" src="{{ path('api', {'function': 'get_img', 'user_id': app.user.id, 'height': 40, 'width': 100}) }}" alt="Image description">
                                 </span>
                                 <span class="g-pos-rel g-top-2">
                                     <span class="g-hidden-sm-down">{{ app.user.username }}</span>
@@ -426,7 +426,7 @@
         $('.js-select').selectpicker();
 
         // initialization of range datepicker
-        $.HSCore.components.HSRangeDatepicker.init('#rangeDatepicker, #rangeDatepicker2');
+        $.HSCore.components.HSRangeDatepicker.init('.js-range-datepicker');
 
         // initialization of charts
         $.HSCore.components.HSBarChart.init('.js-bar-chart');

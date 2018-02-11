@@ -8,7 +8,6 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -16,15 +15,12 @@ class EditAccountType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var \App\Entity\User $user */
-        $user = $options['user'];
-
         $builder
             ->add('new_username', TextType::class, [
                 'label'    => 'panel.form.update_account.new_username.label',
                 'required' => false,
                 'attr'     => [
-                    'placeholder' => 'Current username: '.$user->getUsername(),
+                    'placeholder' => 'panel.form.update_account.new_username.placeholder',
                 ],
             ])
             ->add('new_password', PasswordType::class, [
@@ -45,7 +41,7 @@ class EditAccountType extends AbstractType
                 'label'       => 'panel.form.update_account.new_email.label',
                 'required'    => false,
                 'attr'        => [
-                    'placeholder' => 'Current Email: '.$user->getEmail(),
+                    'placeholder' => 'panel.form.update_account.new_email.placeholder',
                 ],
                 'constraints' => [
                     new Email(['message' => 'panel.form.update_account.new_email.constraints.valid']),
@@ -63,15 +59,5 @@ class EditAccountType extends AbstractType
             ->add('send', SubmitType::class, [
                 'label' => 'panel.form.update_profile.send.label',
             ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults([
-            'user' => null,
-        ]);
     }
 }

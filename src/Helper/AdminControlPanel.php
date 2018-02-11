@@ -66,7 +66,7 @@ class AdminControlPanel
 
     public static function loadLibs(string $rootDir, ContainerInterface $container = null)
     {
-        $libraryDir = $rootDir.'/src/AdminAddons';
+        $libraryDir = $rootDir.'/src/Controller/Panel';
 
         $libsList = scandir($libraryDir);
         foreach ($libsList as $lib) {
@@ -74,7 +74,7 @@ class AdminControlPanel
                 continue;
             }
             $file = pathinfo($libraryDir.'/'.$lib);
-            $class = '\\App\\AdminAddons\\'.$file['filename'];
+            $class = '\\App\\Controller\\Panel\\'.$file['filename'];
 
             self::$list[call_user_func($class.'::__callNumber')] = $class;
         }

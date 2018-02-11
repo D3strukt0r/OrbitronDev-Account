@@ -1,30 +1,19 @@
 <?php
 
-namespace App\Helper;
+namespace App\Controller;
 
 use App\Entity\User;
-use Psr\Container\ContainerInterface;
+use App\Helper\AdminControlPanel;
+use App\Helper\SimpleImage;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
-class AccountApi
+class ApiController extends Controller
 {
-    /**
-     * @param string $message
-     *
-     * @return array
-     */
-    private static function __send_error_message($message)
+    public function getImg(Request $request)
     {
-        return [
-            'error'         => true,
-            'error_message' => $message,
-        ];
-    }
-
-    public static function getImg(ContainerInterface $container)
-    {
-        $request = $container->get('request_stack')->getCurrentRequest();
-        $em = $container->get('doctrine')->getManager();
-        $kernel = $container->get('kernel');
+        $em = $this->getDoctrine()->getManager();
 
         $userId = $request->query->getInt('user_id');
 
@@ -34,7 +23,7 @@ class AccountApi
         $width = $request->query->has('width') ? $request->query->getInt('width') : 1000;
         $height = $request->query->has('height') ? $request->query->getInt('height') : 1000;
 
-        $rootPictureDir = $kernel->getProjectDir().'/public/app/profile_pictures';
+        $rootPictureDir = $this->get('kernel')->getProjectDir().'/var/data/profile_pictures';
 
         if (!is_null($selectedUser)) {
             $pictureName = $selectedUser->getProfile()->getPicture();
@@ -42,23 +31,21 @@ class AccountApi
                 $image = new SimpleImage($fileName);
                 $image->resize($width, $height);
                 $image->output();
-                return null;
+                exit;
             } else {
-                $image = new SimpleImage($kernel->getProjectDir().'/public/img/user.jpg');
+                $image = new SimpleImage($this->get('kernel')->getProjectDir().'/public/img/user.jpg');
                 $image->resize($width, $height);
                 $image->output();
-                return null;
+                exit;
             }
         } else {
-            return self::__send_error_message('user_not_found');
+            return new JsonResponse(['error' => true, 'error_message' => 'user_not_found']);
         }
     }
 
-    public static function updateProfilePic(ContainerInterface $container)
+    public function updateProfilePic(Request $request)
     {
-        $request = $container->get('request_stack')->getCurrentRequest();
-        $em = $container->get('doctrine')->getManager();
-        $kernel = $container->get('kernel');
+        $em = $this->getDoctrine()->getManager();
 
         /** @var \App\Entity\User $current_user */
         $current_user = $em->find(User::class, $request->query->getInt('user_id'));
@@ -68,14 +55,14 @@ class AccountApi
 
         // Validates if the file is in the right format
         if (!in_array($file->getMimeType(), ['image/png', 'image/jpeg', 'image/gif'])) {
-            return self::__send_error_message('mine_type_not_valid');
+            return new JsonResponse(['error' => true, 'error_message' => 'mine_type_not_valid']);
         }
 
         // Generate a unique name for the file before saving it
         $fileName = md5(uniqid()).'.'.$file->guessExtension();
 
         // Move the file to the directory where brochures are stored
-        $directory = $kernel->getProjectDir().'/public/app/profile_pictures';
+        $directory = $this->get('kernel')->getProjectDir().'/var/data/profile_pictures';
         if (!file_exists($directory)) {
             mkdir($directory, 0777, true);
         }
@@ -94,15 +81,14 @@ class AccountApi
         $current_user->getProfile()->setPicture($fileName);
         $em->flush();
 
-        return ['files' => ['name' => $fileName]];
+        return new JsonResponse(['files' => ['name' => $fileName]]);
     }
 
-    public static function uploadProgress(ContainerInterface $container)
+    public function uploadProgress(Request $request)
     {
         // Assuming default values for session.upload_progress.prefix
         // and session.upload_progress.name:
-        $request = $container->get('request_stack')->getCurrentRequest();
-        $session = $container->get('session');
+        $session = $this->get('session');
 
         $s = $session->get('upload_progress_'.intval($request->query->get('PHP_SESSION_UPLOAD_PROGRESS')));
         $progress = [
@@ -114,14 +100,11 @@ class AccountApi
         return $progress;
     }
 
-    public static function panelPages(ContainerInterface $container)
+    public function panelPages(Request $request)
     {
-        $request = $container->get('request_stack')->getCurrentRequest();
-        $kernel = $container->get('kernel');
-
         $page = $request->query->get('p');
 
-        AdminControlPanel::loadLibs($kernel->getProjectDir(), $container);
+        AdminControlPanel::loadLibs($this->get('kernel')->getProjectDir(), $this->container);
 
         $view = 'AdminDefault::notFound';
 
@@ -136,12 +119,14 @@ class AccountApi
         }
 
         if (!is_null($key)) {
-            if (is_callable('\\App\\AdminAddons\\'.$list[$key]['view'])) {
+            if (is_callable('\\App\\Controler\\Panel\\'.$list[$key]['view'])) {
                 $view = $list[$key]['view'];
             }
         }
-        $response = call_user_func('\\App\\AdminAddons\\'.$view, $container);
 
+        $response = $this->forward('App\\Controller\\Panel\\'.$view, [
+            'request' => $request,
+        ]);
         return $response;
     }
 }
