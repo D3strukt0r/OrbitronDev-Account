@@ -1,3 +1,5 @@
+general:
+    title: 'OrbitronDev Account'
 login:
     title: 'Login'
     form:
