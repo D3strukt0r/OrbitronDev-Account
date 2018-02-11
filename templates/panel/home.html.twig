@@ -1,6 +1,11 @@
 {% extends 'layout_admin.html.twig' %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css" />
+{% endblock %}
+
 {% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
     <script src="https://web-assets.orbitrondev.org/unify-admin-2.5/vendor/table-edits/build/table-edits.min.js"></script>
     <script>
         $(document).on('ready', function() {
@@ -27,8 +32,43 @@
                     $('.js-edit i', this).removeClass('hs-admin-check g-color-lightblue-v3').addClass('hs-admin-reload');
                     var data = $('td[data-field]', this).data('field');
                     values['csrf'] = $('input[name=_csrf_token]', this).val();
-                    $.post('{{ path('api', {'function': 'update_user_data'}) }}?element=' + data, values);
-                    $('.js-edit i', this).removeClass('hs-admin-reload').addClass('hs-admin-pencil');
+                    var $this = this;
+                    $.post('{{ path('api', {'function': 'update_user_data'}) }}?element=' + data, values)
+                    .done(function() {
+                        new Noty({
+                            "type": "success",
+                            "layout": "topRight",
+                            "timeout": "7000",
+                            "animation": {
+                                "open": "animated bounceInUp",
+                                "close": "animated bounceOutRight"
+                            },
+                            "closeWith": [
+                                "click"
+                            ],
+                            "text": "<div class=\"g-mr-20\"><div class=\"noty_body__icon\"><i class=\"hs-admin-check\"></i></div></div><div>User update successful<br>Reload page to see changes</div>",
+                            "theme": "unify--v1"
+                        }).show();
+                    })
+                    .fail(function() {
+                        new Noty({
+                            "type": "error",
+                            "layout": "topRight",
+                            "timeout": "7000",
+                            "animation": {
+                                "open": "animated bounceInUp",
+                                "close": "animated bounceOutRight"
+                            },
+                            "closeWith": [
+                                "click"
+                            ],
+                            "text": "<div class=\"g-mr-20\"><div class=\"noty_body__icon\"><i class=\"hs-admin-close\"></i></div></div><div>User update failed<br>Couldn't update data</div>",
+                            "theme": "unify--v1"
+                        }).show();
+                    })
+                    .always(function() {
+                        $('.js-edit i', $this).removeClass('hs-admin-reload').addClass('hs-admin-pencil');
+                    });
                 },
                 cancel: function(values) {
                     $('.js-edit i', this).removeClass('hs-admin-check g-color-lightblue-v3').addClass('hs-admin-pencil');

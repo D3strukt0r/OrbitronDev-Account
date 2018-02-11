@@ -129,4 +129,50 @@ class ApiController extends Controller
         ]);
         return $response;
     }
+
+    public function updateUserData(Request $request)
+    {
+        $element = $request->query->has('element') ? $request->query->get('element') : null;
+        $csrf = $request->request->has('csrf') ? $request->request->get('csrf') : null;
+
+        if (is_null($element)) {
+            throw $this->createNotFoundException();
+        }
+        if (is_null($csrf)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        if ($element === 'username') {
+            if (!$this->isCsrfTokenValid('edit_username', $csrf)) {
+                throw $this->createAccessDeniedException();
+            }
+            if (!$request->request->has('username')) {
+                throw $this->createNotFoundException();
+            }
+            /** @var \App\Entity\User $user */
+            $user = $this->getUser();
+
+            $user->setUsername($request->request->get('username'));
+            $this->getDoctrine()->getManager()->flush();
+            return new JsonResponse(['username_updated']);
+
+        } elseif ($element === 'email') {
+            if (!$this->isCsrfTokenValid('edit_email', $csrf)) {
+                throw $this->createAccessDeniedException();
+            }
+            if (!$request->request->has('email')) {
+                throw $this->createNotFoundException();
+            }
+            /** @var \App\Entity\User $user */
+            $user = $this->getUser();
+
+            $user->setEmail($request->request->get('email'));
+            $user->setEmailVerified(false);
+            $this->getDoctrine()->getManager()->flush();
+            return new JsonResponse(['email_updated']);
+
+        } else {
+            return $this->createNotFoundException();
+        }
+    }
 }
