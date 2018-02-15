@@ -8,7 +8,6 @@ use App\Form\ForgotType;
 use App\Form\RegisterType;
 use App\Form\ResetPasswordType;
 use App\Helper\AdminControlPanel;
-use App\Helper\AccountApi;
 use App\Helper\AccountHelper;
 use App\Helper\TokenGenerator;
 use Swift_Mailer;
@@ -96,8 +95,8 @@ class DefaultController extends Controller
                     ->setFrom(['no-reply-account@orbitrondev.org' => 'OrbitronDev'])
                     ->setTo([$registerData['email']])
                     ->setBody($this->renderView('mail/confirm-email.html.twig', [
-                        'email'    => $registerData['email'],
-                        'token'    => $token,
+                        'email' => $registerData['email'],
+                        'token' => $token,
                     ]), 'text/html');
                 $mailSent = $mailer->send($message);
 
@@ -343,8 +342,8 @@ class DefaultController extends Controller
                     ->setFrom(['no-reply-account@orbitrondev.org' => 'OrbitronDev'])
                     ->setTo([$user->getEmail()])
                     ->setBody($this->renderView('mail/confirm-email.html.twig', [
-                        'email'    => $user->getEmail(),
-                        'token'    => $token,
+                        'email' => $user->getEmail(),
+                        'token' => $token,
                     ]), 'text/html');
                 $this->get('mailer')->send($message);
 

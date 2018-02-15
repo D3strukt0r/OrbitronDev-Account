@@ -120,6 +120,12 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
      */
     private $online = false;
 
+    /**
+     * @var array
+     * @ORM\Column(type="array")
+     */
+    private $roles;
+
     public function __construct()
     {
         $this->paymentMethods = new ArrayCollection();
@@ -497,15 +503,41 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
+     * Returns the roles or permissions granted to the user for security.
+     *
      * @return array
      */
     public function getRoles(): array
     {
-        return ['ROLE_USER'];
+        $roles = $this->roles;
+        // guarantees that a user always has at least one role for security
+        if (empty($roles)) {
+            $roles[] = 'ROLE_USER';
+            $roles[] = 'ROLE_USER_LOL2';
+            $roles[] = 'ROLE_USER_LOL';
+        }
+        return array_unique($roles);
     }
 
+    /**
+     * @param array $roles
+     *
+     * @return $this
+     */
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * Removes sensitive data from the user.
+     */
     public function eraseCredentials()
     {
+        // if you had a plainPassword property, you'd nullify it here
+        // $this->plainPassword = null;
     }
 
     /**
