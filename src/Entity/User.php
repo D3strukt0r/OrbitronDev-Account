@@ -513,8 +513,6 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
         // guarantees that a user always has at least one role for security
         if (empty($roles)) {
             $roles[] = 'ROLE_USER';
-            $roles[] = 'ROLE_USER_LOL2';
-            $roles[] = 'ROLE_USER_LOL';
         }
         return array_unique($roles);
     }
