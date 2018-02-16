@@ -7,7 +7,6 @@ parameters:
     recaptcha.enabled: true
     recaptcha.verify_host: false
     recaptcha.ajax: false
-    setup_key: '%env(SETUP_KEY)%'
 
 services:
     # default configuration for services in *this* file

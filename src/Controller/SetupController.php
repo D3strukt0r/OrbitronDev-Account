@@ -9,13 +9,14 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class SetupController extends Controller
 {
-    public function oneTimeSetup(Request $request, KernelInterface $kernel)
+    public function oneTimeSetup(Request $request, KernelInterface $kernel, PdoSessionHandler $sessionHandlerService)
     {
-        if ($request->query->get('key') == $this->getParameter('setup_key')) {
+        if ($request->query->get('key') == getenv('SETUP_KEY')) {
 
             // Create database entities
             $application = new Application($kernel);
@@ -64,6 +65,15 @@ class SetupController extends Controller
                 $text .= 'Scopes added<br />';
 
                 return new Response($text);
+            }
+            if ($request->query->get('action') == 'add-session-table') {
+                try {
+                    $sessionHandlerService->createTable();
+                    return new Response('Session database created');
+                } catch (\PDOException $e) {
+                    // the table could not be created for some reason
+                    return new Response('Session database not created');
+                }
             }
         }
 
