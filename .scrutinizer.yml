@@ -1,15 +1,28 @@
 filter:
     excluded_paths:
         - 'bin/*'
+        - 'tests/*'
         - 'public/vendor/*'
         - '*.min.js'
 checks:
     php: true
     javascript: true
 build:
+    environment:
+        php:
+            version: 7.1 # Common versions: 5.4, 5.5, 5.6, 7.0, 7.1, or hhvm
     nodes:
         analysis:
             project_setup:
                 override: true
             tests:
-                override: [php-scrutinizer-run]
+                override:
+                - php-scrutinizer-run
+                - phpcs-run
+#    tests:
+#        override:
+#            -
+#                command: 'vendor/bin/phpunit --coverage-clover=coverage.clover'
+#                coverage:
+#                    file: 'coverage.clover'
+#                    format: 'clover'
