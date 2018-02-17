@@ -85,8 +85,7 @@ class AccountHelper
         }
 
         // Add user to database
-        $user = new User();
-        $user
+        $user = (new User())
             ->setUsername($username)
             ->setPassword($password)
             ->setEmail($email)
@@ -97,15 +96,14 @@ class AccountHelper
             ->setLastIp($request->getClientIp())
             ->setDeveloperStatus(false);
 
-        $userProfile = new UserProfiles();
-        $userProfile->setUser($user);
+        $userProfile = (new UserProfiles())
+            ->setUser($user);
         $user->setProfile($userProfile);
 
         /** @var SubscriptionType $defaultSubscription */
         $defaultSubscription = $entityManager->find(SubscriptionType::class, self::$settings['subscription']['default']);
 
-        $userSubscription = new UserSubscription();
-        $userSubscription
+        $userSubscription = (new UserSubscription())
             ->setUser($user)
             ->setSubscription($defaultSubscription)
             ->setActivatedAt(new \DateTime())
@@ -299,7 +297,7 @@ class AccountHelper
         $scope[] = (new OAuthScope())
             ->setScope('user:id')
             ->setName('User ID')
-            ->setDefault(false);
+            ->setDefault(true);
         $scope[] = (new OAuthScope())
             ->setScope('user:username')
             ->setName('Username')
@@ -307,7 +305,7 @@ class AccountHelper
         $scope[] = (new OAuthScope())
             ->setScope('user:email')
             ->setName('Email address')
-            ->setDefault(true);
+            ->setDefault(false);
         $scope[] = (new OAuthScope())
             ->setScope('user:name')
             ->setName('First name')
