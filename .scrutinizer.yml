@@ -18,7 +18,7 @@ build:
             tests:
                 override:
                 - php-scrutinizer-run
-                - phpcs-run
+                - phpcs-run --standard=psr2 ./src
 #    tests:
 #        override:
 #            -
