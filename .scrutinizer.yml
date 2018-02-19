@@ -1,12 +1,3 @@
-filter:
-    excluded_paths:
-        - 'bin/*'
-        - 'tests/*'
-        - 'public/vendor/*'
-        - '*.min.js'
-checks:
-    php: true
-    javascript: true
 build:
     environment:
         php:
@@ -17,8 +8,8 @@ build:
                 override: true
             tests:
                 override:
-                - php-scrutinizer-run
-                - phpcs-run --standard=psr2 ./src
+                    - php-scrutinizer-run
+                    - phpcs-run --standard=psr2 ./src
 #    tests:
 #        override:
 #            -
@@ -26,3 +17,12 @@ build:
 #                coverage:
 #                    file: 'coverage.clover'
 #                    format: 'clover'
+filter:
+    excluded_paths:
+        - 'bin/*'
+        - 'tests/*'
+        - 'public/vendor/*'
+        - '*.min.js'
+checks:
+    php: true
+    javascript: true
