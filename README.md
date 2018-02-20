@@ -35,7 +35,6 @@ Next, rename `.env.dist` to `.env` and change following parameters:
 ```
 RECAPTCHA_PUBLIC_KEY=... (ReCaptcha)
 RECAPTCHA_PRIVATE_KEY=... (ReCaptcha)
-SETUP_KEY=... (Updating sensitive area)
 DATABASE_URL=... (Accessing databse)
 MAILER_URL=... (To send emails)
 ```

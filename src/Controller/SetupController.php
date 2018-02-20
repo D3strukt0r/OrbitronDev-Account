@@ -16,7 +16,7 @@ class SetupController extends Controller
 {
     public function oneTimeSetup(Request $request, KernelInterface $kernel, PdoSessionHandler $sessionHandlerService)
     {
-        if ($request->query->get('key') == getenv('SETUP_KEY')) {
+        if ($request->query->get('key') == $this->getParameter('kernel.secret')) {
 
             // Create database entities
             $application = new Application($kernel);
