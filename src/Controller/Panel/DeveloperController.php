@@ -15,8 +15,8 @@ class DeveloperController extends Controller
 {
     public static function __setupNavigation(ContainerInterface $container)
     {
-        /** @var \App\Entity\User $currentUser */
-        $currentUser = $container->get('security.token_storage')->getToken()->getUser();
+        /** @var \App\Entity\User $user */
+        $user = $container->get('security.token_storage')->getToken()->getUser();
 
         return [
             [
@@ -25,7 +25,7 @@ class DeveloperController extends Controller
                 'id'      => 'developer',
                 'title'   => 'Developer',
                 'icon'    => 'fa fa-fw fa-code',
-                'display' => $currentUser->getDeveloperStatus() ? true : false,
+                'display' => $user->getDeveloperStatus() ? true : false,
             ],
             [
                 'type'   => 'link',
@@ -58,7 +58,7 @@ class DeveloperController extends Controller
                 'title'   => 'Create developer account',
                 'href'    => 'developer-register',
                 'view'    => 'DeveloperController::register',
-                'display' => $currentUser->getDeveloperStatus() ? false : true,
+                'display' => $user->getDeveloperStatus() ? false : true,
             ],
         ];
     }
@@ -74,9 +74,8 @@ class DeveloperController extends Controller
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
-        if ((int)$user->getDeveloperStatus() != 1) {
-            header('Location: '.$this->generateUrl('panel', ['page' => 'developer-register']));
-            exit;
+        if (!$user->getDeveloperStatus()) {
+            return $this->redirectToRoute('panel', ['page' => 'developer-register']);
         }
 
         $createAppForm = $this->createForm(CreateDevApp::class, null, ['entity_manager' => $em]);
@@ -93,8 +92,7 @@ class DeveloperController extends Controller
                 $user->getId()
             );
 
-            header('Location: '.$this->generateUrl('panel', ['page' => 'developer-applications']));
-            exit;
+            return $this->redirectToRoute('panel', ['page' => 'developer-applications']);
         }
 
         return $this->render('panel/developer-create-applications.html.twig', [
@@ -110,8 +108,7 @@ class DeveloperController extends Controller
         $user = $this->getUser();
 
         if (!$user->getDeveloperStatus()) {
-            header('Location: '.$this->generateUrl('panel', ['page' => 'developer-register']));
-            exit;
+            return $this->redirectToRoute('panel', ['page' => 'developer-register']);
         }
 
         /** @var \App\Entity\OAuthClient[] $apps */
@@ -129,14 +126,12 @@ class DeveloperController extends Controller
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
-        if ((int)$user->getDeveloperStatus() != 1) {
-            header('Location: '.$this->generateUrl('panel', ['page' => 'developer-register']));
-            exit;
+        if (!$user->getDeveloperStatus()) {
+            return $this->redirectToRoute('panel', ['page' => 'developer-register']);
         }
 
         if (!$request->query->has('app')) {
-            header('Location: '.$this->generateUrl('panel', ['page' => 'developer-applications']));
-            exit;
+            return $this->redirectToRoute('panel', ['page' => 'developer-applications']);
         }
         $appId = $request->query->get('app');
         /** @var \App\Entity\OAuthClient $appData */
@@ -160,9 +155,8 @@ class DeveloperController extends Controller
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
-        if ((int)$user->getDeveloperStatus() == 1) {
-            header('Location: '.$this->generateUrl('panel', ['page' => 'developer-applications']));
-            exit;
+        if ($user->getDeveloperStatus()) {
+            return $this->redirectToRoute('panel', ['page' => 'developer-applications']);
         }
 
         $developerForm = $this->createForm(CreateDevAccount::class);
@@ -171,8 +165,7 @@ class DeveloperController extends Controller
         if ($developerForm->isSubmitted()) {
             $user->setDeveloperStatus(true);
             $em->flush();
-            header('Location: '.$this->generateUrl('panel', ['page' => 'developer-applications']));
-            exit;
+            return $this->redirectToRoute('panel', ['page' => 'developer-applications']);
         }
 
         return $this->render('panel/developer-register.html.twig', [

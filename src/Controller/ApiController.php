@@ -6,7 +6,6 @@ use App\Entity\User;
 use App\Helper\AdminControlPanel;
 use App\Helper\SimpleImage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class ApiController extends Controller
@@ -39,7 +38,7 @@ class ApiController extends Controller
                 exit;
             }
         } else {
-            return new JsonResponse(['error' => true, 'error_message' => 'user_not_found']);
+            return $this->json(['error' => true, 'error_message' => 'user_not_found']);
         }
     }
 
@@ -55,7 +54,7 @@ class ApiController extends Controller
 
         // Validates if the file is in the right format
         if (!in_array($file->getMimeType(), ['image/png', 'image/jpeg', 'image/gif'])) {
-            return new JsonResponse(['error' => true, 'error_message' => 'mine_type_not_valid']);
+            return $this->json(['error' => true, 'error_message' => 'mine_type_not_valid']);
         }
 
         // Generate a unique name for the file before saving it
@@ -81,7 +80,7 @@ class ApiController extends Controller
         $user->getProfile()->setPicture($fileName);
         $em->flush();
 
-        return new JsonResponse(['files' => ['name' => $fileName]]);
+        return $this->json(['files' => ['name' => $fileName]]);
     }
 
     public function uploadProgress(Request $request)
@@ -154,7 +153,7 @@ class ApiController extends Controller
 
             $user->setUsername($request->request->get('username'));
             $this->getDoctrine()->getManager()->flush();
-            return new JsonResponse(['username_updated']);
+            return $this->json(['username_updated']);
 
         } elseif ($element === 'email') {
             if (!$this->isCsrfTokenValid('edit_email', $csrf)) {
@@ -169,7 +168,7 @@ class ApiController extends Controller
             $user->setEmail($request->request->get('email'));
             $user->setEmailVerified(false);
             $this->getDoctrine()->getManager()->flush();
-            return new JsonResponse(['email_updated']);
+            return $this->json(['email_updated']);
 
         } else {
             return $this->createNotFoundException();

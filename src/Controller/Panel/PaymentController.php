@@ -3,7 +3,6 @@
 namespace App\Controller\Panel;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
 
 class PaymentController extends Controller
 {
@@ -50,6 +49,6 @@ class PaymentController extends Controller
 
     public function payment()
     {
-        return new Response();
+        return $this->render('bundles/TwigBundle/Exception/error404.html.twig', ['status_code' => '', 'status_text' => '']);
     }
 }

@@ -6,7 +6,6 @@ use App\Form\DeleteAccountType;
 use App\Helper\AccountHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class SecurityController extends Controller
 {
@@ -54,12 +53,12 @@ class SecurityController extends Controller
 
     public function inactivity()
     {
-        return new Response();
+        return $this->render('bundles/TwigBundle/Exception/error404.html.twig', ['status_code' => '', 'status_text' => '']);
     }
 
     public function loginLog()
     {
-        return new Response();
+        return $this->render('bundles/TwigBundle/Exception/error404.html.twig', ['status_code' => '', 'status_text' => '']);
     }
 
     public function deleteAccount(Request $request, $navigation)
@@ -73,8 +72,7 @@ class SecurityController extends Controller
         $deleteAccountForm->handleRequest($request);
         if ($deleteAccountForm->isSubmitted() && $deleteAccountForm->isValid()) {
             AccountHelper::removeUser($em, $user);
-            header('Location: '.$this->generateUrl('logout'));
-            exit;
+            return $this->redirectToRoute('logout');
         }
 
         return $this->render('panel/delete-account.html.twig', [

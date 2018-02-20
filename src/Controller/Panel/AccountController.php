@@ -177,8 +177,7 @@ class AccountController extends Controller
 
                 $em->flush();
 
-                header('Location: '.$this->generateUrl('panel', ['page' => 'profile']));
-                exit;
+                return $this->redirectToRoute('panel', ['page' => 'profile']);
             } else {
                 $errorMessages['password_verify'] = $translator->trans('panel.form.update_profile.password_verify.constraints.wrong_password');
             }
@@ -227,8 +226,7 @@ class AccountController extends Controller
 
                 $em->flush();
 
-                header('Location: '.$this->generateUrl('panel', ['page' => 'profile']));
-                exit;
+                return $this->redirectToRoute('panel', ['page' => 'profile']);
             } else {
                 $errorMessage['password_verify'] = $translator->trans('panel.form.add_address.password_verify.constraints.wrong_password');
             }

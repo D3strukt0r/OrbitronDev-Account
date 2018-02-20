@@ -17,7 +17,6 @@ use OAuth2\Scope;
 use OAuth2\Server;
 use OAuth2\Storage\Memory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -180,7 +179,7 @@ class OAuthController extends Controller
         $user = $em->getRepository(User::class)->findOneBy(['id' => $token['user_id']]);
 
         if (is_null($token['scope'])) {
-            return new JsonResponse();
+            return $this->json([]);
         }
 
         $scopeList = explode(' ', $token['scope']);
@@ -200,7 +199,7 @@ class OAuthController extends Controller
                 $responseData[$key] = $value;
             }
         }
-        return new JsonResponse($responseData);
+        return $this->json($responseData);
     }
 
     /**
