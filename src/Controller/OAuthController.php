@@ -8,11 +8,10 @@ use App\Entity\OAuthClient;
 use App\Entity\OAuthRefreshToken;
 use App\Entity\OAuthScope;
 use App\Entity\User;
+use OAuth2\GrantType\AuthorizationCode;
 use OAuth2\GrantType\ClientCredentials;
 use OAuth2\GrantType\RefreshToken;
-use OAuth2\OpenID\GrantType\AuthorizationCode;
 use OAuth2\Request as OAuthRequest;
-use OAuth2\Response;
 use OAuth2\Response as OAuthResponse;
 use OAuth2\Scope;
 use OAuth2\Server;
@@ -100,7 +99,7 @@ class OAuthController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $requestOAuth = OAuthRequest::createFromGlobals();
-        $responseOAuth = new Response();
+        $responseOAuth = new OAuthResponse();
 
         // validate the authorize request
         if (!$this->oauthServer->validateAuthorizeRequest($requestOAuth, $responseOAuth)) {
