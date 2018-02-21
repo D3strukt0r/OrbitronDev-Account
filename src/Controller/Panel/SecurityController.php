@@ -31,9 +31,9 @@ class SecurityController extends Controller
                 'type'   => 'link',
                 'parent' => 'security',
                 'id'     => 'log',
-                'title'  => 'Login log',
-                'href'   => 'login-log',
-                'view'   => 'SecurityController::loginLog',
+                'title'  => 'Activity history',
+                'href'   => 'activity-history',
+                'view'   => 'SecurityController::activityHistory',
             ],
             [
                 'type'   => 'link',
@@ -51,14 +51,18 @@ class SecurityController extends Controller
         return 30;
     }
 
-    public function inactivity()
+    public function inactivity($navigation)
     {
-        return $this->render('bundles/TwigBundle/Exception/error404.html.twig', ['status_code' => '', 'status_text' => '']);
+        return $response = $this->forward('App\\Controller\\Panel\\DefaultController::notFound', [
+            'navigation' => $navigation,
+        ]);
     }
 
-    public function loginLog()
+    public function activityHistory($navigation)
     {
-        return $this->render('bundles/TwigBundle/Exception/error404.html.twig', ['status_code' => '', 'status_text' => '']);
+        return $response = $this->forward('App\\Controller\\Panel\\DefaultController::notFound', [
+            'navigation' => $navigation,
+        ]);
     }
 
     public function deleteAccount(Request $request, $navigation)

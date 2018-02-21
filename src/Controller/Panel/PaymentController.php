@@ -47,8 +47,10 @@ class PaymentController extends Controller
         ]);
     }
 
-    public function payment()
+    public function payment($navigation)
     {
-        return $this->render('bundles/TwigBundle/Exception/error404.html.twig', ['status_code' => '', 'status_text' => '']);
+        return $response = $this->forward('App\\Controller\\Panel\\DefaultController::notFound', [
+            'navigation' => $navigation,
+        ]);
     }
 }
