@@ -2,7 +2,6 @@
 
 namespace App\Helper;
 
-
 use Psr\Container\ContainerInterface;
 
 class AdminControlPanel

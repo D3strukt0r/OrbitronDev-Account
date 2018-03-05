@@ -23,7 +23,6 @@ confirm:
     path: /confirm-email
     controller: App\Controller\DefaultController::confirm
 
-
 panel_default:
     path: /p
     controller: FrameworkBundle:Redirect:redirect
