@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Helper\AccountHelper;
+use App\Service\AccountHelper;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class SetupController extends Controller
 {
-    public function oneTimeSetup(Request $request, KernelInterface $kernel, PdoSessionHandler $sessionHandlerService)
+    public function oneTimeSetup(Request $request, KernelInterface $kernel, PdoSessionHandler $sessionHandlerService, AccountHelper $helper)
     {
         if ($request->query->get('key') == $this->getParameter('kernel.secret')) {
 
@@ -57,11 +57,10 @@ class SetupController extends Controller
             }
             if ($request->query->get('action') == 'add-default-entries') {
                 // Add default values
-                $em = $this->getDoctrine()->getManager();
                 $text = '';
-                AccountHelper::addDefaultSubscriptionTypes($em);
+                $helper->addDefaultSubscriptionTypes();
                 $text .= 'Subscription types added<br />';
-                AccountHelper::addDefaultScopes($em);
+                $helper->addDefaultScopes();
                 $text .= 'Scopes added<br />';
 
                 return new Response($text);

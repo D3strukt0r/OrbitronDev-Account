@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helper;
+namespace App\Service;
 
 use App\Entity\OAuthClient;
 use App\Entity\OAuthScope;
@@ -9,7 +9,7 @@ use App\Entity\User;
 use App\Entity\UserProfiles;
 use App\Entity\UserSubscription;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class AccountHelper
 {
@@ -43,19 +43,33 @@ class AccountHelper
     ];
 
     /**
+     * @var \Doctrine\Common\Persistence\ObjectManager $em
+     */
+    private $em;
+
+    /**
+     * @var \Symfony\Component\HttpFoundation\Request $request
+     */
+    private $request;
+
+    public function __construct(ObjectManager $manager, RequestStack $request)
+    {
+        $this->em = $manager;
+        $this->request = $request->getCurrentRequest();
+    }
+
+    /**
      * Add a new user. Username, Email, and password is required twice. Returns
      * the user id.
      *
-     * @param \Doctrine\Common\Persistence\ObjectManager $entityManager
-     * @param \Symfony\Component\HttpFoundation\Request  $request
-     * @param string                                     $username
-     * @param string                                     $password
-     * @param string                                     $passwordVerify
-     * @param string                                     $email
+     * @param string $username
+     * @param string $password
+     * @param string $passwordVerify
+     * @param string $email
      *
      * @return int|string
      */
-    public static function addUser(ObjectManager $entityManager, Request $request, $username, $password, $passwordVerify, $email)
+    public function addUser($username, $password, $passwordVerify, $email)
     {
         // Check username
         if (strlen($username) == 0) {
@@ -64,16 +78,16 @@ class AccountHelper
             return 'username:username_short';
         } elseif (strlen($username) > self::$settings['username']['max_length']) {
             return 'username:username_long';
-        } elseif (self::usernameExists($entityManager, $username)) {
+        } elseif ($this->usernameExists($username)) {
             return 'username:user_exists';
-        } elseif (self::usernameBlocked($username)) {
+        } elseif ($this->usernameBlocked($username)) {
             return 'username:blocked_name';
-        } elseif (!self::usernameValid($username)) {
+        } elseif (!$this->usernameValid($username)) {
             return 'username:not_valid_name';
         } // Check E-Mail
         elseif (strlen($email) == 0) {
             return 'email:insert_email';
-        } elseif (!self::emailValid($email)) {
+        } elseif (!$this->emailValid($email)) {
             return 'email:email_not_valid';
         } // Check password
         elseif (strlen($password) == 0) {
@@ -92,8 +106,8 @@ class AccountHelper
             ->setEmailVerified(false)
             ->setCreatedOn(new \DateTime())
             ->setLastOnlineAt(new \DateTime())
-            ->setCreatedIp($request->getClientIp())
-            ->setLastIp($request->getClientIp())
+            ->setCreatedIp($this->request->getClientIp())
+            ->setLastIp($this->request->getClientIp())
             ->setDeveloperStatus(false);
 
         $userProfile = (new UserProfiles())
@@ -101,7 +115,7 @@ class AccountHelper
         $user->setProfile($userProfile);
 
         /** @var SubscriptionType $defaultSubscription */
-        $defaultSubscription = $entityManager->find(SubscriptionType::class, self::$settings['subscription']['default']);
+        $defaultSubscription = $this->em->find(SubscriptionType::class, self::$settings['subscription']['default']);
 
         $userSubscription = (new UserSubscription())
             ->setUser($user)
@@ -110,38 +124,36 @@ class AccountHelper
             ->setExpiresAt(new \DateTime());
         $user->setSubscription($userSubscription);
 
-        $entityManager->persist($user);
-        $entityManager->flush();
+        $this->em->persist($user);
+        $this->em->flush();
 
         return $user;
     }
 
     /**
-     * @param \Doctrine\Common\Persistence\ObjectManager $em
-     * @param \App\Entity\User                           $user
+     * @param \App\Entity\User $user
      */
-    public static function removeUser(ObjectManager $em, User $user)
+    public function removeUser(User $user)
     {
-        $em->remove($user);
-        $em->flush();
+        $this->em->remove($user);
+        $this->em->flush();
     }
 
     /**
      * Checks whether the username or email exists in the database. Returns
      * true when the username or email exist once in the database.
      *
-     * @param \Doctrine\Common\Persistence\ObjectManager $em
-     * @param string                                     $usernameOrEmail
+     * @param string $usernameOrEmail
      *
      * @return \App\Entity\User|bool
      */
-    public static function userExists(ObjectManager $em, $usernameOrEmail)
+    public function userExists($usernameOrEmail)
     {
         /** @var User $user */
-        $user = $em->getRepository(User::class)->findOneBy(['username' => $usernameOrEmail]);
+        $user = $this->em->getRepository(User::class)->findOneBy(['username' => $usernameOrEmail]);
         if (is_null($user)) {
             /** @var User $user */
-            $user = $em->getRepository(User::class)->findOneBy(['email' => $usernameOrEmail]);
+            $user = $this->em->getRepository(User::class)->findOneBy(['email' => $usernameOrEmail]);
             if (is_null($user)) {
                 return false;
             }
@@ -153,14 +165,13 @@ class AccountHelper
      * Checks whether the username is already existing in the database. Returns
      * true when the username is already existing once in the database.
      *
-     * @param \Doctrine\Common\Persistence\ObjectManager $em
-     * @param string                                     $username
+     * @param string $username
      *
      * @return bool
      */
-    public static function usernameExists(ObjectManager $em, $username)
+    public function usernameExists($username)
     {
-        $user = $em->getRepository(User::class)->findOneBy(['username' => $username]);
+        $user = $this->em->getRepository(User::class)->findOneBy(['username' => $username]);
 
         if (is_null($user)) {
             return false;
@@ -178,7 +189,7 @@ class AccountHelper
      *
      * @return bool
      */
-    public static function usernameBlocked($username)
+    public function usernameBlocked($username)
     {
         foreach (self::$settings['username']['blocked'] as $bl) {
             if (strtolower($username) == strtolower($bl)) {
@@ -203,7 +214,7 @@ class AccountHelper
      *
      * @return int
      */
-    public static function usernameValid($username)
+    public function usernameValid($username)
     {
         return preg_match(self::$settings['username']['pattern'], $username);
     }
@@ -212,14 +223,13 @@ class AccountHelper
      * Checks whether the email is already existing in the database. Returns
      * true when the email is already existing once in the database.
      *
-     * @param \Doctrine\Common\Persistence\ObjectManager $em
-     * @param string                                     $email
+     * @param string $email
      *
      * @return bool
      */
-    public static function emailExists(ObjectManager $em, $email)
+    public function emailExists($email)
     {
-        $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
+        $user = $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
 
         if (is_null($user)) {
             return false;
@@ -236,25 +246,24 @@ class AccountHelper
      *
      * @return int
      */
-    public static function emailValid($email)
+    public function emailValid($email)
     {
         return preg_match(self::$settings['email']['pattern'], $email);
     }
 
     /**
-     * @param \Doctrine\Common\Persistence\ObjectManager $em
-     * @param string                                     $clientName
-     * @param string                                     $clientSecret
-     * @param string                                     $redirectUri
-     * @param array                                      $scopes
-     * @param int                                        $userId
+     * @param string $clientName
+     * @param string $clientSecret
+     * @param string $redirectUri
+     * @param array  $scopes
+     * @param int    $userId
      *
      * @return string
      */
-    public static function addApp(ObjectManager $em, $clientName, $clientSecret, $redirectUri, $scopes, $userId)
+    public function addApp($clientName, $clientSecret, $redirectUri, $scopes, $userId)
     {
         /** @var \App\Entity\User $user */
-        $user = $em->find(User::class, $userId);
+        $user = $this->em->find(User::class, $userId);
         $addClient = new OAuthClient();
         $addClient
             ->setClientIdentifier($clientName)
@@ -263,13 +272,13 @@ class AccountHelper
             ->setScopes($scopes)
             ->setUsers($user->getId());
 
-        $em->persist($addClient);
-        $em->flush();
+        $this->em->persist($addClient);
+        $this->em->flush();
 
         return $addClient->getId();
     }
 
-    public static function addDefaultSubscriptionTypes(ObjectManager $em)
+    public function addDefaultSubscriptionTypes()
     {
         $subscriptions = [];
         $subscriptions[] = (new SubscriptionType())
@@ -286,12 +295,12 @@ class AccountHelper
             ->setPermissions(['web_service', 'web_service_multiple', 'support']);
 
         foreach ($subscriptions as $item) {
-            $em->persist($item);
+            $this->em->persist($item);
         }
-        $em->flush();
+        $this->em->flush();
     }
 
-    public static function addDefaultScopes(ObjectManager $em)
+    public function addDefaultScopes()
     {
         $scope = [];
         $scope[] = (new OAuthScope())
@@ -324,8 +333,8 @@ class AccountHelper
             ->setDefault(false);
 
         foreach ($scope as $item) {
-            $em->persist($item);
+            $this->em->persist($item);
         }
-        $em->flush();
+        $this->em->flush();
     }
 }

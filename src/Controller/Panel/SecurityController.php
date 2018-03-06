@@ -3,7 +3,7 @@
 namespace App\Controller\Panel;
 
 use App\Form\DeleteAccountType;
-use App\Helper\AccountHelper;
+use App\Service\AccountHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -65,9 +65,8 @@ class SecurityController extends Controller
         ]);
     }
 
-    public function deleteAccount(Request $request, $navigation)
+    public function deleteAccount(Request $request, AccountHelper $helper, $navigation)
     {
-        $em = $this->getDoctrine()->getManager();
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
@@ -75,7 +74,7 @@ class SecurityController extends Controller
 
         $deleteAccountForm->handleRequest($request);
         if ($deleteAccountForm->isSubmitted() && $deleteAccountForm->isValid()) {
-            AccountHelper::removeUser($em, $user);
+            $helper->removeUser($user);
             return $this->redirectToRoute('logout');
         }
 

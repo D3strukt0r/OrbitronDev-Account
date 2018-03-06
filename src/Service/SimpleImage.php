@@ -16,7 +16,7 @@
  * GNU General Public License for more details:
  * http://www.gnu.org/licenses/gpl.html
  */
-namespace App\Helper;
+namespace App\Service;
 
 class SimpleImage
 {

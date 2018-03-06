@@ -3,10 +3,10 @@
 namespace App\Controller\Panel;
 
 use App\Entity\OAuthClient;
-use App\Helper\AccountHelper;
+use App\Service\AccountHelper;
 use App\Form\CreateDevAccount;
 use App\Form\CreateDevApp;
-use App\Helper\TokenGenerator;
+use App\Service\TokenGenerator;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -68,7 +68,7 @@ class DeveloperController extends Controller
         return 40;
     }
 
-    public function createApplication(Request $request, $navigation)
+    public function createApplication(Request $request, AccountHelper $helper, $navigation)
     {
         $em = $this->getDoctrine()->getManager();
         /** @var \App\Entity\User $user */
@@ -83,8 +83,7 @@ class DeveloperController extends Controller
         $createAppForm->handleRequest($request);
         if ($createAppForm->isSubmitted() && $createAppForm->isValid()) {
 
-            AccountHelper::addApp(
-                $em,
+            $helper->addApp(
                 $createAppForm->get('client_name')->getData(),
                 TokenGenerator::createRandomToken(['use_openssl' => false]),
                 $createAppForm->get('redirect_uri')->getData(),

@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Helper\AdminControlPanel;
-use App\Helper\SimpleImage;
+use App\Service\AdminControlPanel;
+use App\Service\SimpleImage;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 

@@ -7,9 +7,9 @@ use App\Form\ConfirmEmailType;
 use App\Form\ForgotType;
 use App\Form\RegisterType;
 use App\Form\ResetPasswordType;
-use App\Helper\AdminControlPanel;
-use App\Helper\AccountHelper;
-use App\Helper\TokenGenerator;
+use App\Service\AdminControlPanel;
+use App\Service\AccountHelper;
+use App\Service\TokenGenerator;
 use Swift_Mailer;
 use Swift_Message;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -57,7 +57,7 @@ class DefaultController extends Controller
         ]);
     }
 
-    public function register(Request $request, TranslatorInterface $translator, Swift_Mailer $mailer)
+    public function register(Request $request, TranslatorInterface $translator, Swift_Mailer $mailer, AccountHelper $helper)
     {
         // If user is logged in, redirect to panel
         /** @var \App\Entity\User $user */
@@ -76,9 +76,7 @@ class DefaultController extends Controller
             ];
 
             $registerData = $registerForm->getData();
-            $registerResult = AccountHelper::addUser(
-                $this->getDoctrine()->getManager(),
-                $request,
+            $registerResult = $helper->addUser(
                 $registerData['username'],
                 $registerData['password'],
                 $registerData['password_verify'],
@@ -188,7 +186,7 @@ class DefaultController extends Controller
         return $result;
     }
 
-    public function forgot(Request $request)
+    public function forgot(Request $request, AccountHelper $helper)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -260,12 +258,11 @@ class DefaultController extends Controller
                 return $this->render('forgot-password-form.html.twig', [
                     'reset_form' => $resetForm->createView(),
                 ]);
-
             }
         } else {
             $forgotForm->handleRequest($request);
             if ($forgotForm->isSubmitted() && $forgotForm->isValid()) {
-                if (AccountHelper::emailExists($em, $forgotForm->get('email')->getData())) {
+                if ($helper->emailExists($forgotForm->get('email')->getData())) {
                     /** @var \App\Entity\User $user */
                     $user = $em->getRepository(User::class)->findOneBy(['email' => $forgotForm->get('email')->getData()]);
                     $tokenGenerator = new TokenGenerator($em);

@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Form\Type\ReCaptchaType;
-use App\Helper\AccountHelper;
+use App\Service\AccountHelper;
 use App\Validator\Constraints\ReCaptchaTrue;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;

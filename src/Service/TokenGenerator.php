@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helper;
+namespace App\Service;
 
 use App\Entity\Token;
 use Doctrine\Common\Persistence\ObjectManager;

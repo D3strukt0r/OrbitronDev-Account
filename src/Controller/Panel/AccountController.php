@@ -2,7 +2,7 @@
 
 namespace App\Controller\Panel;
 
-use App\Helper\AccountHelper;
+use App\Service\AccountHelper;
 use App\Entity\UserAddress;
 use App\Form\AddAddressType;
 use App\Form\EditAccountType;
@@ -56,7 +56,7 @@ class AccountController extends Controller
         return 10;
     }
 
-    public function account(Request $request, TranslatorInterface $translator, $navigation)
+    public function account(Request $request, TranslatorInterface $translator, AccountHelper $helper, $navigation)
     {
         $em = $this->getDoctrine()->getManager();
         /** @var \App\Entity\User $user */
@@ -92,11 +92,11 @@ class AccountController extends Controller
                         $errorMessages['new_username'] = $translator->trans('panel.form.update_account.new_username.constraints.username_short');
                     } elseif (strlen($newUsername) > AccountHelper::$settings['username']['max_length']) {
                         $errorMessages['new_username'] = $translator->trans('panel.form.update_account.new_username.constraints.username_long');
-                    } elseif (AccountHelper::usernameExists($em, $newUsername)) {
+                    } elseif ($helper->usernameExists($newUsername)) {
                         $errorMessages['new_username'] = $translator->trans('panel.form.update_account.new_username.constraints.username_exists');
-                    } elseif (AccountHelper::usernameBlocked($newUsername)) {
+                    } elseif ($helper->usernameBlocked($newUsername)) {
                         $errorMessages['new_username'] = $translator->trans('panel.form.update_account.new_username.constraints.blocked_username');
-                    } elseif (!AccountHelper::usernameValid($newUsername)) {
+                    } elseif (!$helper->usernameValid($newUsername)) {
                         $errorMessages['new_username'] = $translator->trans('panel.form.update_account.new_username.constraints.not_valid');
                     }
                 }
