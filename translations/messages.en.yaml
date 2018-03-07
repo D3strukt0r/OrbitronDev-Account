@@ -1,5 +1,6 @@
 general:
     title: 'OrbitronDev Account'
+    copyright: '© 2013-2018 OrbitronDev. All rights reserved.'
 login:
     title: 'Login'
     form:
@@ -120,7 +121,6 @@ panel:
         logout: 'Logout'
     message:
         close: 'Close'
-    copyright: 'Copyright © OrbitronDev 2017'
     edit: 'Edit'
     yes: 'Yes'
     no: 'No'

@@ -26,10 +26,10 @@ class HomeController extends Controller
 
     public function home($navigation)
     {
-        return $this->render('panel/home.html.twig', array(
+        return $this->render('panel/home.html.twig', [
             'navigation_links' => $navigation,
             'user'             => $this->getUser(),
-        ));
+        ]);
     }
 
 }
