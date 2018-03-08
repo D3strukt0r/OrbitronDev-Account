@@ -7,6 +7,7 @@ use App\Entity\UserAddress;
 use App\Form\AddAddressType;
 use App\Form\EditAccountType;
 use App\Form\EditProfileType;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +23,7 @@ class AccountController extends Controller
                 'parent' => 'root',
                 'id'     => 'account',
                 'title'  => 'Account',
-                'icon'   => 'fa fa-fw fa-user',
+                'icon'   => 'hs-admin-user',
             ],
             [
                 'type'   => 'link',
@@ -56,9 +57,8 @@ class AccountController extends Controller
         return 10;
     }
 
-    public function account(Request $request, TranslatorInterface $translator, AccountHelper $helper, $navigation)
+    public function account(ObjectManager $em, Request $request, TranslatorInterface $translator, AccountHelper $helper, $navigation)
     {
-        $em = $this->getDoctrine()->getManager();
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
@@ -151,9 +151,8 @@ class AccountController extends Controller
         ]);
     }
 
-    public function profile(Request $request, TranslatorInterface $translator, $navigation)
+    public function profile(ObjectManager $em, Request $request, TranslatorInterface $translator, $navigation)
     {
-        $em = $this->getDoctrine()->getManager();
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
@@ -200,9 +199,8 @@ class AccountController extends Controller
         ]);
     }
 
-    public function addAddress(Request $request, TranslatorInterface $translator, $navigation)
+    public function addAddress(ObjectManager $em, Request $request, TranslatorInterface $translator, $navigation)
     {
-        $em = $this->getDoctrine()->getManager();
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 

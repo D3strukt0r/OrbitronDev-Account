@@ -14,7 +14,7 @@ class PaymentController extends Controller
                 'parent' => 'root',
                 'id'     => 'payment',
                 'title'  => 'Billing',
-                'icon'   => 'fa fa-fw fa-credit-card',
+                'icon'   => 'hs-admin-credit-card',
             ],
             [
                 'type'   => 'link',

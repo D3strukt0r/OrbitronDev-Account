@@ -105,12 +105,12 @@
                                 <tbody>
                                 <tr>
                                     <td><b>{{ 'panel.id'|trans }}</b></td>
-                                    <td>{{ user.id }}</td>
+                                    <td>{{ app.user.id }}</td>
                                     <td></td>
                                 </tr>
                                 <tr>
                                     <td><b>{{ 'panel.username'|trans }}</b></td>
-                                    <td data-field="username">{{ user.username }}</td>
+                                    <td data-field="username">{{ app.user.username }}</td>
                                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('edit_username') }}"/>
                                     <td>
                                         <a class="js-edit u-link-v5 g-color-gray-light-v6 g-color-lightblue-v3--hover"
@@ -132,7 +132,7 @@
                                 </tr>
                                 <tr>
                                     <td><b>{{ 'panel.email'|trans }}</b></td>
-                                    <td data-field="email">{{ user.email }}</td>
+                                    <td data-field="email">{{ app.user.email }}</td>
                                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('edit_email') }}"/>
                                     <td>
                                         <a class="js-edit u-link-v5 g-color-gray-light-v6 g-color-lightblue-v3--hover"
@@ -143,8 +143,8 @@
                                 </tr>
                                 <tr>
                                     <td><b>{{ 'panel.page.home.block1.activated'|trans }}</b></td>
-                                    <td>{% if user.emailVerified == 1 %}{{ 'panel.yes'|trans }}{% else %}{{ 'panel.no'|trans }}{% endif %}</td>
-                                    <td>{% if not user.emailVerified %}<a href="{{ path('confirm') }}" class="btn u-btn-yellow btn-sm">{{ 'panel.activate'|trans }}</a>{% endif %}</td>
+                                    <td>{% if app.user.emailVerified == 1 %}{{ 'panel.yes'|trans }}{% else %}{{ 'panel.no'|trans }}{% endif %}</td>
+                                    <td>{% if not app.user.emailVerified %}<a href="{{ path('confirm') }}" class="btn u-btn-yellow btn-sm">{{ 'panel.activate'|trans }}</a>{% endif %}</td>
                                 </tr>
                                 </tbody>
                             </table><!-- /.table .table-hover -->

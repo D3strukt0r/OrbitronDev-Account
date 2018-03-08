@@ -10,6 +10,7 @@ use App\Form\ResetPasswordType;
 use App\Service\AdminControlPanel;
 use App\Service\AccountHelper;
 use App\Service\TokenGenerator;
+use Doctrine\Common\Persistence\ObjectManager;
 use Swift_Mailer;
 use Swift_Message;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -25,22 +26,26 @@ class DefaultController extends Controller
 {
     public function index()
     {
-        // If user is logged in, redirect to panel
+        //////////// TEST IF USER IS LOGGED IN ////////////
+        /** @var \App\Entity\User|null $user */
         $user = $this->getUser();
         if ($user instanceof UserInterface) {
             return $this->redirectToRoute('panel_default');
         } else {
-            return $this->redirectToRoute('login');
+            throw $this->createAccessDeniedException();
         }
+        //////////// END TEST IF USER IS LOGGED IN ////////////
     }
 
     public function login(Request $request, AuthenticationUtils $authUtils)
     {
-        // If user is logged in, redirect to panel
+        //////////// TEST IF USER IS LOGGED IN ////////////
+        /** @var \App\Entity\User|null $user */
         $user = $this->getUser();
         if ($user instanceof UserInterface) {
             return $this->redirectToRoute('panel_default');
         }
+        //////////// END TEST IF USER IS LOGGED IN ////////////
 
         $redirectUrl = $request->query->has('_target_path') ? $request->query->get('_target_path') : $this->generateUrl('panel', ['page' => 'home']);
 
@@ -59,12 +64,13 @@ class DefaultController extends Controller
 
     public function register(Request $request, TranslatorInterface $translator, Swift_Mailer $mailer, AccountHelper $helper)
     {
-        // If user is logged in, redirect to panel
-        /** @var \App\Entity\User $user */
+        //////////// TEST IF USER IS LOGGED IN ////////////
+        /** @var \App\Entity\User|null $user */
         $user = $this->getUser();
         if ($user instanceof UserInterface) {
             return $this->redirectToRoute('panel_default');
         }
+        //////////// END TEST IF USER IS LOGGED IN ////////////
 
         $registerForm = $this->createForm(RegisterType::class);
         $registerForm->handleRequest($request);
@@ -135,12 +141,13 @@ class DefaultController extends Controller
 
     public function panel(Request $request, $page)
     {
-        // If user is logged in, redirect to panel
-        /** @var \App\Entity\User $user */
+        //////////// TEST IF USER IS LOGGED IN ////////////
+        /** @var \App\Entity\User|null $user */
         $user = $this->getUser();
         if (!$user instanceof UserInterface) {
-            return $this->redirectToRoute('login');
+            throw $this->createAccessDeniedException();
         }
+        //////////// END TEST IF USER IS LOGGED IN ////////////
 
         AdminControlPanel::loadLibs($this->get('kernel')->getProjectDir(), $this->container);
 
@@ -186,15 +193,15 @@ class DefaultController extends Controller
         return $result;
     }
 
-    public function forgot(Request $request, AccountHelper $helper)
+    public function forgot(ObjectManager $em, Request $request, AccountHelper $helper)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        // If user is logged in, redirect to panel
+        //////////// TEST IF USER IS LOGGED IN ////////////
+        /** @var \App\Entity\User|null $user */
         $user = $this->getUser();
         if ($user instanceof UserInterface) {
             return $this->redirectToRoute('panel_default');
         }
+        //////////// END TEST IF USER IS LOGGED IN ////////////
 
         $forgotForm = $this->createForm(ForgotType::class);
 
@@ -241,7 +248,7 @@ class DefaultController extends Controller
                     }
 
                     $userId = $token->getInformation()['user_id'];
-                    /** @var \App\Entity\User $user */
+                    /** @var \App\Entity\User|null $user */
                     $user = $em->find(User::class, $userId);
                     $user->setPassword($password);
                     $em->flush();
@@ -263,7 +270,7 @@ class DefaultController extends Controller
             $forgotForm->handleRequest($request);
             if ($forgotForm->isSubmitted() && $forgotForm->isValid()) {
                 if ($helper->emailExists($forgotForm->get('email')->getData())) {
-                    /** @var \App\Entity\User $user */
+                    /** @var \App\Entity\User|null $user */
                     $user = $em->getRepository(User::class)->findOneBy(['email' => $forgotForm->get('email')->getData()]);
                     $tokenGenerator = new TokenGenerator($em);
                     $token = $tokenGenerator->generateToken('reset_password', (new \DateTime())->modify('+1 day'), ['user_id' => $user->getId()]);
@@ -297,12 +304,9 @@ class DefaultController extends Controller
         }
     }
 
-    public function confirm(Request $request)
+    public function confirm(ObjectManager $em, Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        // If user is logged in, redirect to panel
-        /** @var \App\Entity\User $user */
+        /** @var \App\Entity\User|null $user */
         $user = $this->getUser();
 
         $sendEmailForm = $this->createForm(ConfirmEmailType::class);

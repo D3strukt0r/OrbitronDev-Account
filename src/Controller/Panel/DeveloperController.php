@@ -7,6 +7,7 @@ use App\Service\AccountHelper;
 use App\Form\CreateDevAccount;
 use App\Form\CreateDevApp;
 use App\Service\TokenGenerator;
+use Doctrine\Common\Persistence\ObjectManager;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +25,7 @@ class DeveloperController extends Controller
                 'parent'  => 'root',
                 'id'      => 'developer',
                 'title'   => 'Developer',
-                'icon'    => 'fa fa-fw fa-code',
+                'icon'    => 'hs-admin-plug',
                 'display' => $user->getDeveloperStatus() ? true : false,
             ],
             [
@@ -68,9 +69,8 @@ class DeveloperController extends Controller
         return 40;
     }
 
-    public function createApplication(Request $request, AccountHelper $helper, $navigation)
+    public function createApplication(ObjectManager $em, Request $request, AccountHelper $helper, $navigation)
     {
-        $em = $this->getDoctrine()->getManager();
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
@@ -100,9 +100,8 @@ class DeveloperController extends Controller
         ]);
     }
 
-    public function applicationList($navigation)
+    public function applicationList(ObjectManager $em, $navigation)
     {
-        $em = $this->getDoctrine()->getManager();
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
@@ -119,9 +118,8 @@ class DeveloperController extends Controller
         ]);
     }
 
-    public function showApplication(Request $request, $navigation)
+    public function showApplication(ObjectManager $em, Request $request, $navigation)
     {
-        $em = $this->getDoctrine()->getManager();
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
@@ -148,9 +146,8 @@ class DeveloperController extends Controller
         ]);
     }
 
-    public function register(Request $request, $navigation)
+    public function register(ObjectManager $em, Request $request, $navigation)
     {
-        $em = $this->getDoctrine()->getManager();
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 

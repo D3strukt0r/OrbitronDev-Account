@@ -14,7 +14,7 @@ class HomeController extends Controller
             'id'     => 'home',
             'title'  => 'Overview',
             'href'   => 'home',
-            'icon'   => 'fa fa-fw fa-home',
+            'icon'   => 'hs-admin-panel',
             'view'   => 'HomeController::home',
         ];
     }
@@ -28,7 +28,6 @@ class HomeController extends Controller
     {
         return $this->render('panel/home.html.twig', [
             'navigation_links' => $navigation,
-            'user'             => $this->getUser(),
         ]);
     }
 

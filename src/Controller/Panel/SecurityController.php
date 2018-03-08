@@ -17,7 +17,7 @@ class SecurityController extends Controller
                 'parent' => 'root',
                 'id'     => 'security',
                 'title'  => 'Security',
-                'icon'   => 'fa fa-fw fa-lock',
+                'icon'   => 'hs-admin-lock',
             ],
             [
                 'type'   => 'link',

@@ -8,6 +8,7 @@ use App\Entity\OAuthClient;
 use App\Entity\OAuthRefreshToken;
 use App\Entity\OAuthScope;
 use App\Entity\User;
+use Doctrine\Common\Persistence\ObjectManager;
 use OAuth2\GrantType\AuthorizationCode;
 use OAuth2\GrantType\ClientCredentials;
 use OAuth2\GrantType\RefreshToken;
@@ -86,16 +87,15 @@ class OAuthController extends Controller
         )));
     }
 
-    public function authorize(Request $request)
+    public function authorize(ObjectManager $em, Request $request)
     {
-        /** @var \App\Entity\User $user */
+        /** @var \App\Entity\User|null $user */
         $user = $this->getUser();
         if (!$user instanceof UserInterface) {
             return $this->redirectToRoute('login', ['_target_path' => $request->server->get('REQUEST_URI')]);
         }
 
         $this->oauthServer();
-        $em = $this->getDoctrine()->getManager();
 
         $requestOAuth = OAuthRequest::createFromGlobals();
         $responseOAuth = new OAuthResponse();
@@ -158,10 +158,9 @@ class OAuthController extends Controller
     }
 
     // curl http://localhost/oauth/resource -d 'access_token=YOUR_TOKEN'
-    public function resource(Request $request)
+    public function resource(ObjectManager $em, Request $request)
     {
         $this->oauthServer();
-        $em = $this->getDoctrine()->getManager();
         $requestOAuth = OAuthRequest::createFromGlobals();
         $responseOAuth = new OAuthResponse();
 

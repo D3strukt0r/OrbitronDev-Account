@@ -5,18 +5,17 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Service\AdminControlPanel;
 use App\Service\SimpleImage;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 class ApiController extends Controller
 {
-    public function getImg(Request $request)
+    public function getImg(ObjectManager $em, Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-
         $userId = $request->query->getInt('user_id');
 
-        /** @var null|\App\Entity\User $selectedUser */
+        /** @var \App\Entity\User|null $selectedUser */
         $selectedUser = $em->find(User::class, $userId);
 
         $width = $request->query->has('width') ? $request->query->getInt('width') : 1000;
@@ -42,11 +41,9 @@ class ApiController extends Controller
         }
     }
 
-    public function updateProfilePic(Request $request)
+    public function updateProfilePic(ObjectManager $em, Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        /** @var \App\Entity\User $user */
+        /** @var \App\Entity\User|null $user */
         $user = $em->find(User::class, $request->query->getInt('user_id'));
 
         /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $file */
@@ -148,7 +145,7 @@ class ApiController extends Controller
             if (!$request->request->has('username')) {
                 throw $this->createNotFoundException();
             }
-            /** @var \App\Entity\User $user */
+            /** @var \App\Entity\User|null $user */
             $user = $this->getUser();
 
             $user->setUsername($request->request->get('username'));
@@ -162,7 +159,7 @@ class ApiController extends Controller
             if (!$request->request->has('email')) {
                 throw $this->createNotFoundException();
             }
-            /** @var \App\Entity\User $user */
+            /** @var \App\Entity\User|null $user */
             $user = $this->getUser();
 
             $user->setEmail($request->request->get('email'));
