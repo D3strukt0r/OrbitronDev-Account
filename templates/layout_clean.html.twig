@@ -38,7 +38,7 @@
     <link rel="stylesheet" href="https://web-assets.orbitrondev.org/unify-2.5/css/unify-globals.css" />
 
     <!-- CSS Customization -->
-    <link rel="stylesheet" href="/css/custom.css?v=10-02-2018" />
+    <link rel="stylesheet" href="/css/custom.css?v={{ "now"|date("d-m-Y") }}" />
     {% block stylesheets %}{% endblock %}
 </head>
 
@@ -55,25 +55,6 @@
     {% endblock %}
 </main>
 
-<!-- JS Google Analytics -->
-<script>
-    (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-            (i[r].q = i[r].q || []).push(arguments)
-        };
-        i[r].l = 1 * new Date();
-        a = s.createElement(o);
-        m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-    ga('create', 'UA-69484706-1', 'auto');
-    ga('send', 'pageview');
-</script>
-
 <!-- JS Global Compulsory -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.0.1/jquery-migrate.min.js"></script>
@@ -87,31 +68,11 @@
 <script src="https://web-assets.orbitrondev.org/unify-2.5/js/hs.core.js"></script>
 
 <!-- JS Custom -->
-<script src="/js/custom.js?v=10-02-2018"></script>
+<script src="/js/custom.js?v={{ "now"|date("d-m-Y") }}"></script>
 
 <!-- JS Plugins Init. -->
-<script>
-    window.addEventListener('load', function() {
-        window.cookieconsent.initialise({
-            'palette': {
-                'popup': {
-                    'background': '#252e39'
-                },
-                'button': {
-                    'background': '#14a7d0'
-                }
-            },
-            law: {
-                // Only show information if needed in the country
-                regionalLaw: false
-            },
-            location: {
-                // 'freegeoip' has to be taken out, as it is not avilable anymore
-                services: ['ipinfo', 'maxmind']
-            }
-        });
-    });
-</script>
+{% include '_cookie_notice.html.twig' %}
+{% include '_analytics.html.twig' %}
 {% block javascripts %}{% endblock %}
 <!--[if lt IE 9]>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
