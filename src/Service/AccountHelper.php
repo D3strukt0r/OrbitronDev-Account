@@ -317,19 +317,27 @@ class AccountHelper
             ->setDefault(false);
         $scope[] = (new OAuthScope())
             ->setScope('user:name')
-            ->setName('First name')
+            ->setName('Profile -> First name')
             ->setDefault(false);
         $scope[] = (new OAuthScope())
             ->setScope('user:surname')
-            ->setName('Surname')
+            ->setName('Profile -> Surname')
             ->setDefault(false);
         $scope[] = (new OAuthScope())
             ->setScope('user:birthday')
-            ->setName('Birthday')
+            ->setName('Profile -> Birthday')
+            ->setDefault(false);
+        $scope[] = (new OAuthScope())
+            ->setScope('user:activeaddresses')
+            ->setName('Profile -> The address which is selected as default')
+            ->setDefault(false);
+        $scope[] = (new OAuthScope())
+            ->setScope('user:addresses')
+            ->setName('Profile -> A list of all saved addresses')
             ->setDefault(false);
         $scope[] = (new OAuthScope())
             ->setScope('user:subscription')
-            ->setName('Subscription')
+            ->setName('Current subscription status')
             ->setDefault(false);
 
         foreach ($scope as $item) {

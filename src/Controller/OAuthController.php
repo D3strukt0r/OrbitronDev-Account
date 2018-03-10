@@ -266,6 +266,37 @@ class OAuthController extends Controller
      *
      * @return array
      */
+    private function scopeUserActiveaddresses($user)
+    {
+        return ['active_address' => $user->getProfile()->getActiveAddress()];
+    }
+
+    /**
+     * @param \App\Entity\User $user
+     *
+     * @return array
+     */
+    private function scopeUserAddresses($user)
+    {
+        $addresses = [];
+        foreach ($user->getProfile()->getAddresses() as $address) {
+            $addresses[$address->getId()] = [
+                'street' => $address->getStreet(),
+                'house_number' => $address->getHouseNumber(),
+                'zip_code' => $address->getZipCode(),
+                'city' => $address->getCity(),
+                'country' => $address->getCountry(),
+            ];
+        }
+
+        return ['addresses' => $addresses];
+    }
+
+    /**
+     * @param \App\Entity\User $user
+     *
+     * @return array
+     */
     private function scopeUserSubscription($user)
     {
         return ['subscription_type' => $user->getSubscription()->getSubscription()->getTitle()];

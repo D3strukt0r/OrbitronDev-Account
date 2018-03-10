@@ -65,6 +65,11 @@ class SetupController extends Controller
 
                 return new Response($text);
             }
+            if ($request->query->get('action') == 'add-default-scopes') {
+                $helper->addDefaultScopes();
+
+                return new Response('Scopes added');
+            }
             if ($request->query->get('action') == 'add-session-table') {
                 try {
                     $sessionHandlerService->createTable();
@@ -74,8 +79,8 @@ class SetupController extends Controller
                     return new Response('Session database not created');
                 }
             }
+            throw $this->createNotFoundException('Action not known');
         }
-
-        return null;
+        throw $this->createNotFoundException('Wrong key');
     }
 }

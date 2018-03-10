@@ -3,6 +3,11 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
+        $(document).ready(function() {
+            // Has to be executed beacause google maps changes this automatically to "off"
+            $("#pac-input").attr('autocomplete', 'nope');
+        });
+
         var autocomplete;
         var componentForm = {
             street_number: 'short_name',
@@ -24,7 +29,7 @@
             // Create the autocomplete object, restricting the search to geographical
             // location types.
             autocomplete = new google.maps.places.Autocomplete(
-                /** @type {!HTMLInputElement} */(document.getElementById('autocomplete')),
+                /** @type {!HTMLInputElement} */(document.getElementById('pac-input')),
                 {types: ['geocode']});
 
             // When the user selects an address from the dropdown, populate the address
@@ -76,7 +81,7 @@
         }
         // [END region_geolocation]
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSO1fpoQuukeVKiueZxzqhLCFlkgP0IMM&signed_in=true&libraries=places&callback=initAutocomplete" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSO1fpoQuukeVKiueZxzqhLCFlkgP0IMM&libraries=places&callback=initAutocomplete" async defer></script>
 {% endblock %}
 
 {% block breadcrumb %}
@@ -109,7 +114,7 @@
                         <div class="col-sm-8">
 
                             <div class="mb-2">
-                                <input id="autocomplete" class="form-control" autocomplete="off" placeholder="{{ 'panel.page.add_address.block1.address'|trans }}" onfocus="geolocate()" />
+                                <input id="pac-input" class="form-control" autocomplete="off" placeholder="{{ 'panel.page.add_address.block1.address'|trans }}" onfocus="geolocate()" />
                             </div>
 
                             <div class="form-row mb-2">

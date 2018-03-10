@@ -46,7 +46,7 @@ class OAuthRefreshToken
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=50, nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     protected $scope;
 
