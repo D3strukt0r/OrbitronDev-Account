@@ -30,9 +30,11 @@
 
                         <div class="form-group {% if register_form.username.vars.errors|length %}u-has-error-v1{% endif %} mb-4">
                             <div class="input-group">
-                                <span class="input-group-addon g-width-45 g-brd-gray-light-v4 g-color-gray-dark-v5">
-                                    <i class="icon-finance-067 u-line-icon-pro"></i>
-                                </span>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-0 g-bg-white g-color-gray-light-v1 g-brd-gray-light-v4">
+                                        <i class="icon-finance-067 u-line-icon-pro"></i>
+                                    </span>
+                                </div>
                                 {{ form_widget(register_form.username, {'attr': {'class': 'form-control g-brd-gray-light-v4 g-brd-primary--hover g-py-15 g-px-15'}}) }}
                             </div>
                             <small class="form-control-feedback">{{ form_errors(register_form.username) }}</small>
@@ -40,9 +42,11 @@
 
                         <div class="form-group {% if register_form.email.vars.errors|length %}u-has-error-v1{% endif %} mb-4">
                             <div class="input-group">
-                                <span class="input-group-addon g-width-45 g-brd-gray-light-v4 g-color-gray-dark-v5">
-                                    <i class="icon-communication-062 u-line-icon-pro"></i>
-                                </span>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text rounded-0 g-bg-white g-color-gray-light-v1 g-brd-gray-light-v4">
+                                        <i class="icon-communication-062 u-line-icon-pro"></i>
+                                    </span>
+                                </div>
                                 {{ form_widget(register_form.email, {'attr': {'class': 'form-control g-brd-gray-light-v4 g-brd-primary--hover g-py-15 g-px-15'}}) }}
                             </div>
                             <small class="form-control-feedback">{{ form_errors(register_form.email) }}</small>
@@ -51,9 +55,11 @@
                         <div class="row">
                             <div class="form-group {% if register_form.password.vars.errors|length %}u-has-error-v1{% endif %} col-xs-12 col-sm-6 mb-4">
                                 <div class="input-group">
-                                    <span class="input-group-addon g-width-45 g-brd-gray-light-v4 g-color-gray-dark-v5">
-                                        <i class="icon-media-094 u-line-icon-pro"></i>
-                                    </span>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text rounded-0 g-bg-white g-color-gray-light-v1 g-brd-gray-light-v4">
+                                            <i class="icon-media-094 u-line-icon-pro"></i>
+                                        </span>
+                                    </div>
                                     {{ form_widget(register_form.password, {'attr': {'class': 'form-control g-brd-gray-light-v4 g-brd-primary--hover g-py-15 g-px-15'}}) }}
                                 </div>
                                 <small class="form-control-feedback">{{ form_errors(register_form.password) }}</small>
@@ -61,9 +67,11 @@
 
                             <div class="form-group {% if register_form.password_verify.vars.errors|length %}u-has-error-v1{% endif %} col-xs-12 col-sm-6 mb-4">
                                 <div class="input-group">
-                                    <span class="input-group-addon g-width-45 g-brd-gray-light-v4 g-color-gray-dark-v5">
-                                        <i class="icon-media-094 u-line-icon-pro"></i>
-                                    </span>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text rounded-0 g-bg-white g-color-gray-light-v1 g-brd-gray-light-v4">
+                                            <i class="icon-media-094 u-line-icon-pro"></i>
+                                        </span>
+                                    </div>
                                     {{ form_widget(register_form.password_verify, {'attr': {'class': 'form-control g-brd-gray-light-v4 g-brd-primary--hover g-py-15 g-px-15'}}) }}
                                 </div>
                                 <small class="form-control-feedback">{{ form_errors(register_form.password_verify) }}</small>
