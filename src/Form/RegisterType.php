@@ -15,6 +15,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class RegisterType extends AbstractType
 {
@@ -27,13 +28,17 @@ class RegisterType extends AbstractType
                     'placeholder' => 'register.form.username.placeholder',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'register.form.username.constraints.not_blank']),
+                    new NotBlank(['message' => 'register.username.not_blank']),
                     new Length([
-                        'min' => AccountHelper::$settings['username']['min_length'],
-                        'minMessage' => 'register.form.username.constraints.username_short',
-                        'max' => AccountHelper::$settings['username']['max_length'],
-                        'maxMessage' => 'register.form.username.constraints.username_long',
-                    ])
+                        'min'        => AccountHelper::$settings['username']['min_length'],
+                        'minMessage' => 'register.username.username_short',
+                        'max'        => AccountHelper::$settings['username']['max_length'],
+                        'maxMessage' => 'register.username.username_long',
+                    ]),
+                    new Regex([
+                        'pattern' => AccountHelper::$settings['username']['pattern'],
+                        'message' => 'register.username.regex',
+                    ]),
                 ],
             ])
             ->add('email', EmailType::class, [
@@ -42,8 +47,12 @@ class RegisterType extends AbstractType
                     'placeholder' => 'register.form.email.placeholder',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'register.form.email.constraints.not_blank']),
-                    new Email(['message' => 'register.form.email.constraints.valid']),
+                    new NotBlank(['message' => 'register.email.not_blank']),
+                    new Email([
+                        'strict'  => true,
+                        'checkMX' => true,
+                        'message' => 'register.email.valid',
+                    ]),
                 ],
             ])
             ->add('password', PasswordType::class, [
@@ -52,11 +61,11 @@ class RegisterType extends AbstractType
                     'placeholder' => 'register.form.password.placeholder',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'register.form.password.constraints.not_blank']),
+                    new NotBlank(['message' => 'register.password.not_blank']),
                     new Length([
-                        'min' => AccountHelper::$settings['password']['min_length'],
-                        'minMessage' => 'register.form.password.constraints.password_too_short',
-                    ])
+                        'min'        => AccountHelper::$settings['password']['min_length'],
+                        'minMessage' => 'register.password.password_too_short',
+                    ]),
                 ],
             ])
             ->add('password_verify', PasswordType::class, [
@@ -65,7 +74,7 @@ class RegisterType extends AbstractType
                     'placeholder' => 'register.form.password_verify.placeholder',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'register.form.password_verify.constraints.not_blank']),
+                    new NotBlank(['message' => 'register.password_verify.not_blank']),
                 ],
             ])
             ->add('recaptcha', ReCaptchaType::class, [
@@ -81,17 +90,17 @@ class RegisterType extends AbstractType
                 'mapped'      => false,
                 'constraints' => [
                     new ReCaptchaTrue(),
-                ]
+                ],
             ])
             ->add('terms', CheckboxType::class, [
                 'label'       => 'register.form.terms.label',
                 'required'    => true,
                 'constraints' => [
-                    new NotBlank(['message' => 'register.form.terms.constraints.not_blank']),
+                    new NotBlank(['message' => 'register.terms.not_blank']),
                 ],
             ])
-            ->add('send', SubmitType::class, array(
+            ->add('send', SubmitType::class, [
                 'label' => 'register.form.send.label',
-            ));
+            ]);
     }
 }

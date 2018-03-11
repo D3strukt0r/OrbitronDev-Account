@@ -7,17 +7,12 @@ login:
         email:
             label: 'E-Mail:'
             placeholder: 'johndoe@gmail.com'
-            constraints:
-                not_blank: 'Please enter your email address'
-                valid: 'Please enter a VALID email address'
             error:
                 insert_username: 'Please enter your username'
                 user_does_not_exist: "This user doesn't exist"
         password:
             label: 'Password:'
             placeholder: 'Password'
-            constraints:
-                not_blank: 'Please enter your password'
             error:
                 insert_password: 'Please enter your password'
                 wrong_password: 'Incorrect password'
@@ -35,36 +30,17 @@ register:
         username:
             label: 'Username'
             placeholder: 'JohnDoe'
-            constraints:
-                not_blank: 'You have to insert an username'
-                username_short: 'Your username must be between 3 and 20 letters/numbers etc'
-                username_long: 'Your username must be between 3 and 20 letters/numbers etc'
-            error:
-                user_exists: 'This user is already in use'
-                blocked_name: 'This username has been blocked by an administrator'
         email:
             label: 'E-mail'
             placeholder: 'johndoe@gmail.com'
-            constraints:
-                not_blank: 'You have to insert an email'
-                valid: 'This E-Mail is not valid. The format has to be example@example.com'
         password:
             label: 'Password'
             placeholder: 'Password'
-            constraints:
-                not_blank: 'You have to insert a password'
-                password_too_short: 'Your password is too short (min. 7 characters)'
         password_verify:
             label: 'Repeat Password'
             placeholder: 'Password'
-            constraints:
-                not_blank: 'You have to repeat your password'
-            error:
-                passwords_do_not_match: "Your passwords don't match"
         terms:
             label: 'I accept the %link%Terms and Conditions%/link%'
-            constraints:
-                not_blank: 'Please accept the terms'
         send:
             label: 'Register'
     unknown_error: 'Unknown error'
@@ -81,22 +57,15 @@ forgot:
         email:
             label: 'E-mail'
             placeholder: 'johndoe@gmail.com'
-            constraints:
-                not_blank: 'Please enter your email address'
-                valid: 'Please enter a VALID email address'
         send:
             label: 'Send'
     form_reset:
         password:
             label: 'Password'
             placeholder: 'Password'
-            constraints:
-                not_blank: 'Please enter your password'
         password_verify:
             label: 'Repeat password'
             placeholder: 'Password'
-            constraints:
-                not_blank: 'Please enter your password'
         send:
             label: 'Change password'
 confirm:
@@ -166,12 +135,10 @@ panel:
                 placeholder: 'Enter your new email'
                 constraints:
                     not_blank: 'You have to insert an email'
-                    valid: 'Please enter a VALID email address'
             password_verify:
                 label: 'Current Password'
                 placeholder: 'Enter your current password'
                 constraints:
-                    not_blank: 'Please enter your password'
                     wrong_password: 'Your inserted password is not your current'
             send:
                 label: 'Submit'
@@ -196,7 +163,6 @@ panel:
                 label: 'Current Password'
                 placeholder: 'Enter your current password'
                 constraints:
-                    not_blank: 'Please enter your password'
                     wrong_password: 'Your inserted password is not your current'
             send:
                 label: 'Submit'
@@ -220,7 +186,6 @@ panel:
                 label: 'Current Password'
                 placeholder: 'Enter your current password'
                 constraints:
-                    not_blank: 'Please enter your password'
                     wrong_password: 'Your inserted password is not your current'
             send:
                 label: 'Add address'
@@ -233,12 +198,8 @@ panel:
         create_dev_app:
             client_name:
                 label: 'Name'
-                constraints:
-                    not_blank: 'Please enter the Public client name'
             redirect_uri:
                 label: 'Redirect URI'
-                constraints:
-                    not_blank: 'Please enter a redirect URI'
             scopes:
                 label: 'Scopes'
             send:

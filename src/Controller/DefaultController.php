@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\SubscriptionType;
 use App\Entity\User;
+use App\Entity\UserProfiles;
+use App\Entity\UserSubscription;
 use App\Form\ConfirmEmailType;
 use App\Form\ForgotType;
 use App\Form\RegisterType;
@@ -47,7 +50,7 @@ class DefaultController extends Controller
         }
         //////////// END TEST IF USER IS LOGGED IN ////////////
 
-        $redirectUrl = $request->query->has('_target_path') ? $request->query->get('_target_path') : $this->generateUrl('panel', ['page' => 'home']);
+        $redirectUrl = $request->query->get('_target_path', $this->generateUrl('panel_default'));
 
         // get the login error if there is one
         $error = $authUtils->getLastAuthenticationError();
@@ -62,7 +65,7 @@ class DefaultController extends Controller
         ]);
     }
 
-    public function register(Request $request, TranslatorInterface $translator, Swift_Mailer $mailer, AccountHelper $helper)
+    public function register(ObjectManager $em, Request $request, TranslatorInterface $translator, Swift_Mailer $mailer, AccountHelper $helper)
     {
         //////////// TEST IF USER IS LOGGED IN ////////////
         /** @var \App\Entity\User|null $user */
@@ -75,31 +78,61 @@ class DefaultController extends Controller
         $registerForm = $this->createForm(RegisterType::class);
         $registerForm->handleRequest($request);
         if ($registerForm->isSubmitted() && $registerForm->isValid()) {
-            $resultCodes = [
-                'user_exists'            => $translator->trans('register.form.username.error.user_exists'),
-                'blocked_name'           => $translator->trans('register.form.username.error.blocked_name'),
-                'passwords_do_not_match' => $translator->trans('register.form.password_verify.error.passwords_do_not_match'),
-            ];
+            $formData = $registerForm->getData();
+            $error = false;
+            if ($helper->usernameExists($formData['username'])) {
+                $error = true;
+                $registerForm->get('username')->addError(new FormError($translator->trans('register.username.user_exists', [], 'validators')));
+            }
+            if ($helper->usernameBlocked($formData['username'])) {
+                $error = true;
+                $registerForm->get('username')->addError(new FormError($translator->trans('register.username.blocked_name', [], 'validators')));
+            }
+            if ($formData['password'] != $formData['password_verify']) {
+                $error = true;
+                $registerForm->get('password_verify')->addError(new FormError($translator->trans('register.password_verify.passwords_do_not_match', [], 'validators')));
+            }
 
-            $registerData = $registerForm->getData();
-            $registerResult = $helper->addUser(
-                $registerData['username'],
-                $registerData['password'],
-                $registerData['password_verify'],
-                $registerData['email']
-            );
+            if (!$error) {
+                // Add user to database
+                $user = (new User())
+                    ->setUsername($formData['username'])
+                    ->setPassword($formData['password'])
+                    ->setEmail($formData['email'])
+                    ->setEmailVerified(false)
+                    ->setCreatedOn(new \DateTime())
+                    ->setLastOnlineAt(new \DateTime())
+                    ->setCreatedIp($request->getClientIp())
+                    ->setLastIp($request->getClientIp())
+                    ->setDeveloperStatus(false);
 
-            if ($registerResult instanceof UserInterface) {
-                $user = $registerResult;
+                $userProfile = (new UserProfiles())
+                    ->setUser($user);
+                $user->setProfile($userProfile);
+
+                /** @var SubscriptionType $defaultSubscription */
+                $defaultSubscription = $em->find(SubscriptionType::class, AccountHelper::$settings['subscription']['default']);
+
+                $userSubscription = (new UserSubscription())
+                    ->setUser($user)
+                    ->setSubscription($defaultSubscription)
+                    ->setActivatedAt(new \DateTime())
+                    ->setExpiresAt(new \DateTime());
+                $user->setSubscription($userSubscription);
+
+                $em->persist($user);
+                $em->flush();
+
+                // Send verification email
                 $tokenGenerator = new TokenGenerator($this->getDoctrine()->getManager());
                 $token = $tokenGenerator->generateToken('confirm_email', (new \DateTime())->modify('+1 day'));
 
                 $message = (new Swift_Message())
                     ->setSubject('[Account] Email activation')
                     ->setFrom(['no-reply-account@orbitrondev.org' => 'OrbitronDev'])
-                    ->setTo([$registerData['email']])
+                    ->setTo([$formData['email']])
                     ->setBody($this->renderView('mail/confirm-email.html.twig', [
-                        'email' => $registerData['email'],
+                        'email' => $formData['email'],
                         'token' => $token,
                     ]), 'text/html');
                 $mailSent = $mailer->send($message);
@@ -121,16 +154,6 @@ class DefaultController extends Controller
                 $this->get('event_dispatcher')->dispatch('security.interactive_login', $event);
 
                 return $this->redirect($url);
-            } elseif ($registerResult === false) {
-                $this->addFlash('error', $translator->trans('register.unknown_error'));
-            } else {
-                $errorMessage = explode(':', $registerResult);
-                $registerErrorMessage = $resultCodes[$errorMessage[1]];
-                if ($errorMessage[0] == 'form') {
-                    $registerForm->addError(new FormError($registerErrorMessage));
-                } else {
-                    $registerForm->get($errorMessage[0])->addError(new FormError($registerErrorMessage));
-                }
             }
         }
 
@@ -211,9 +234,9 @@ class DefaultController extends Controller
             if (is_null($job) || $job === false) {
                 if (is_string($job) && $job != 'reset_password') {
                     // Wrong token
-                    $forgotForm->addError(new FormError('This token is not for resetting a password'));
+                    $forgotForm->addError(new FormError('This token is not for resetting a password')); // TODO: Missing translation
                 } else {
-                    $forgotForm->addError(new FormError('Token not found'));
+                    $forgotForm->addError(new FormError('Token not found')); // TODO: Missing translation
                 }
 
                 return $this->render('forgot-password.html.twig', [
@@ -228,19 +251,19 @@ class DefaultController extends Controller
                     $passwordVerify = trim($resetForm->get('password_verify')->getData());
 
                     if (strlen($password) == 0) {
-                        $resetForm->get('password')->addError(new FormError('You have to insert a password'));
+                        $resetForm->get('password')->addError(new FormError('You have to insert a password')); // TODO: Missing translation
 
                         return $this->render('forgot-password-form.html.twig', [
                             'reset_form' => $resetForm->createView(),
                         ]);
                     } elseif (strlen($password) < AccountHelper::$settings['password']['min_length']) {
-                        $resetForm->get('password')->addError(new FormError('Your password is too short (min. 7 characters)'));
+                        $resetForm->get('password')->addError(new FormError('Your password is too short (min. 7 characters)')); // TODO: Missing translation
 
                         return $this->render('forgot-password-form.html.twig', [
                             'reset_form' => $resetForm->createView(),
                         ]);
                     } elseif ($password != $passwordVerify) {
-                        $resetForm->get('password_verify')->addError(new FormError('Your passwords don\'t match'));
+                        $resetForm->get('password_verify')->addError(new FormError('Your passwords don\'t match')); // TODO: Missing translation
 
                         return $this->render('forgot-password-form.html.twig', [
                             'reset_form' => $resetForm->createView(),
@@ -254,7 +277,7 @@ class DefaultController extends Controller
                     $em->flush();
                     $token->remove();
 
-                    $this->addFlash('success', 'Successfully changed your password');
+                    $this->addFlash('success', 'Successfully changed your password'); // TODO: Missing translation
 
                     return $this->render('forgot-password-form.html.twig', [
                         'reset_form' => $resetForm->createView(),
@@ -293,7 +316,7 @@ class DefaultController extends Controller
                     ]);
                 } else {
                     // Email does not exist
-                    $forgotForm->get('email')->addError(new FormError('A user with this email does not exist.'));
+                    $forgotForm->get('email')->addError(new FormError('A user with this email does not exist.')); // TODO: Missing translation
                 }
             }
 
@@ -317,7 +340,7 @@ class DefaultController extends Controller
             if (is_null($job) || $job === false) {
                 $errorMessage = 'Token not found';
                 if (is_string($job) && $job != 'confirm_email') {
-                    $errorMessage = 'This token is not for email activation';
+                    $errorMessage = 'This token is not for email activation'; // TODO: Missing translation
                 }
                 $this->addFlash('failure', $errorMessage);
 
@@ -328,7 +351,7 @@ class DefaultController extends Controller
                 $user->setEmailVerified(true);
                 $em->flush();
                 $token->remove();
-                $this->addFlash('success', 'Successfully verified your email');
+                $this->addFlash('success', 'Successfully verified your email'); // TODO: Missing translation
 
                 return $this->render('confirm-email.html.twig');
             }
@@ -348,7 +371,7 @@ class DefaultController extends Controller
                     ]), 'text/html');
                 $this->get('mailer')->send($message);
 
-                $this->addFlash('success', 'Email sent');
+                $this->addFlash('success', 'Email sent'); // TODO: Missing translation
             }
 
             return $this->render('confirm-email.html.twig', [

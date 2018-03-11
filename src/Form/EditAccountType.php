@@ -44,7 +44,7 @@ class EditAccountType extends AbstractType
                     'placeholder' => 'panel.form.update_account.new_email.placeholder',
                 ],
                 'constraints' => [
-                    new Email(['message' => 'panel.form.update_account.new_email.constraints.valid']),
+                    new Email(['message' => 'panel.edit_account.new_email.valid']),
                 ],
             ])
             ->add('password_verify', PasswordType::class, [
@@ -53,7 +53,7 @@ class EditAccountType extends AbstractType
                     'placeholder' => 'panel.form.update_profile.password_verify.placeholder',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'panel.form.update_account.password_verify.constraints.not_blank']),
+                    new NotBlank(['message' => 'panel.edit_account.password_verify.not_blank']),
                 ],
             ])
             ->add('send', SubmitType::class, [

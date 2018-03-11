@@ -3,6 +3,7 @@
 namespace App\Controller\Panel;
 
 use App\Entity\OAuthClient;
+use App\Entity\OAuthScope;
 use App\Service\AccountHelper;
 use App\Form\CreateDevAccount;
 use App\Form\CreateDevApp;
@@ -78,18 +79,29 @@ class DeveloperController extends Controller
             return $this->redirectToRoute('panel', ['page' => 'developer-register']);
         }
 
-        $createAppForm = $this->createForm(CreateDevApp::class, null, ['entity_manager' => $em]);
+        /** @var \App\Entity\OAuthScope[] $scopes */
+        $scopes = $em->getRepository(OAuthScope::class)->findAll();
+
+        $scope_choices = [];
+        foreach ($scopes as $scope) {
+            $scope_choices[$scope->getName()] = $scope->getScope();
+        }
+        $createAppForm = $this->createForm(CreateDevApp::class, null, ['scope_choices' => $scope_choices]);
 
         $createAppForm->handleRequest($request);
         if ($createAppForm->isSubmitted() && $createAppForm->isValid()) {
+            $formData = $createAppForm->getData();
 
-            $helper->addApp(
-                $createAppForm->get('client_name')->getData(),
-                TokenGenerator::createRandomToken(['use_openssl' => false]),
-                $createAppForm->get('redirect_uri')->getData(),
-                $createAppForm->get('scopes')->getData(),
-                $user->getId()
-            );
+            $addClient = new OAuthClient();
+            $addClient
+                ->setClientIdentifier($formData['client_name'])
+                ->setClientSecret(TokenGenerator::createRandomToken(['use_openssl' => false]))
+                ->setRedirectUri($formData['redirect_uri'])
+                ->setScopes($formData['scopes'])
+                ->setUsers($user->getId());
+
+            $em->persist($addClient);
+            $em->flush();
 
             return $this->redirectToRoute('panel', ['page' => 'developer-applications']);
         }

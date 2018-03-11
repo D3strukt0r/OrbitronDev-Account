@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\OAuthScope;
+use App\Entity\SubscriptionType;
 use App\Service\AccountHelper;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -58,15 +60,15 @@ class SetupController extends Controller
             if ($request->query->get('action') == 'add-default-entries') {
                 // Add default values
                 $text = '';
-                $helper->addDefaultSubscriptionTypes();
+                $this->addDefaultSubscriptionTypes();
                 $text .= 'Subscription types added<br />';
-                $helper->addDefaultScopes();
+                $this->addDefaultScopes();
                 $text .= 'Scopes added<br />';
 
                 return new Response($text);
             }
             if ($request->query->get('action') == 'add-default-scopes') {
-                $helper->addDefaultScopes();
+                $this->addDefaultScopes();
 
                 return new Response('Scopes added');
             }
@@ -82,5 +84,75 @@ class SetupController extends Controller
             throw $this->createNotFoundException('Action not known');
         }
         throw $this->createNotFoundException('Wrong key');
+    }
+
+    private function addDefaultSubscriptionTypes()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $subscriptions = [];
+        $subscriptions[] = (new SubscriptionType())
+            ->setTitle('Basic')
+            ->setPrice('0')
+            ->setPermissions([]);
+        $subscriptions[] = (new SubscriptionType())
+            ->setTitle('Premium')
+            ->setPrice('10')
+            ->setPermissions(['web_service', 'support']);
+        $subscriptions[] = (new SubscriptionType())
+            ->setTitle('Enterprise')
+            ->setPrice('30')
+            ->setPermissions(['web_service', 'web_service_multiple', 'support']);
+
+        foreach ($subscriptions as $item) {
+            $em->persist($item);
+        }
+        $em->flush();
+    }
+
+    private function addDefaultScopes()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $scope = [];
+        $scope[] = (new OAuthScope())
+            ->setScope('user:id')
+            ->setName('User ID')
+            ->setDefault(true);
+        $scope[] = (new OAuthScope())
+            ->setScope('user:username')
+            ->setName('Username')
+            ->setDefault(false);
+        $scope[] = (new OAuthScope())
+            ->setScope('user:email')
+            ->setName('Email address')
+            ->setDefault(false);
+        $scope[] = (new OAuthScope())
+            ->setScope('user:name')
+            ->setName('Profile -> First name')
+            ->setDefault(false);
+        $scope[] = (new OAuthScope())
+            ->setScope('user:surname')
+            ->setName('Profile -> Surname')
+            ->setDefault(false);
+        $scope[] = (new OAuthScope())
+            ->setScope('user:birthday')
+            ->setName('Profile -> Birthday')
+            ->setDefault(false);
+        $scope[] = (new OAuthScope())
+            ->setScope('user:activeaddresses')
+            ->setName('Profile -> The address which is selected as default')
+            ->setDefault(false);
+        $scope[] = (new OAuthScope())
+            ->setScope('user:addresses')
+            ->setName('Profile -> A list of all saved addresses')
+            ->setDefault(false);
+        $scope[] = (new OAuthScope())
+            ->setScope('user:subscription')
+            ->setName('Current subscription status')
+            ->setDefault(false);
+
+        foreach ($scope as $item) {
+            $em->persist($item);
+        }
+        $em->flush();
     }
 }

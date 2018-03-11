@@ -1,0 +1,51 @@
+login:
+    email:
+        not_blank: 'Please enter your email address'
+        valid: 'Please enter a VALID email address'
+    password:
+        not_blank: 'Please enter your password'
+register:
+    username:
+        not_blank: 'You have to insert an username'
+        username_short: 'Your username must be between 3 and 20 letters/numbers etc'
+        username_long: 'Your username must be between 3 and 20 letters/numbers etc'
+        regex: 'Only use a-z, A-Z, 0-9 and _'
+        user_exists: 'This user is already in use'
+        blocked_name: 'This username has been blocked by an administrator'
+    email:
+        not_blank: 'You have to insert an email'
+        valid: 'This E-Mail is not valid. The format has to be example@example.com'
+    password:
+        not_blank: 'You have to insert a password'
+        password_too_short: 'Your password is too short (min. 7 characters)'
+    password_verify:
+        not_blank: 'You have to repeat your password'
+        passwords_do_not_match: "Your passwords don't match"
+    terms:
+        not_blank: 'Please accept the terms'
+forgot:
+    email:
+        not_blank: 'Please enter your email address'
+        valid: 'Please enter a VALID email address'
+reset:
+    password:
+        not_blank: 'Please enter your password'
+    password_verify:
+        not_blank: 'Please enter your password'
+panel:
+    edit_account:
+        new_email:
+            valid: 'Please enter a VALID email address'
+        password_verify:
+            not_blank: 'Please enter your password'
+    edit_profile:
+        password_verify:
+            not_blank: 'Please enter your password'
+    create_dev_app:
+        client_name:
+            not_blank: 'Please enter the Public client name'
+        redirect_uri:
+            not_blank: 'Please enter a redirect URI'
+    add_address:
+        password_verify:
+            not_blank: 'Please enter your password'

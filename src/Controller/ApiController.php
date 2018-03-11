@@ -18,8 +18,8 @@ class ApiController extends Controller
         /** @var \App\Entity\User|null $selectedUser */
         $selectedUser = $em->find(User::class, $userId);
 
-        $width = $request->query->has('width') ? $request->query->getInt('width') : 1000;
-        $height = $request->query->has('height') ? $request->query->getInt('height') : 1000;
+        $width = $request->query->getInt('width', 1000);
+        $height = $request->query->getInt('height', 1000);
 
         $rootPictureDir = $this->get('kernel')->getProjectDir().'/var/data/profile_pictures';
 
@@ -128,8 +128,8 @@ class ApiController extends Controller
 
     public function updateUserData(Request $request)
     {
-        $element = $request->query->has('element') ? $request->query->get('element') : null;
-        $csrf = $request->request->has('csrf') ? $request->request->get('csrf') : null;
+        $element = $request->query->get('element', null);
+        $csrf = $request->request->get('csrf', null);
 
         if (is_null($element)) {
             throw $this->createNotFoundException();

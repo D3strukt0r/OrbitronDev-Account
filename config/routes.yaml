@@ -17,6 +17,7 @@ register:
 forgot:
     path: /forgot
     controller: App\Controller\DefaultController::forgot
+    #schemes: [https]
 logout:
     path: /logout
 confirm:
@@ -33,6 +34,7 @@ panel_default:
 panel:
     path: /p/{page}
     controller: App\Controller\DefaultController::panel
+    #schemes: [https]
 
 api:
     path: /api/{function}

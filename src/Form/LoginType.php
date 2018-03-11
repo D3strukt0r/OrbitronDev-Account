@@ -27,8 +27,8 @@ class LoginType extends AbstractType
                     'placeholder' => 'login.form.email.placeholder',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'login.form.email.constraints.not_blank']),
-                    new Email(['message' => 'login.form.email.constraints.valid']),
+                    new NotBlank(['message' => 'login.email.not_blank']),
+                    new Email(['message' => 'login.email.valid']),
                 ],
             ])
             ->add('password', PasswordType::class, [
@@ -37,7 +37,7 @@ class LoginType extends AbstractType
                     'placeholder' => 'login.form.password.placeholder',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'login.form.password.constraints.not_blank']),
+                    new NotBlank(['message' => 'login.password.not_blank']),
                 ],
             ])
             ->add('remember', CheckboxType::class, [

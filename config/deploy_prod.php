@@ -23,6 +23,6 @@ return new class extends DefaultDeployer
         $this->runRemote('php -r "unlink(\'composer-setup.php\');"');
 
         // Install dependencies
-        $this->runRemote('php ./composer.phar install --no-dev --optimize-autoloader');
+        $this->runRemote('php ./composer.phar install --optimize --no-dev');
     }
 };

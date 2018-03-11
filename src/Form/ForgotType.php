@@ -18,12 +18,12 @@ class ForgotType extends AbstractType
         $builder
             ->add('email', EmailType::class, [
                 'label'       => 'forgot.form.email.label',
-                'attr' => [
+                'attr'        => [
                     'placeholder' => 'forgot.form.email.placeholder',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'forgot.form.email.constraints.not_blank']),
-                    new Email(['message' => 'forgot.form.email.constraints.valid']),
+                    new NotBlank(['message' => 'forgot.email.not_blank']),
+                    new Email(['message' => 'forgot.email.valid']),
                 ],
             ])
             ->add('recaptcha', ReCaptchaType::class, [
@@ -39,7 +39,7 @@ class ForgotType extends AbstractType
                 'mapped'      => false,
                 'constraints' => [
                     new ReCaptchaTrue(),
-                ]
+                ],
             ])
             ->add('send', SubmitType::class, [
                 'label' => 'forgot.form.send.label',

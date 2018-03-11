@@ -83,7 +83,7 @@ class AccountController extends Controller
                 $changeEmail = false;
             }
 
-            $errorMessages = array();
+            $errorMessages = [];
             if ($user->verifyPassword($formData['password_verify'])) {
                 if ($changeUsername) {
                     if (strlen($newUsername) == 0) {
@@ -156,7 +156,13 @@ class AccountController extends Controller
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
 
-        $editProfileForm = $this->createForm(EditProfileType::class, null, ['user' => $user]);
+        $editProfileForm = $this->createForm(EditProfileType::class, null, [
+            'name'     => $user->getProfile()->getName(),
+            'surname'  => $user->getProfile()->getSurname(),
+            'gender'   => $user->getProfile()->getGender(),
+            'birthday' => !is_null($bd = $user->getProfile()->getBirthday()) ? $bd->format('d.m.Y') : null,
+            'website'  => $user->getProfile()->getWebsite(),
+        ]);
 
         $editProfileForm->handleRequest($request);
         if ($editProfileForm->isSubmitted()) {
@@ -167,7 +173,7 @@ class AccountController extends Controller
                 $user->getProfile()->setName($formData['first_name']);
                 $user->getProfile()->setSurname($formData['last_name']);
                 $user->getProfile()->setGender($formData['gender']);
-                if ($date = \DateTime::createFromFormat('d.m.Y', $formData['birthday'])) {
+                if ($date = \DateTime::createFromFormat('d/m/Y', $formData['birthday'])) {
                     $user->getProfile()->setBirthday($date);
                 } else {
                     $errorMessages['update_birthday'] = $translator->trans('panel.form.update_profile.birthday.constraints.date_not_created');

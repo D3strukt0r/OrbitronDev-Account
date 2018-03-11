@@ -50,7 +50,7 @@ class AddAddressType extends AbstractType
                     'placeholder' => 'panel.form.add_address.password_verify.placeholder',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'panel.form.add_address.password_verify.constraints.not_blank']),
+                    new NotBlank(['message' => 'panel.add_address.password_verify.not_blank']),
                 ],
             ])
             ->add('send', SubmitType::class, [

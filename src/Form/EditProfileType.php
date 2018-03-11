@@ -15,29 +15,20 @@ class EditProfileType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var \App\Entity\User $user */
-        $user = $options['user'];
-
-        if (!is_null($user->getProfile()->getBirthday())) {
-            $dtBirthday = $user->getProfile()->getBirthday()->format('d.m.Y');
-        } else {
-            $dtBirthday = null;
-        }
-
         $builder
             ->add('first_name', TextType::class, [
-                'label' => 'panel.form.update_profile.first_name.label',
-                'attr'  => [
-                    'placeholder' => $user->getProfile()->getName(),
-                    'value'       => $user->getProfile()->getName(),
+                'label'    => 'panel.form.update_profile.first_name.label',
+                'attr'     => [
+                    'placeholder' => $options['name'],
+                    'value'       => $options['name'],
                 ],
                 'required' => false,
             ])
             ->add('last_name', TextType::class, [
-                'label' => 'panel.form.update_profile.last_name.label',
-                'attr'  => [
-                    'placeholder' => $user->getProfile()->getSurname(),
-                    'value'       => $user->getProfile()->getSurname(),
+                'label'    => 'panel.form.update_profile.last_name.label',
+                'attr'     => [
+                    'placeholder' => $options['surname'],
+                    'value'       => $options['surname'],
                 ],
                 'required' => false,
             ])
@@ -48,19 +39,19 @@ class EditProfileType extends AbstractType
                     'panel.form.update_profile.gender.option.male'   => 1,
                     'panel.form.update_profile.gender.option.female' => 2,
                 ],
-                'data'    => $user->getProfile()->getGender(),
+                'data'    => $options['gender'],
             ])
             ->add('birthday', TextType::class, [
-                'label' => 'panel.form.update_profile.birthday.label',
-                'attr'  => [
-                    'value' => $dtBirthday,
+                'label'    => 'panel.form.update_profile.birthday.label',
+                'attr'     => [
+                    'value' => $options['birthday'],
                 ],
                 'required' => false,
             ])
             ->add('website', TextType::class, [
-                'label' => 'panel.form.update_profile.website.label',
-                'attr'  => [
-                    'value' => $user->getProfile()->getWebsite(),
+                'label'    => 'panel.form.update_profile.website.label',
+                'attr'     => [
+                    'value' => $options['website'],
                 ],
                 'required' => false,
             ])
@@ -70,7 +61,7 @@ class EditProfileType extends AbstractType
                     'placeholder' => 'panel.form.update_profile.password_verify.placeholder',
                 ],
                 'constraints' => [
-                    new NotBlank(['message' => 'panel.form.update_profile.password_verify.constraints.not_blank']),
+                    new NotBlank(['message' => 'panel.edit_profile.password_verify.not_blank']),
                 ],
             ])
             ->add('send', SubmitType::class, [
@@ -84,7 +75,11 @@ class EditProfileType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'user' => null,
+            'name'     => '',
+            'surname'  => '',
+            'gender'   => 0,
+            'birthday' => null,
+            'website'  => '',
         ]);
     }
 }
