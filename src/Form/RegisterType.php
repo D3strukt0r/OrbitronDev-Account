@@ -9,6 +9,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -55,26 +56,30 @@ class RegisterType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('password', PasswordType::class, [
-                'label'       => 'register.form.password.label',
-                'attr'        => [
-                    'placeholder' => 'register.form.password.placeholder',
+            ->add('password', RepeatedType::class, [
+                'type'            => PasswordType::class,
+                'invalid_message' => 'register.password_verify.do_not_match',
+                'first_options'   => [
+                    'label'       => 'register.form.password.label',
+                    'attr'        => [
+                        'placeholder' => 'register.form.password.placeholder',
+                    ],
+                    'constraints' => [
+                        new NotBlank(['message' => 'register.password.not_blank']),
+                        new Length([
+                            'min'        => AccountHelper::$settings['password']['min_length'],
+                            'minMessage' => 'register.password.password_too_short',
+                        ]),
+                    ],
                 ],
-                'constraints' => [
-                    new NotBlank(['message' => 'register.password.not_blank']),
-                    new Length([
-                        'min'        => AccountHelper::$settings['password']['min_length'],
-                        'minMessage' => 'register.password.password_too_short',
-                    ]),
-                ],
-            ])
-            ->add('password_verify', PasswordType::class, [
-                'label'       => 'register.form.password_verify.label',
-                'attr'        => [
-                    'placeholder' => 'register.form.password_verify.placeholder',
-                ],
-                'constraints' => [
-                    new NotBlank(['message' => 'register.password_verify.not_blank']),
+                'second_options'  => [
+                    'label'       => 'register.form.password_verify.label',
+                    'attr'        => [
+                        'placeholder' => 'register.form.password_verify.placeholder',
+                    ],
+                    'constraints' => [
+                        new NotBlank(['message' => 'register.password_verify.not_blank']),
+                    ],
                 ],
             ])
             ->add('recaptcha', ReCaptchaType::class, [

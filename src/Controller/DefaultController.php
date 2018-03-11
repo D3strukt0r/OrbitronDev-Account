@@ -88,10 +88,6 @@ class DefaultController extends Controller
                 $error = true;
                 $registerForm->get('username')->addError(new FormError($translator->trans('register.username.blocked_name', [], 'validators')));
             }
-            if ($formData['password'] != $formData['password_verify']) {
-                $error = true;
-                $registerForm->get('password_verify')->addError(new FormError($translator->trans('register.password_verify.passwords_do_not_match', [], 'validators')));
-            }
 
             if (!$error) {
                 // Add user to database
@@ -216,7 +212,7 @@ class DefaultController extends Controller
         return $result;
     }
 
-    public function forgot(ObjectManager $em, Request $request, AccountHelper $helper)
+    public function forgot(ObjectManager $em, Request $request)
     {
         //////////// TEST IF USER IS LOGGED IN ////////////
         /** @var \App\Entity\User|null $user */
@@ -229,6 +225,7 @@ class DefaultController extends Controller
         $forgotForm = $this->createForm(ForgotType::class);
 
         if (!is_null($token = $request->query->get('token'))) {
+            // Token was received
             $token = new TokenGenerator($em, $token);
             $job = $token->getJob();
             if (is_null($job) || $job === false) {
@@ -238,42 +235,17 @@ class DefaultController extends Controller
                 } else {
                     $forgotForm->addError(new FormError('Token not found')); // TODO: Missing translation
                 }
-
-                return $this->render('forgot-password.html.twig', [
-                    'forgot_form' => $forgotForm->createView(),
-                ]);
             } else {
                 $resetForm = $this->createForm(ResetPasswordType::class);
                 $resetForm->handleRequest($request);
-                if ($resetForm->isSubmitted()) {
+                if ($resetForm->isSubmitted() && $resetForm->isValid()) {
                     // Reset Email
-                    $password = trim($resetForm->get('password')->getData());
-                    $passwordVerify = trim($resetForm->get('password_verify')->getData());
-
-                    if (strlen($password) == 0) {
-                        $resetForm->get('password')->addError(new FormError('You have to insert a password')); // TODO: Missing translation
-
-                        return $this->render('forgot-password-form.html.twig', [
-                            'reset_form' => $resetForm->createView(),
-                        ]);
-                    } elseif (strlen($password) < AccountHelper::$settings['password']['min_length']) {
-                        $resetForm->get('password')->addError(new FormError('Your password is too short (min. 7 characters)')); // TODO: Missing translation
-
-                        return $this->render('forgot-password-form.html.twig', [
-                            'reset_form' => $resetForm->createView(),
-                        ]);
-                    } elseif ($password != $passwordVerify) {
-                        $resetForm->get('password_verify')->addError(new FormError('Your passwords don\'t match')); // TODO: Missing translation
-
-                        return $this->render('forgot-password-form.html.twig', [
-                            'reset_form' => $resetForm->createView(),
-                        ]);
-                    }
+                    $formData = $resetForm->getData();
 
                     $userId = $token->getInformation()['user_id'];
                     /** @var \App\Entity\User|null $user */
                     $user = $em->find(User::class, $userId);
-                    $user->setPassword($password);
+                    $user->setPassword($formData['password']);
                     $em->flush();
                     $token->remove();
 
@@ -289,42 +261,41 @@ class DefaultController extends Controller
                     'reset_form' => $resetForm->createView(),
                 ]);
             }
-        } else {
-            $forgotForm->handleRequest($request);
-            if ($forgotForm->isSubmitted() && $forgotForm->isValid()) {
-                if ($helper->emailExists($forgotForm->get('email')->getData())) {
-                    /** @var \App\Entity\User|null $user */
-                    $user = $em->getRepository(User::class)->findOneBy(['email' => $forgotForm->get('email')->getData()]);
-                    $tokenGenerator = new TokenGenerator($em);
-                    $token = $tokenGenerator->generateToken('reset_password', (new \DateTime())->modify('+1 day'), ['user_id' => $user->getId()]);
-
-                    $message = (new Swift_Message())
-                        ->setSubject('[Account] Reset password')
-                        ->setFrom(['no-reply-account@orbitrondev.org' => 'OrbitronDev'])
-                        ->setTo([$user->getEmail()])
-                        ->setBody($this->renderView('mail/reset-password.html.twig', [
-                            'email' => $user->getEmail(),
-                            'token' => $token,
-                        ]), 'text/html');
-                    $this->get('mailer')->send($message);
-
-                    // Email sent
-                    $this->addFlash('success', 'Email sent');
-
-                    return $this->render('forgot-password.html.twig', [
-                        'forgot_form' => $forgotForm->createView(),
-                    ]);
-                } else {
-                    // Email does not exist
-                    $forgotForm->get('email')->addError(new FormError('A user with this email does not exist.')); // TODO: Missing translation
-                }
-            }
-
-            // Enter email to send mail
-            return $this->render('forgot-password.html.twig', [
-                'forgot_form' => $forgotForm->createView(),
-            ]);
         }
+
+        // Ask for email
+        $forgotForm->handleRequest($request);
+        if ($forgotForm->isSubmitted() && $forgotForm->isValid()) {
+            $formData = $forgotForm->getData();
+
+            /** @var \App\Entity\User|null $user */
+            $user = $em->getRepository(User::class)->findOneBy(['email' => $formData['email']]);
+            if (!is_null($user)) {
+                $tokenGenerator = new TokenGenerator($em);
+                $token = $tokenGenerator->generateToken('reset_password', (new \DateTime())->modify('+1 day'), ['user_id' => $user->getId()]);
+
+                $message = (new Swift_Message())
+                    ->setSubject('[Account] Reset password')
+                    ->setFrom(['no-reply-account@orbitrondev.org' => 'OrbitronDev'])
+                    ->setTo([$user->getEmail()])
+                    ->setBody($this->renderView('mail/reset-password.html.twig', [
+                        'email' => $user->getEmail(),
+                        'token' => $token,
+                    ]), 'text/html');
+                $this->get('mailer')->send($message);
+
+                // Email sent
+                $this->addFlash('success', 'Email sent'); // TODO: Missing translation
+            } else {
+                // Email does not exist
+                $forgotForm->get('email')->addError(new FormError('A user with this email does not exist.')); // TODO: Missing translation
+            }
+        }
+
+        // Enter email to send mail
+        return $this->render('forgot-password.html.twig', [
+            'forgot_form' => $forgotForm->createView(),
+        ]);
     }
 
     public function confirm(ObjectManager $em, Request $request)
@@ -335,6 +306,7 @@ class DefaultController extends Controller
         $sendEmailForm = $this->createForm(ConfirmEmailType::class);
 
         if (!is_null($token = $request->query->get('token'))) {
+            // Token was received
             $token = new TokenGenerator($em, $token);
             $job = $token->getJob();
             if (is_null($job) || $job === false) {
@@ -343,10 +315,6 @@ class DefaultController extends Controller
                     $errorMessage = 'This token is not for email activation'; // TODO: Missing translation
                 }
                 $this->addFlash('failure', $errorMessage);
-
-                return $this->render('confirm-email.html.twig', [
-                    'send_email_form' => $sendEmailForm->createView(),
-                ]);
             } else {
                 $user->setEmailVerified(true);
                 $em->flush();
@@ -355,28 +323,29 @@ class DefaultController extends Controller
 
                 return $this->render('confirm-email.html.twig');
             }
-        } else {
-            $sendEmailForm->handleRequest($request);
-            if ($sendEmailForm->isSubmitted()) {
-                $tokenGenerator = new TokenGenerator($em);
-                $token = $tokenGenerator->generateToken('confirm_email', (new \DateTime())->modify('+1 day'));
-
-                $message = (new Swift_Message())
-                    ->setSubject('[Account] Email activation')
-                    ->setFrom(['no-reply-account@orbitrondev.org' => 'OrbitronDev'])
-                    ->setTo([$user->getEmail()])
-                    ->setBody($this->renderView('mail/confirm-email.html.twig', [
-                        'email' => $user->getEmail(),
-                        'token' => $token,
-                    ]), 'text/html');
-                $this->get('mailer')->send($message);
-
-                $this->addFlash('success', 'Email sent'); // TODO: Missing translation
-            }
-
-            return $this->render('confirm-email.html.twig', [
-                'send_email_form' => $sendEmailForm->createView(),
-            ]);
         }
+
+        // Show send window
+        $sendEmailForm->handleRequest($request);
+        if ($sendEmailForm->isSubmitted()) {
+            $tokenGenerator = new TokenGenerator($em);
+            $token = $tokenGenerator->generateToken('confirm_email', (new \DateTime())->modify('+1 day'));
+
+            $message = (new Swift_Message())
+                ->setSubject('[Account] Email activation')
+                ->setFrom(['no-reply-account@orbitrondev.org' => 'OrbitronDev'])
+                ->setTo([$user->getEmail()])
+                ->setBody($this->renderView('mail/confirm-email.html.twig', [
+                    'email' => $user->getEmail(),
+                    'token' => $token,
+                ]), 'text/html');
+            $this->get('mailer')->send($message);
+
+            $this->addFlash('success', 'Email sent'); // TODO: Missing translation
+        }
+
+        return $this->render('confirm-email.html.twig', [
+            'send_email_form' => $sendEmailForm->createView(),
+        ]);
     }
 }

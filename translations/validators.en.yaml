@@ -20,7 +20,7 @@ register:
         password_too_short: 'Your password is too short (min. 7 characters)'
     password_verify:
         not_blank: 'You have to repeat your password'
-        passwords_do_not_match: "Your passwords don't match"
+        do_not_match: "Your passwords don't match"
     terms:
         not_blank: 'Please accept the terms'
 forgot:
@@ -29,9 +29,11 @@ forgot:
         valid: 'Please enter a VALID email address'
 reset:
     password:
-        not_blank: 'Please enter your password'
+        not_blank: 'You have to insert a password'
+        password_too_short: 'Your password is too short (min. 7 characters)'
     password_verify:
-        not_blank: 'Please enter your password'
+        not_blank: 'You have to verify your password'
+        do_not_match: "Your passwords don't match"
 panel:
     edit_account:
         new_email:
