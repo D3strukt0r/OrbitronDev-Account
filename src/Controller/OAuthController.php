@@ -42,15 +42,15 @@ class OAuthController extends Controller
         $refreshTokenStorage = $em->getRepository(OAuthRefreshToken::class);
 
         // Pass the doctrine storage objects to the OAuth2 server class
-        $this->oauthServer = new Server(array(
+        $this->oauthServer = new Server([
             'client_credentials' => $clientStorage,
             'user_credentials'   => $userStorage,
             'access_token'       => $accessTokenStorage,
             'authorization_code' => $authorizationCodeStorage,
             'refresh_token'      => $refreshTokenStorage,
-        ), array(
+        ], [
             'refresh_token_lifetime' => 2419200,
-        ));
+        ]);
 
         // Get all SCOPES
         /** @var \App\Entity\OAuthScope[] $scopesList */
@@ -80,11 +80,11 @@ class OAuthController extends Controller
         $this->oauthServer->addGrantType(new AuthorizationCode($authorizationCodeStorage));
 
         // Add the "Refresh Token" grant type
-        $this->oauthServer->addGrantType(new RefreshToken($refreshTokenStorage, array(
+        $this->oauthServer->addGrantType(new RefreshToken($refreshTokenStorage, [
             // the refresh token grant request will have a "refresh_token" field
             // with a new refresh token on each request
             'always_issue_new_refresh_token' => true,
-        )));
+        ]));
     }
 
     public function authorize(ObjectManager $em, Request $request)
@@ -281,11 +281,11 @@ class OAuthController extends Controller
         $addresses = [];
         foreach ($user->getProfile()->getAddresses() as $address) {
             $addresses[$address->getId()] = [
-                'street' => $address->getStreet(),
+                'street'       => $address->getStreet(),
                 'house_number' => $address->getHouseNumber(),
-                'zip_code' => $address->getZipCode(),
-                'city' => $address->getCity(),
-                'country' => $address->getCountry(),
+                'zip_code'     => $address->getZipCode(),
+                'city'         => $address->getCity(),
+                'country'      => $address->getCountry(),
             ];
         }
 

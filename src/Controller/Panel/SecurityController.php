@@ -3,7 +3,6 @@
 namespace App\Controller\Panel;
 
 use App\Form\DeleteAccountType;
-use App\Service\AccountHelper;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,12 +71,11 @@ class SecurityController extends Controller
         $user = $this->getUser();
 
         $deleteAccountForm = $this->createForm(DeleteAccountType::class);
-
         $deleteAccountForm->handleRequest($request);
         if ($deleteAccountForm->isSubmitted() && $deleteAccountForm->isValid()) {
             $em->remove($user);
             $em->flush();
-            return $this->redirectToRoute('logout');
+            return $this->redirectToRoute('logout'); // TODO: Logout causes an error! Probably because the user doesn't exist then anymore.
         }
 
         return $this->render('panel/delete-account.html.twig', [

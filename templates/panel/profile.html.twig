@@ -94,6 +94,9 @@
                             </div>
                             {{ form_widget(edit_profile_form.send, {'attr': {'class': 'btn u-btn-blue'}}) }}
                         </div>
+                        <div class="form-row">
+                            <small class="form-text text-danger">{{ form_errors(edit_profile_form.password_verify) }}</small>
+                        </div>
                     </div>
                 {{ form_end(edit_profile_form) }}
             </div>

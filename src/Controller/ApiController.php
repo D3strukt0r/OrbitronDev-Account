@@ -151,7 +151,6 @@ class ApiController extends Controller
             $user->setUsername($request->request->get('username'));
             $this->getDoctrine()->getManager()->flush();
             return $this->json(['username_updated']);
-
         } elseif ($element === 'email') {
             if (!$this->isCsrfTokenValid('edit_email', $csrf)) {
                 throw $this->createAccessDeniedException();
@@ -166,7 +165,6 @@ class ApiController extends Controller
             $user->setEmailVerified(false);
             $this->getDoctrine()->getManager()->flush();
             return $this->json(['email_updated']);
-
         } else {
             return $this->createNotFoundException();
         }

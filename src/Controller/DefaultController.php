@@ -23,7 +23,6 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
-use Symfony\Component\Translation\TranslatorInterface;
 
 class DefaultController extends Controller
 {
@@ -65,7 +64,7 @@ class DefaultController extends Controller
         ]);
     }
 
-    public function register(ObjectManager $em, Request $request, TranslatorInterface $translator, Swift_Mailer $mailer, AccountHelper $helper)
+    public function register(ObjectManager $em, Request $request, Swift_Mailer $mailer)
     {
         //////////// TEST IF USER IS LOGGED IN ////////////
         /** @var \App\Entity\User|null $user */
@@ -79,78 +78,67 @@ class DefaultController extends Controller
         $registerForm->handleRequest($request);
         if ($registerForm->isSubmitted() && $registerForm->isValid()) {
             $formData = $registerForm->getData();
-            $error = false;
-            if ($helper->usernameExists($formData['username'])) {
-                $error = true;
-                $registerForm->get('username')->addError(new FormError($translator->trans('register.username.user_exists', [], 'validators')));
+
+            // Add user to database
+            $user = (new User())
+                ->setUsername($formData['username'])
+                ->setPassword($formData['password'])
+                ->setEmail($formData['email'])
+                ->setEmailVerified(false)
+                ->setCreatedOn(new \DateTime())
+                ->setLastOnlineAt(new \DateTime())
+                ->setCreatedIp($request->getClientIp())
+                ->setLastIp($request->getClientIp())
+                ->setDeveloperStatus(false);
+
+            $userProfile = (new UserProfiles())
+                ->setUser($user);
+            $user->setProfile($userProfile);
+
+            /** @var SubscriptionType $defaultSubscription */
+            $defaultSubscription = $em->find(SubscriptionType::class, AccountHelper::$settings['subscription']['default']);
+
+            $userSubscription = (new UserSubscription())
+                ->setUser($user)
+                ->setSubscription($defaultSubscription)
+                ->setActivatedAt(new \DateTime())
+                ->setExpiresAt(new \DateTime());
+            $user->setSubscription($userSubscription);
+
+            $em->persist($user);
+            $em->flush();
+
+            // Send verification email
+            $tokenGenerator = new TokenGenerator($this->getDoctrine()->getManager());
+            $token = $tokenGenerator->generateToken('confirm_email', (new \DateTime())->modify('+1 day'));
+
+            $message = (new Swift_Message())
+                ->setSubject('[Account] Email activation')
+                ->setFrom(['no-reply-account@orbitrondev.org' => 'OrbitronDev'])
+                ->setTo([$formData['email']])
+                ->setBody($this->renderView('mail/confirm-email.html.twig', [
+                    'email' => $formData['email'],
+                    'token' => $token,
+                ]), 'text/html');
+            $mailSent = $mailer->send($message);
+
+            if ($mailSent) {
+                $this->addFlash('successful', 'register.confirmation_mail.sent');
+            } else {
+                $this->addFlash('failed', 'register.confirmation_mail.not_sent');
             }
-            if ($helper->usernameBlocked($formData['username'])) {
-                $error = true;
-                $registerForm->get('username')->addError(new FormError($translator->trans('register.username.blocked_name', [], 'validators')));
-            }
+            $url = $request->query->has('page') ? urldecode($request->query->get('page')) : $this->generateUrl('panel', ['page' => 'home']);
 
-            if (!$error) {
-                // Add user to database
-                $user = (new User())
-                    ->setUsername($formData['username'])
-                    ->setPassword($formData['password'])
-                    ->setEmail($formData['email'])
-                    ->setEmailVerified(false)
-                    ->setCreatedOn(new \DateTime())
-                    ->setLastOnlineAt(new \DateTime())
-                    ->setCreatedIp($request->getClientIp())
-                    ->setLastIp($request->getClientIp())
-                    ->setDeveloperStatus(false);
+            //Handle getting or creating the user entity likely with a posted form
+            // The third parameter "main" can change according to the name of your firewall in security.yml
+            $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+            $this->get('security.token_storage')->setToken($token);
 
-                $userProfile = (new UserProfiles())
-                    ->setUser($user);
-                $user->setProfile($userProfile);
+            // Fire the login event manually
+            $event = new InteractiveLoginEvent($request, $token);
+            $this->get('event_dispatcher')->dispatch('security.interactive_login', $event);
 
-                /** @var SubscriptionType $defaultSubscription */
-                $defaultSubscription = $em->find(SubscriptionType::class, AccountHelper::$settings['subscription']['default']);
-
-                $userSubscription = (new UserSubscription())
-                    ->setUser($user)
-                    ->setSubscription($defaultSubscription)
-                    ->setActivatedAt(new \DateTime())
-                    ->setExpiresAt(new \DateTime());
-                $user->setSubscription($userSubscription);
-
-                $em->persist($user);
-                $em->flush();
-
-                // Send verification email
-                $tokenGenerator = new TokenGenerator($this->getDoctrine()->getManager());
-                $token = $tokenGenerator->generateToken('confirm_email', (new \DateTime())->modify('+1 day'));
-
-                $message = (new Swift_Message())
-                    ->setSubject('[Account] Email activation')
-                    ->setFrom(['no-reply-account@orbitrondev.org' => 'OrbitronDev'])
-                    ->setTo([$formData['email']])
-                    ->setBody($this->renderView('mail/confirm-email.html.twig', [
-                        'email' => $formData['email'],
-                        'token' => $token,
-                    ]), 'text/html');
-                $mailSent = $mailer->send($message);
-
-                if ($mailSent) {
-                    $this->addFlash('successful', 'register.confirmation_mail.sent');
-                } else {
-                    $this->addFlash('failed', 'register.confirmation_mail.not_sent');
-                }
-                $url = $request->query->has('page') ? urldecode($request->query->get('page')) : $this->generateUrl('panel', ['page' => 'home']);
-
-                //Handle getting or creating the user entity likely with a posted form
-                // The third parameter "main" can change according to the name of your firewall in security.yml
-                $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
-                $this->get('security.token_storage')->setToken($token);
-
-                // Fire the login event manually
-                $event = new InteractiveLoginEvent($request, $token);
-                $this->get('event_dispatcher')->dispatch('security.interactive_login', $event);
-
-                return $this->redirect($url);
-            }
+            return $this->redirect($url);
         }
 
         return $this->render('register.html.twig', [

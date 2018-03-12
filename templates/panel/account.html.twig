@@ -37,12 +37,12 @@
                         </div>
 
                         <div class="form-group row">
-                            {{ form_label(edit_account_form.new_password, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+                            {{ form_label(edit_account_form.new_password.first, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
                             <div class="col-sm-8">
-                                {{ form_widget(edit_account_form.new_password, {'attr': {'class': 'form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10'}}) }}
-                                <small class="form-text text-danger">{{ form_errors(edit_account_form.new_password) }}</small>
-                                {{ form_widget(edit_account_form.new_password_verify, {'attr': {'class': 'form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10'}}) }}
-                                <small class="form-text text-danger">{{ form_errors(edit_account_form.new_password_verify) }}</small>
+                                {{ form_widget(edit_account_form.new_password.first, {'attr': {'class': 'form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10'}}) }}
+                                <small class="form-text text-danger">{{ form_errors(edit_account_form.new_password.first) }}</small>
+                                {{ form_widget(edit_account_form.new_password.second, {'attr': {'class': 'form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10'}}) }}
+                                <small class="form-text text-danger">{{ form_errors(edit_account_form.new_password.second) }}</small>
                             </div>
                         </div>
 
@@ -72,6 +72,8 @@
                                 {{ form_widget(edit_account_form.password_verify, {'attr': {'class': 'form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10'}}) }}
                             </div>
                             {{ form_widget(edit_account_form.send, {'attr': {'class': 'btn u-btn-blue'}}) }}
+                        </div>
+                        <div class="form-row">
                             <small class="form-text text-danger">{{ form_errors(edit_account_form.password_verify) }}</small>
                         </div>
                     </div>

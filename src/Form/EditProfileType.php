@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class EditProfileType extends AbstractType
@@ -19,16 +20,14 @@ class EditProfileType extends AbstractType
             ->add('first_name', TextType::class, [
                 'label'    => 'panel.form.update_profile.first_name.label',
                 'attr'     => [
-                    'placeholder' => $options['name'],
-                    'value'       => $options['name'],
+                    'value' => $options['name'],
                 ],
                 'required' => false,
             ])
             ->add('last_name', TextType::class, [
                 'label'    => 'panel.form.update_profile.last_name.label',
                 'attr'     => [
-                    'placeholder' => $options['surname'],
-                    'value'       => $options['surname'],
+                    'value' => $options['surname'],
                 ],
                 'required' => false,
             ])
@@ -62,6 +61,7 @@ class EditProfileType extends AbstractType
                 ],
                 'constraints' => [
                     new NotBlank(['message' => 'panel.edit_profile.password_verify.not_blank']),
+                    new UserPassword(['message' => 'panel.edit_profile.password_verify.wrong_password']),
                 ],
             ])
             ->add('send', SubmitType::class, [

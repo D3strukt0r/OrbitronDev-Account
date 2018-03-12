@@ -7,15 +7,9 @@ login:
         email:
             label: 'E-Mail:'
             placeholder: 'johndoe@gmail.com'
-            error:
-                insert_username: 'Please enter your username'
-                user_does_not_exist: "This user doesn't exist"
         password:
             label: 'Password:'
             placeholder: 'Password'
-            error:
-                insert_password: 'Please enter your password'
-                wrong_password: 'Incorrect password'
         remember: 'Keep signed in'
         login: 'Login'
     message_close: 'Close'
@@ -112,34 +106,18 @@ panel:
             new_username:
                 label: 'Username'
                 placeholder: 'Enter your new username'
-                constraints:
-                    not_blank: 'You have to insert an username'
-                    username_short: 'Your username must be between 3 and 20 letters/numbers etc'
-                    username_long: 'Your username must be between 3 and 20 letters/numbers etc'
-                    username_exists: 'This username is already in use'
-                    blocked_username: 'This username has been blocked by an administrator'
-                    not_valid: 'This username is not valid.'
             new_password:
                 label: 'Password'
                 placeholder: 'Enter your new password'
-                constraints:
-                    not_blank: 'You have to insert a password'
-                    password_too_short: 'Your password is too short (min. 7 characters)'
             new_password_verify:
                 label: 'Repeat Password'
                 placeholder: 'Confirm new password'
-                constraints:
-                    passwords_do_not_match: "Your inserted password do not match the password verifier"
             new_email:
                 label: 'Email'
                 placeholder: 'Enter your new email'
-                constraints:
-                    not_blank: 'You have to insert an email'
             password_verify:
                 label: 'Current Password'
                 placeholder: 'Enter your current password'
-                constraints:
-                    wrong_password: 'Your inserted password is not your current'
             send:
                 label: 'Submit'
         update_profile:
@@ -155,15 +133,11 @@ panel:
                     female: 'Female'
             birthday:
                 label: 'Birthday'
-                constraints:
-                    date_not_created: "Your birthday couldn't be saved"
             website:
                 label: 'Website'
             password_verify:
                 label: 'Current Password'
                 placeholder: 'Enter your current password'
-                constraints:
-                    wrong_password: 'Your inserted password is not your current'
             send:
                 label: 'Submit'
         add_address:
@@ -185,8 +159,6 @@ panel:
             password_verify:
                 label: 'Current Password'
                 placeholder: 'Enter your current password'
-                constraints:
-                    wrong_password: 'Your inserted password is not your current'
             send:
                 label: 'Add address'
         delete_account:

@@ -2,8 +2,10 @@ login:
     email:
         not_blank: 'Please enter your email address'
         valid: 'Please enter a VALID email address'
+        user_does_not_exist: "This user doesn't exist"
     password:
         not_blank: 'Please enter your password'
+        wrong_password: 'Incorrect password'
 register:
     username:
         not_blank: 'You have to insert an username'
@@ -15,6 +17,7 @@ register:
     email:
         not_blank: 'You have to insert an email'
         valid: 'This E-Mail is not valid. The format has to be example@example.com'
+        exists: 'This email is already in use'
     password:
         not_blank: 'You have to insert a password'
         password_too_short: 'Your password is too short (min. 7 characters)'
@@ -36,13 +39,31 @@ reset:
         do_not_match: "Your passwords don't match"
 panel:
     edit_account:
+        new_username:
+            not_blank: 'You have to insert an username'
+            username_short: 'Your username must be between 3 and 20 letters/numbers etc'
+            username_long: 'Your username must be between 3 and 20 letters/numbers etc'
+            username_exists: 'This username is already in use'
+            blocked_username: 'This username has been blocked by an administrator'
+            regex: 'This username is not valid.'
+        new_password:
+            not_blank: 'You have to insert a password'
+            password_too_short: 'Your password is too short (min. 7 characters)'
+        new_password_verify:
+            do_not_match: "Your inserted password do not match the password verifier"
         new_email:
+            not_blank: 'You have to insert an email'
             valid: 'Please enter a VALID email address'
+            exists: 'This email is already in use'
         password_verify:
             not_blank: 'Please enter your password'
+            wrong_password: 'Your inserted password is not your current'
     edit_profile:
+        birthday:
+            date_not_created: "Your birthday couldn't be saved"
         password_verify:
             not_blank: 'Please enter your password'
+            wrong_password: 'Your inserted password is not your current'
     create_dev_app:
         client_name:
             not_blank: 'Please enter the Public client name'
@@ -51,3 +72,4 @@ panel:
     add_address:
         password_verify:
             not_blank: 'Please enter your password'
+            wrong_password: 'Your inserted password is not your current'

@@ -13,13 +13,22 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class RegisterType extends AbstractType
 {
+    private $helper;
+
+    public function __construct(AccountHelper $helper)
+    {
+        $this->helper = $helper;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -40,6 +49,14 @@ class RegisterType extends AbstractType
                         'pattern' => AccountHelper::$settings['username']['pattern'],
                         'message' => 'register.username.regex',
                     ]),
+                    new Callback(function ($object, ExecutionContextInterface $context, $payload) {
+                        if ($this->helper->usernameExists($object)) {
+                            $context->addViolation('register.username.user_exists');
+                        }
+                        if ($this->helper->usernameBlocked($object)) {
+                            $context->addViolation('register.username.blocked_name');
+                        }
+                    }),
                 ],
             ])
             ->add('email', EmailType::class, [
@@ -54,6 +71,11 @@ class RegisterType extends AbstractType
                         'checkMX' => true,
                         'message' => 'register.email.valid',
                     ]),
+                    new Callback(function ($object, ExecutionContextInterface $context, $payload) {
+                        if ($this->helper->emailExists($object)) {
+                            $context->addViolation('register.email.exists');
+                        }
+                    }),
                 ],
             ])
             ->add('password', RepeatedType::class, [

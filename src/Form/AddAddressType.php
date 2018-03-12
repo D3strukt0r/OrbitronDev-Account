@@ -7,6 +7,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class AddAddressType extends AbstractType
@@ -51,6 +52,7 @@ class AddAddressType extends AbstractType
                 ],
                 'constraints' => [
                     new NotBlank(['message' => 'panel.add_address.password_verify.not_blank']),
+                    new UserPassword(['message' => 'panel.add_address.password_verify.wrong_password']),
                 ],
             ])
             ->add('send', SubmitType::class, [

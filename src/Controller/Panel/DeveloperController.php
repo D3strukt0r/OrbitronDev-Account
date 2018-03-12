@@ -70,7 +70,7 @@ class DeveloperController extends Controller
         return 40;
     }
 
-    public function createApplication(ObjectManager $em, Request $request, AccountHelper $helper, $navigation)
+    public function createApplication(ObjectManager $em, Request $request, $navigation)
     {
         /** @var \App\Entity\User $user */
         $user = $this->getUser();
@@ -87,7 +87,6 @@ class DeveloperController extends Controller
             $scope_choices[$scope->getName()] = $scope->getScope();
         }
         $createAppForm = $this->createForm(CreateDevApp::class, null, ['scope_choices' => $scope_choices]);
-
         $createAppForm->handleRequest($request);
         if ($createAppForm->isSubmitted() && $createAppForm->isValid()) {
             $formData = $createAppForm->getData();
@@ -168,7 +167,6 @@ class DeveloperController extends Controller
         }
 
         $developerForm = $this->createForm(CreateDevAccount::class);
-
         $developerForm->handleRequest($request);
         if ($developerForm->isSubmitted()) {
             $user->setDeveloperStatus(true);
