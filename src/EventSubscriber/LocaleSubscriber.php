@@ -49,8 +49,8 @@ class LocaleSubscriber implements EventSubscriberInterface
         $response = $event->getResponse();
         $request = $event->getRequest();
 
-        if ($myResult = $request->attributes->get('set_locale_cookie')) {
-            $response->headers->setCookie(new Cookie('_locale', $myResult, (new \DateTime())->modify('+1 year')));
+        if ($locale = $request->attributes->get('set_locale_cookie')) {
+            $response->headers->setCookie(new Cookie('_locale', $locale, (new \DateTime())->modify('+1 year')));
         }
     }
 
