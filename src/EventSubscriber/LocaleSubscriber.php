@@ -40,7 +40,7 @@ class LocaleSubscriber implements EventSubscriberInterface
         } else {
             // if no explicit locale has been set on this request, use one from the cookie
             $request->setLocale($request->cookies->get('_locale', $this->defaultLocale));
-            $event->getRequest()->attributes->set('set_locale_cookie', $this->defaultLocale);
+            $request->attributes->set('set_locale_cookie', $this->defaultLocale);
         }
     }
 
