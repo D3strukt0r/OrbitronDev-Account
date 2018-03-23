@@ -27,7 +27,7 @@ class LocaleSubscriber implements EventSubscriberInterface
         // try to see if the locale has been set as a _locale routing parameter or is present as a cookie
         if ($locale = $request->attributes->get('_locale')) {
             $request->setLocale($locale);
-            $event->getRequest()->attributes->set('set_locale_cookie', $locale);
+            $request->attributes->set('set_locale_cookie', $locale);
 
         } elseif ($locale = $request->query->get('_locale')) {
             $request->setLocale($locale);
