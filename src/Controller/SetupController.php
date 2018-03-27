@@ -23,7 +23,7 @@ class SetupController extends Controller
             try {
                 $application = new Application($kernel);
                 $application->setAutoExit(false);
-                $application->run(new ArrayInput(['command' => 'doctrine:schema:update', '--force']), new NullOutput());
+                $application->run(new ArrayInput(['command' => 'doctrine:schema:create', '--force']), new NullOutput());
                 $output .= '[ <span style="color:green">OK</span> ] Database updated<br />';
             } catch (\Exception $exception) {
                 $output .= '[<span style="color:red">FAIL</span>] Database updated ('.$exception->getMessage().')<br />';
