@@ -4,10 +4,6 @@ namespace Deployer;
 
 require 'recipe/symfony4.php';
 
-set('bin/php', function () {
-    return locateBinaryPath('/usr/local/php72/bin/php');
-});
-
 // Project name
 set('application', 'account');
 
@@ -33,14 +29,9 @@ add('shared_dirs', ['var/data']);
 set('writable_dirs', []);
 
 // Hosts
-host('hostinger')
-    ->hostname('orbitrondev')
+host('orbitrondev')
     ->set('deploy_path', '/home/u530305173/public_html/account')
     ->set('http_user', 'u530305173');
-host('hostpoint')
-    ->hostname('orbitrondev2')
-    ->set('deploy_path', '/home/manuelev/www/account')
-    ->set('http_user', 'manuelev');
 
 // Tasks
 task('build', function () {

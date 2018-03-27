@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\OAuthScope;
 use App\Entity\SubscriptionType;
-use App\Service\AccountHelper;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -16,143 +15,97 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class SetupController extends Controller
 {
-    public function oneTimeSetup(Request $request, KernelInterface $kernel, PdoSessionHandler $sessionHandlerService, AccountHelper $helper)
+    public function oneTimeSetup(Request $request, KernelInterface $kernel, PdoSessionHandler $sessionHandlerService)
     {
         if ($request->query->get('key') == $this->getParameter('kernel.secret')) {
+            $em = $this->getDoctrine()->getManager();
+            $output = '';
+            try {
+                $application = new Application($kernel);
+                $application->setAutoExit(false);
+                $application->run(new ArrayInput(['command' => 'doctrine:schema:update', '--force']), new NullOutput());
+                $output .= '[ <span style="color:green">OK</span> ] Database updated<br />';
+            } catch (\Exception $exception) {
+                $output .= '[<span style="color:red">FAIL</span>] Database updated ('.$exception->getMessage().')<br />';
+            }
+            try {
+                $sessionHandlerService->createTable();
+                $output .= '[ <span style="color:green">OK</span> ] Session table added<br />';
+            } catch (\Exception $exception) {
+                $output .= '[<span style="color:red">FAIL</span>] Session table added ('.$exception->getMessage().')<br />';
+            }
+            try {
+                $subscriptions = [];
+                $subscriptions[] = (new SubscriptionType())
+                    ->setTitle('Basic')
+                    ->setPrice('0')
+                    ->setPermissions([]);
+                $subscriptions[] = (new SubscriptionType())
+                    ->setTitle('Premium')
+                    ->setPrice('10')
+                    ->setPermissions(['web_service', 'support']);
+                $subscriptions[] = (new SubscriptionType())
+                    ->setTitle('Enterprise')
+                    ->setPrice('30')
+                    ->setPermissions(['web_service', 'web_service_multiple', 'support']);
 
-            // Create database entities
-            $application = new Application($kernel);
-            $application->setAutoExit(false);
+                foreach ($subscriptions as $item) {
+                    $em->persist($item);
+                }
+                $em->flush();
+                $output .= '[ <span style="color:green">OK</span> ] Default subscription types added<br />';
+            } catch (\Exception $exception) {
+                $output .= '[<span style="color:red">FAIL</span>] Default subscription types added ('.$exception->getMessage().')<br />';
+            }
+            try {
+                $scope = [];
+                $scope[] = (new OAuthScope())
+                    ->setScope('user:id')
+                    ->setName('User ID')
+                    ->setDefault(true);
+                $scope[] = (new OAuthScope())
+                    ->setScope('user:username')
+                    ->setName('Username')
+                    ->setDefault(false);
+                $scope[] = (new OAuthScope())
+                    ->setScope('user:email')
+                    ->setName('Email address')
+                    ->setDefault(false);
+                $scope[] = (new OAuthScope())
+                    ->setScope('user:name')
+                    ->setName('Profile -> First name')
+                    ->setDefault(false);
+                $scope[] = (new OAuthScope())
+                    ->setScope('user:surname')
+                    ->setName('Profile -> Surname')
+                    ->setDefault(false);
+                $scope[] = (new OAuthScope())
+                    ->setScope('user:birthday')
+                    ->setName('Profile -> Birthday')
+                    ->setDefault(false);
+                $scope[] = (new OAuthScope())
+                    ->setScope('user:activeaddresses')
+                    ->setName('Profile -> The address which is selected as default')
+                    ->setDefault(false);
+                $scope[] = (new OAuthScope())
+                    ->setScope('user:addresses')
+                    ->setName('Profile -> A list of all saved addresses')
+                    ->setDefault(false);
+                $scope[] = (new OAuthScope())
+                    ->setScope('user:subscription')
+                    ->setName('Current subscription status')
+                    ->setDefault(false);
 
-            if ($request->query->get('action') == 'drop-schema') {
-                $input = new ArrayInput([
-                    'command' => 'doctrine:schema:drop',
-                ]);
-                try {
-                    $application->run($input, new NullOutput());
-                } catch (\Exception $exception) {
-                    return new Response('Database schema NOT dropped. <br/>'.$exception->getMessage());
+                foreach ($scope as $item) {
+                    $em->persist($item);
                 }
-                return new Response('Database schema dropped');
+                $em->flush();
+                $output .= '[ <span style="color:green">OK</span> ] Default OAuth2 scopes added<br />';
+            } catch (\Exception $exception) {
+                $output .= '[<span style="color:red">FAIL</span>] Default OAuth2 scopes added ('.$exception->getMessage().')<br />';
             }
-            if ($request->query->get('action') == 'create-schema') {
-                $input = new ArrayInput([
-                    'command' => 'doctrine:schema:create',
-                ]);
-                try {
-                    $application->run($input, new NullOutput());
-                } catch (\Exception $exception) {
-                    return new Response('Database schema NOT created. <br/>'.$exception->getMessage());
-                }
-                return new Response('Database schema created');
-            }
-            if ($request->query->get('action') == 'update-schema') {
-                $input = new ArrayInput([
-                    'command' => 'doctrine:schema:update',
-                ]);
-                try {
-                    $application->run($input, new NullOutput());
-                } catch (\Exception $exception) {
-                    return new Response('Database schema NOT updated. <br/>'.$exception->getMessage());
-                }
-                return new Response('Database schema updated');
-            }
-            if ($request->query->get('action') == 'add-default-entries') {
-                // Add default values
-                $text = '';
-                $this->addDefaultSubscriptionTypes();
-                $text .= 'Subscription types added<br />';
-                $this->addDefaultScopes();
-                $text .= 'Scopes added<br />';
-
-                return new Response($text);
-            }
-            if ($request->query->get('action') == 'add-default-scopes') {
-                $this->addDefaultScopes();
-
-                return new Response('Scopes added');
-            }
-            if ($request->query->get('action') == 'add-session-table') {
-                try {
-                    $sessionHandlerService->createTable();
-                    return new Response('Session database created');
-                } catch (\PDOException $e) {
-                    // the table could not be created for some reason
-                    return new Response('Session database not created');
-                }
-            }
-            throw $this->createNotFoundException('Action not known');
+            return new Response('<body style="background-color: black;color: white;"><pre>'.$output.'</pre></body>');
         }
         throw $this->createNotFoundException('Wrong key');
-    }
-
-    private function addDefaultSubscriptionTypes()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $subscriptions = [];
-        $subscriptions[] = (new SubscriptionType())
-            ->setTitle('Basic')
-            ->setPrice('0')
-            ->setPermissions([]);
-        $subscriptions[] = (new SubscriptionType())
-            ->setTitle('Premium')
-            ->setPrice('10')
-            ->setPermissions(['web_service', 'support']);
-        $subscriptions[] = (new SubscriptionType())
-            ->setTitle('Enterprise')
-            ->setPrice('30')
-            ->setPermissions(['web_service', 'web_service_multiple', 'support']);
-
-        foreach ($subscriptions as $item) {
-            $em->persist($item);
-        }
-        $em->flush();
-    }
-
-    private function addDefaultScopes()
-    {
-        $em = $this->getDoctrine()->getManager();
-        $scope = [];
-        $scope[] = (new OAuthScope())
-            ->setScope('user:id')
-            ->setName('User ID')
-            ->setDefault(true);
-        $scope[] = (new OAuthScope())
-            ->setScope('user:username')
-            ->setName('Username')
-            ->setDefault(false);
-        $scope[] = (new OAuthScope())
-            ->setScope('user:email')
-            ->setName('Email address')
-            ->setDefault(false);
-        $scope[] = (new OAuthScope())
-            ->setScope('user:name')
-            ->setName('Profile -> First name')
-            ->setDefault(false);
-        $scope[] = (new OAuthScope())
-            ->setScope('user:surname')
-            ->setName('Profile -> Surname')
-            ->setDefault(false);
-        $scope[] = (new OAuthScope())
-            ->setScope('user:birthday')
-            ->setName('Profile -> Birthday')
-            ->setDefault(false);
-        $scope[] = (new OAuthScope())
-            ->setScope('user:activeaddresses')
-            ->setName('Profile -> The address which is selected as default')
-            ->setDefault(false);
-        $scope[] = (new OAuthScope())
-            ->setScope('user:addresses')
-            ->setName('Profile -> A list of all saved addresses')
-            ->setDefault(false);
-        $scope[] = (new OAuthScope())
-            ->setScope('user:subscription')
-            ->setName('Current subscription status')
-            ->setDefault(false);
-
-        foreach ($scope as $item) {
-            $em->persist($item);
-        }
-        $em->flush();
     }
 }
