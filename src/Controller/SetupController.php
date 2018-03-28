@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class SetupController extends Controller
 {
-    public function oneTimeSetup(Request $request, KernelInterface $kernel, PdoSessionHandler $sessionHandlerService)
+    public function setup(Request $request, KernelInterface $kernel, PdoSessionHandler $sessionHandlerService)
     {
         if ($request->query->get('key') == $this->getParameter('kernel.secret')) {
             $em = $this->getDoctrine()->getManager();
