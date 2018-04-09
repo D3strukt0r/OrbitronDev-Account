@@ -7,7 +7,7 @@ class EncryptableFieldEntity
     /**
      * @var array
      */
-    protected $hashOptions = ['cost' => 11];
+    protected $hashOptions = ['cost' => 12];
 
     /**
      * @param string $value
