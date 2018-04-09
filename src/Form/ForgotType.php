@@ -17,8 +17,8 @@ class ForgotType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, [
-                'label'       => 'forgot.form.email.label',
-                'attr'        => [
+                'label' => 'forgot.form.email.label',
+                'attr' => [
                     'placeholder' => 'forgot.form.email.placeholder',
                 ],
                 'constraints' => [
@@ -27,16 +27,16 @@ class ForgotType extends AbstractType
                 ],
             ])
             ->add('recaptcha', ReCaptchaType::class, [
-                'attr'        => [
+                'attr' => [
                     'options' => [
                         'theme' => 'light',
-                        'type'  => 'image',
-                        'size'  => 'normal',
+                        'type' => 'image',
+                        'size' => 'normal',
                         'defer' => true,
                         'async' => true,
                     ],
                 ],
-                'mapped'      => false,
+                'mapped' => false,
                 'constraints' => [
                     new ReCaptchaTrue(),
                 ],

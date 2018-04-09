@@ -37,11 +37,11 @@ class TokenGenerator
     {
         $this->em = $entityManager;
 
-        if (!is_null($token) && is_string($token)) {
+        if (null !== $token && is_string($token)) {
             /** @var \App\Entity\Token $token */
-            $token = $this->em->getRepository(Token::class)->findOneBy(array('token' => $token));
+            $token = $this->em->getRepository(Token::class)->findOneBy(['token' => $token]);
 
-            if (!is_null($token)) {
+            if (null !== $token) {
                 $this->isGenerated = true;
                 $this->token = $token;
             }
@@ -110,11 +110,11 @@ class TokenGenerator
      *
      * @return string
      */
-    public static function createRandomToken($options = array())
+    public static function createRandomToken($options = [])
     {
-        $defaultOptions = array(
+        $defaultOptions = [
             'use_openssl' => false,
-        );
+        ];
         $options = array_merge($defaultOptions, $options);
 
         if ($options['use_openssl']) {
@@ -124,9 +124,9 @@ class TokenGenerator
                 return $bytes;
             }
             throw new \UnexpectedValueException('OpenSSL did not produce a secure random number.');
-        } else {
-            return hash('sha256', uniqid(mt_rand(), true));
         }
+
+        return hash('sha256', uniqid(mt_rand(), true));
     }
 
     /**
@@ -135,7 +135,7 @@ class TokenGenerator
     public function getJob()
     {
         if ($this->isGenerated) {
-            if (is_null($this->token)) {
+            if (null === $this->token) {
                 return false;
             }
             if ($this->token->getExpires()->getTimestamp() < time()) {
@@ -154,7 +154,7 @@ class TokenGenerator
     public function getInformation()
     {
         if ($this->isGenerated) {
-            if (is_null($this->token)) {
+            if (null === $this->token) {
                 return false;
             }
             if ($this->token->getExpires()->getTimestamp() < time()) {
@@ -173,7 +173,7 @@ class TokenGenerator
     public function remove()
     {
         if ($this->isGenerated) {
-            if (is_null($this->token)) {
+            if (null === $this->token) {
                 return false;
             }
 

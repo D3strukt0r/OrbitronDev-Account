@@ -10,27 +10,27 @@ class PaymentController extends Controller
     {
         return [
             [
-                'type'   => 'group',
+                'type' => 'group',
                 'parent' => 'root',
-                'id'     => 'payment',
-                'title'  => 'Billing',
-                'icon'   => 'hs-admin-credit-card',
+                'id' => 'payment',
+                'title' => 'Billing',
+                'icon' => 'hs-admin-credit-card',
             ],
             [
-                'type'   => 'link',
+                'type' => 'link',
                 'parent' => 'payment',
-                'id'     => 'plans',
-                'title'  => 'Plans',
-                'href'   => 'plans',
-                'view'   => 'PaymentController::plans',
+                'id' => 'plans',
+                'title' => 'Plans',
+                'href' => 'plans',
+                'view' => 'PaymentController::plans',
             ],
             [
-                'type'   => 'link',
+                'type' => 'link',
                 'parent' => 'payment',
-                'id'     => 'payment_methods',
-                'title'  => 'Payment methods',
-                'href'   => 'payment',
-                'view'   => 'PaymentController::payment',
+                'id' => 'payment_methods',
+                'title' => 'Payment methods',
+                'href' => 'payment',
+                'view' => 'PaymentController::payment',
             ],
         ];
     }

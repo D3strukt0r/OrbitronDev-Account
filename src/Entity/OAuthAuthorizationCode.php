@@ -57,7 +57,7 @@ class OAuthAuthorizationCode
     protected $scope;
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -67,7 +67,7 @@ class OAuthAuthorizationCode
     }
 
     /**
-     * Get code
+     * Get code.
      *
      * @return string
      */
@@ -77,7 +77,7 @@ class OAuthAuthorizationCode
     }
 
     /**
-     * Set code
+     * Set code.
      *
      * @param string $code
      *
@@ -91,7 +91,7 @@ class OAuthAuthorizationCode
     }
 
     /**
-     * Get client_id
+     * Get client_id.
      *
      * @return string
      */
@@ -101,7 +101,7 @@ class OAuthAuthorizationCode
     }
 
     /**
-     * Get user_identifier
+     * Get user_identifier.
      *
      * @return int
      */
@@ -111,7 +111,7 @@ class OAuthAuthorizationCode
     }
 
     /**
-     * Get expires
+     * Get expires.
      *
      * @return \DateTime
      */
@@ -121,7 +121,7 @@ class OAuthAuthorizationCode
     }
 
     /**
-     * Set expires
+     * Set expires.
      *
      * @param \DateTime $expires
      *
@@ -135,7 +135,7 @@ class OAuthAuthorizationCode
     }
 
     /**
-     * Get redirect_uri
+     * Get redirect_uri.
      *
      * @return string
      */
@@ -145,7 +145,7 @@ class OAuthAuthorizationCode
     }
 
     /**
-     * Set redirect_uri
+     * Set redirect_uri.
      *
      * @param string $redirectUri
      *
@@ -159,7 +159,7 @@ class OAuthAuthorizationCode
     }
 
     /**
-     * Get scope
+     * Get scope.
      *
      * @return string
      */
@@ -169,7 +169,7 @@ class OAuthAuthorizationCode
     }
 
     /**
-     * Set scope
+     * Set scope.
      *
      * @param string $scope
      *
@@ -183,7 +183,7 @@ class OAuthAuthorizationCode
     }
 
     /**
-     * Get client
+     * Get client.
      *
      * @return \App\Entity\OAuthClient
      */
@@ -193,7 +193,7 @@ class OAuthAuthorizationCode
     }
 
     /**
-     * Set client
+     * Set client.
      *
      * @param \App\Entity\OAuthClient|null $client
      *
@@ -207,7 +207,7 @@ class OAuthAuthorizationCode
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return \App\Entity\User
      */
@@ -217,7 +217,7 @@ class OAuthAuthorizationCode
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \App\Entity\User|null $user
      *
@@ -236,11 +236,11 @@ class OAuthAuthorizationCode
     public function toArray(): array
     {
         return [
-            'code'      => $this->code,
+            'code' => $this->code,
             'client_id' => $this->client->getId(),
-            'user_id'   => $this->user->getId(),
-            'expires'   => $this->expires,
-            'scope'     => $this->scope,
+            'user_id' => $this->user->getId(),
+            'expires' => $this->expires,
+            'scope' => $this->scope,
         ];
     }
 

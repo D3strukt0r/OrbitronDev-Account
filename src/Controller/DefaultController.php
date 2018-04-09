@@ -10,8 +10,8 @@ use App\Form\ConfirmEmailType;
 use App\Form\ForgotType;
 use App\Form\RegisterType;
 use App\Form\ResetPasswordType;
-use App\Service\AdminControlPanel;
 use App\Service\AccountHelper;
+use App\Service\AdminControlPanel;
 use App\Service\TokenGenerator;
 use Doctrine\Common\Persistence\ObjectManager;
 use Swift_Mailer;
@@ -33,9 +33,8 @@ class DefaultController extends Controller
         $user = $this->getUser();
         if ($user instanceof UserInterface) {
             return $this->redirectToRoute('panel_default');
-        } else {
-            throw $this->createAccessDeniedException();
         }
+        throw $this->createAccessDeniedException();
         //////////// END TEST IF USER IS LOGGED IN ////////////
     }
 
@@ -58,9 +57,9 @@ class DefaultController extends Controller
         $lastUsername = $authUtils->getLastUsername();
 
         return $this->render('login.html.twig', [
-            'redirect_url'  => $redirectUrl,
+            'redirect_url' => $redirectUrl,
             'last_username' => $lastUsername,
-            'error'         => $error,
+            'error' => $error,
         ]);
     }
 
@@ -172,15 +171,16 @@ class DefaultController extends Controller
             next($list);
         }
 
-        if (!is_null($key)) {
+        if (null !== $key) {
             if (is_callable('\\App\\Controller\\Panel\\'.$list[$key]['view'])) {
                 $view = $list[$key]['view'];
             }
         }
         $response = $this->forward('App\\Controller\\Panel\\'.$view, [
             'navigation' => $navigationLinks,
-            'request'    => $request,
+            'request' => $request,
         ]);
+
         return $response;
     }
 
@@ -197,6 +197,7 @@ class DefaultController extends Controller
         $result = $this->forward('App\\Controller\\ApiController::'.$function, [
             'request' => $request,
         ]);
+
         return $result;
     }
 
@@ -212,12 +213,12 @@ class DefaultController extends Controller
 
         $forgotForm = $this->createForm(ForgotType::class);
 
-        if (!is_null($token = $request->query->get('token'))) {
+        if (null !== ($token = $request->query->get('token'))) {
             // Token was received
             $token = new TokenGenerator($em, $token);
             $job = $token->getJob();
-            if (is_null($job) || $job === false) {
-                if (is_string($job) && $job != 'reset_password') {
+            if (null === $job || false === $job) {
+                if (is_string($job) && 'reset_password' !== $job) {
                     // Wrong token
                     $forgotForm->addError(new FormError('This token is not for resetting a password')); // TODO: Missing translation
                 } else {
@@ -241,7 +242,7 @@ class DefaultController extends Controller
 
                     return $this->render('forgot-password-form.html.twig', [
                         'reset_form' => $resetForm->createView(),
-                        'redirect'   => $this->generateUrl('login'),
+                        'redirect' => $this->generateUrl('login'),
                     ]);
                 }
 
@@ -258,7 +259,7 @@ class DefaultController extends Controller
 
             /** @var \App\Entity\User|null $user */
             $user = $em->getRepository(User::class)->findOneBy(['email' => $formData['email']]);
-            if (!is_null($user)) {
+            if (null !== $user) {
                 $tokenGenerator = new TokenGenerator($em);
                 $token = $tokenGenerator->generateToken('reset_password', (new \DateTime())->modify('+1 day'), ['user_id' => $user->getId()]);
 
@@ -293,13 +294,13 @@ class DefaultController extends Controller
 
         $sendEmailForm = $this->createForm(ConfirmEmailType::class);
 
-        if (!is_null($token = $request->query->get('token'))) {
+        if (null !== ($token = $request->query->get('token'))) {
             // Token was received
             $token = new TokenGenerator($em, $token);
             $job = $token->getJob();
-            if (is_null($job) || $job === false) {
+            if (null === $job || false === $job) {
                 $errorMessage = 'Token not found';
-                if (is_string($job) && $job != 'confirm_email') {
+                if (is_string($job) && 'confirm_email' !== $job) {
                     $errorMessage = 'This token is not for email activation'; // TODO: Missing translation
                 }
                 $this->addFlash('failure', $errorMessage);

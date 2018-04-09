@@ -32,8 +32,8 @@ class LoginType extends AbstractType
                 'data' => $options['redirect'],
             ])
             ->add('email', EmailType::class, [
-                'label'       => 'login.form.email.label',
-                'attr'        => [
+                'label' => 'login.form.email.label',
+                'attr' => [
                     'placeholder' => 'login.form.email.placeholder',
                 ],
                 'constraints' => [
@@ -47,8 +47,8 @@ class LoginType extends AbstractType
                 ],
             ])
             ->add('password', PasswordType::class, [
-                'label'       => 'login.form.password.label',
-                'attr'        => [
+                'label' => 'login.form.password.label',
+                'attr' => [
                     'placeholder' => 'login.form.password.placeholder',
                 ],
                 'constraints' => [
@@ -56,7 +56,7 @@ class LoginType extends AbstractType
                 ],
             ])
             ->add('remember', CheckboxType::class, [
-                'label'    => 'login.form.remember',
+                'label' => 'login.form.remember',
                 'required' => false,
             ])
             ->add('send', SubmitType::class, [

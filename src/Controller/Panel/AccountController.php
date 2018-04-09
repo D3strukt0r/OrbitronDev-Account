@@ -16,35 +16,35 @@ class AccountController extends Controller
     {
         return [
             [
-                'type'   => 'group',
+                'type' => 'group',
                 'parent' => 'root',
-                'id'     => 'account',
-                'title'  => 'Account',
-                'icon'   => 'hs-admin-user',
+                'id' => 'account',
+                'title' => 'Account',
+                'icon' => 'hs-admin-user',
             ],
             [
-                'type'   => 'link',
+                'type' => 'link',
                 'parent' => 'account',
-                'id'     => 'account_account',
-                'title'  => 'Account details',
-                'href'   => 'account',
-                'view'   => 'AccountController::account',
+                'id' => 'account_account',
+                'title' => 'Account details',
+                'href' => 'account',
+                'view' => 'AccountController::account',
             ],
             [
-                'type'   => 'link',
+                'type' => 'link',
                 'parent' => 'account',
-                'id'     => 'account_profile',
-                'title'  => 'Personal information',
-                'href'   => 'profile',
-                'view'   => 'AccountController::profile',
+                'id' => 'account_profile',
+                'title' => 'Personal information',
+                'href' => 'profile',
+                'view' => 'AccountController::profile',
             ],
             [
-                'type'   => 'link',
+                'type' => 'link',
                 'parent' => 'account',
-                'id'     => 'account_add_address',
-                'title'  => 'Add new address',
-                'href'   => 'add-address',
-                'view'   => 'AccountController::addAddress',
+                'id' => 'account_add_address',
+                'title' => 'Add new address',
+                'href' => 'add-address',
+                'view' => 'AccountController::addAddress',
             ],
         ];
     }
@@ -64,13 +64,13 @@ class AccountController extends Controller
             /** @var \App\Entity\User $user */
             $user = $this->getUser();
 
-            if (!is_null($newUsername = $formData['new_username'])) {
+            if (null !== ($newUsername = $formData['new_username'])) {
                 $user->setUsername($newUsername);
             }
-            if (!is_null($newPassword = $formData['new_password'])) {
+            if (null !== ($newPassword = $formData['new_password'])) {
                 $user->setPassword($newPassword);
             }
-            if (!is_null($newEmail = $formData['new_email'])) {
+            if (null !== ($newEmail = $formData['new_email'])) {
                 $user->setEmail($newEmail);
                 $user->setEmailVerified(false);
             }
@@ -78,7 +78,7 @@ class AccountController extends Controller
         }
 
         return $this->render('panel/account.html.twig', [
-            'navigation_links'  => $navigation,
+            'navigation_links' => $navigation,
             'edit_account_form' => $editAccountForm->createView(),
         ]);
     }
@@ -89,11 +89,11 @@ class AccountController extends Controller
         $user = $this->getUser();
 
         $editProfileForm = $this->createForm(EditProfileType::class, null, [
-            'name'     => $user->getProfile()->getName(),
-            'surname'  => $user->getProfile()->getSurname(),
-            'gender'   => $user->getProfile()->getGender(),
-            'birthday' => !is_null($bd = $user->getProfile()->getBirthday()) ? $bd->format('d/m/Y') : null,
-            'website'  => $user->getProfile()->getWebsite(),
+            'name' => $user->getProfile()->getName(),
+            'surname' => $user->getProfile()->getSurname(),
+            'gender' => $user->getProfile()->getGender(),
+            'birthday' => null !== ($bd = $user->getProfile()->getBirthday()) ? $bd->format('d/m/Y') : null,
+            'website' => $user->getProfile()->getWebsite(),
         ]);
         $editProfileForm->handleRequest($request);
         if ($editProfileForm->isSubmitted() && $editProfileForm->isValid()) {
@@ -112,7 +112,7 @@ class AccountController extends Controller
         }
 
         return $this->render('panel/profile.html.twig', [
-            'navigation_links'  => $navigation,
+            'navigation_links' => $navigation,
             'edit_profile_form' => $editProfileForm->createView(),
         ]);
     }

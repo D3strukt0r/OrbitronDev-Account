@@ -288,15 +288,15 @@ class UserProfiles
     public function toArray(): array
     {
         return [
-            'user_id'        => $this->id,
-            'name'           => $this->name,
-            'surname'        => $this->surname,
-            'gender'         => $this->gender,
-            'birthday'       => $this->birthday,
-            'website'        => $this->website,
-            'picture'        => $this->picture,
+            'user_id' => $this->id,
+            'name' => $this->name,
+            'surname' => $this->surname,
+            'gender' => $this->gender,
+            'birthday' => $this->birthday,
+            'website' => $this->website,
+            'picture' => $this->picture,
             'active_address' => $this->active_address,
-            'addresses'      => $this->addresses->toArray(),
+            'addresses' => $this->addresses->toArray(),
         ];
     }
 }

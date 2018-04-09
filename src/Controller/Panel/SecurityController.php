@@ -13,35 +13,35 @@ class SecurityController extends Controller
     {
         return [
             [
-                'type'   => 'group',
+                'type' => 'group',
                 'parent' => 'root',
-                'id'     => 'security',
-                'title'  => 'Security',
-                'icon'   => 'hs-admin-lock',
+                'id' => 'security',
+                'title' => 'Security',
+                'icon' => 'hs-admin-lock',
             ],
             [
-                'type'   => 'link',
+                'type' => 'link',
                 'parent' => 'security',
-                'id'     => 'inactivity',
-                'title'  => 'Inactivity',
-                'href'   => 'inactivity',
-                'view'   => 'SecurityController::inactivity',
+                'id' => 'inactivity',
+                'title' => 'Inactivity',
+                'href' => 'inactivity',
+                'view' => 'SecurityController::inactivity',
             ],
             [
-                'type'   => 'link',
+                'type' => 'link',
                 'parent' => 'security',
-                'id'     => 'log',
-                'title'  => 'Activity history',
-                'href'   => 'activity-history',
-                'view'   => 'SecurityController::activityHistory',
+                'id' => 'log',
+                'title' => 'Activity history',
+                'href' => 'activity-history',
+                'view' => 'SecurityController::activityHistory',
             ],
             [
-                'type'   => 'link',
+                'type' => 'link',
                 'parent' => 'security',
-                'id'     => 'delete',
-                'title'  => sprintf('%sDelete Account%s', '<b><span class="text-danger">', '</span></b>'),
-                'href'   => 'delete-account',
-                'view'   => 'SecurityController::deleteAccount',
+                'id' => 'delete',
+                'title' => sprintf('%sDelete Account%s', '<b><span class="text-danger">', '</span></b>'),
+                'href' => 'delete-account',
+                'view' => 'SecurityController::deleteAccount',
             ],
         ];
     }
@@ -75,11 +75,12 @@ class SecurityController extends Controller
         if ($deleteAccountForm->isSubmitted() && $deleteAccountForm->isValid()) {
             $em->remove($user);
             $em->flush();
+
             return $this->redirectToRoute('logout'); // TODO: Logout causes an error! Probably because the user doesn't exist then anymore.
         }
 
         return $this->render('panel/delete-account.html.twig', [
-            'navigation_links'    => $navigation,
+            'navigation_links' => $navigation,
             'delete_account_form' => $deleteAccountForm->createView(),
         ]);
     }

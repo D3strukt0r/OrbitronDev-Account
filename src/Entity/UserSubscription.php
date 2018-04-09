@@ -137,7 +137,7 @@ class UserSubscription
      */
     public function getRemainingDays(): ?int
     {
-        if (is_null($this->getExpiresAt())) {
+        if (null === $this->getExpiresAt()) {
             return null;
         }
 
@@ -146,7 +146,7 @@ class UserSubscription
             return 0;
         }
 
-        return (int)ceil($difference / 86400);
+        return (int) ceil($difference / 86400);
     }
 
     /**
@@ -154,7 +154,7 @@ class UserSubscription
      */
     public function hasSubscription(): bool
     {
-        if (is_null($days = $this->getRemainingDays()) || $days > 0) {
+        if (null === ($days = $this->getRemainingDays()) || $days > 0) {
             return true;
         }
 
@@ -167,10 +167,10 @@ class UserSubscription
     public function toArray(): array
     {
         return [
-            'user_id'      => $this->id,
+            'user_id' => $this->id,
             'subscription' => $this->subscription->toArray(),
             'activated_at' => $this->activated_at,
-            'expires_at'   => $this->expires_at,
+            'expires_at' => $this->expires_at,
         ];
     }
 }

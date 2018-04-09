@@ -30,12 +30,12 @@ class OAuthAuthorizationCodeRepository extends EntityRepository implements Autho
         $user = $this->_em->getRepository(User::class)->findOneBy(['id' => $userEmail]);
 
         $authCode = OAuthAuthorizationCode::fromArray([
-            'code'         => $code,
-            'client'       => $client,
-            'user'         => $user,
+            'code' => $code,
+            'client' => $client,
+            'user' => $user,
             'redirect_uri' => $redirectUri,
-            'expires'      => (new \DateTime())->setTimestamp($expires),
-            'scope'        => $scope,
+            'expires' => (new \DateTime())->setTimestamp($expires),
+            'scope' => $scope,
         ]);
         $this->_em->persist($authCode);
         $this->_em->flush();
@@ -44,7 +44,7 @@ class OAuthAuthorizationCodeRepository extends EntityRepository implements Autho
     public function expireAuthorizationCode($code)
     {
         $authCode = $this->findOneBy(['code' => $code]);
-        if (is_null($authCode)) {
+        if (null === $authCode) {
             return false;
         }
 

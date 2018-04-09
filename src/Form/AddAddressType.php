@@ -17,37 +17,37 @@ class AddAddressType extends AbstractType
         $builder
             ->add('location_street', TextType::class, [
                 'label' => 'panel.form.add_address.location_street.label',
-                'attr'  => [
+                'attr' => [
                     'placeholder' => 'panel.form.add_address.location_street.placeholder',
                 ],
             ])
             ->add('location_street_number', TextType::class, [
                 'label' => 'panel.form.add_address.location_street_number.label',
-                'attr'  => [
+                'attr' => [
                     'placeholder' => 'panel.form.add_address.location_street_number.placeholder',
                 ],
             ])
             ->add('location_postal_code', TextType::class, [
                 'label' => 'panel.form.add_address.location_postal_code.label',
-                'attr'  => [
+                'attr' => [
                     'placeholder' => 'panel.form.add_address.location_postal_code.placeholder',
                 ],
             ])
             ->add('location_city', TextType::class, [
                 'label' => 'panel.form.add_address.location_city.label',
-                'attr'  => [
+                'attr' => [
                     'placeholder' => 'panel.form.add_address.location_city.placeholder',
                 ],
             ])
             ->add('location_country', TextType::class, [
                 'label' => 'panel.form.add_address.location_country.label',
-                'attr'  => [
+                'attr' => [
                     'placeholder' => 'panel.form.add_address.location_country.placeholder',
                 ],
             ])
             ->add('password_verify', PasswordType::class, [
-                'label'       => 'panel.form.add_address.password_verify.label',
-                'attr'        => [
+                'label' => 'panel.form.add_address.password_verify.label',
+                'attr' => [
                     'placeholder' => 'panel.form.add_address.password_verify.placeholder',
                 ],
                 'constraints' => [

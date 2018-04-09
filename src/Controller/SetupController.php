@@ -17,7 +17,7 @@ class SetupController extends Controller
 {
     public function setup(Request $request, KernelInterface $kernel, PdoSessionHandler $sessionHandlerService)
     {
-        if ($request->query->get('key') == $this->getParameter('kernel.secret')) {
+        if ($request->query->get('key') === $this->getParameter('kernel.secret')) {
             $em = $this->getDoctrine()->getManager();
             $output = '';
             try {
@@ -104,6 +104,7 @@ class SetupController extends Controller
             } catch (\Exception $exception) {
                 $output .= '[<span style="color:red">FAIL</span>] Default OAuth2 scopes added ('.$exception->getMessage().')<br />';
             }
+
             return new Response('<body style="background-color: black;color: white;"><pre>'.$output.'</pre></body>');
         }
         throw $this->createNotFoundException('Wrong key');

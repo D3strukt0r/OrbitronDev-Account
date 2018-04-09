@@ -22,7 +22,7 @@ class UserRepository extends EntityRepository implements UserCredentialsInterfac
     {
         /** @var \App\Entity\User $user */
         $user = $this->findOneBy(['email' => $emailOrUsername]);
-        if (is_null($user)) {
+        if (null === $user) {
             /** @var \App\Entity\User $user */
             $user = $this->findOneBy(['username' => $emailOrUsername]);
         }
@@ -37,8 +37,8 @@ class UserRepository extends EntityRepository implements UserCredentialsInterfac
      * @param $email
      *
      * @return array the associated "user_id" and optional "scope" values
-     * This function MUST return FALSE if the requested user does not exist or is
-     * invalid. "scope" is a space-separated list of restricted scopes.
+     *               This function MUST return FALSE if the requested user does not exist or is
+     *               invalid. "scope" is a space-separated list of restricted scopes.
      * @code
      * return array(
      *     "user_id"  => USER_ID,    // REQUIRED user_id to be stored with the authorization code or access token
@@ -65,7 +65,7 @@ class UserRepository extends EntityRepository implements UserCredentialsInterfac
     public function friendShipExists($user, $friend)
     {
         foreach ($user->getFriends() as $friendItem) {
-            if ($friendItem->getId() == $friend->getId()) {
+            if ($friendItem->getId() === $friend->getId()) {
                 return true;
             }
         }
@@ -75,7 +75,7 @@ class UserRepository extends EntityRepository implements UserCredentialsInterfac
 
     /**
      * @param \App\Entity\User $user
-     * @param bool                     $onlineOnly
+     * @param bool             $onlineOnly
      *
      * @return int
      */
@@ -85,10 +85,10 @@ class UserRepository extends EntityRepository implements UserCredentialsInterfac
         foreach ($user->getFriends() as $friend) {
             if ($onlineOnly) {
                 if ($friend->isOnline()) {
-                    $count++;
+                    ++$count;
                 }
             } else {
-                $count++;
+                ++$count;
             }
         }
 

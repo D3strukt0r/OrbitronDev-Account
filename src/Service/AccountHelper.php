@@ -9,41 +9,41 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class AccountHelper
 {
     public static $settings = [
-        'username'     => [
-            'min_length'    => 3,
-            'max_length'    => 50,
-            'blocked'       => ['admin', 'administrator', 'mod', 'moderator', 'guest', 'undefined'],
+        'username' => [
+            'min_length' => 3,
+            'max_length' => 50,
+            'blocked' => ['admin', 'administrator', 'mod', 'moderator', 'guest', 'undefined'],
             'blocked_parts' => ['mod', 'system', 'admin'],
-            'pattern'       => '/^[a-zA-Z0-9_]+$/i', // Accepted: a-z, A-Z, 0-9 and _
+            'pattern' => '/^[a-zA-Z0-9_]+$/i', // Accepted: a-z, A-Z, 0-9 and _
         ],
-        'password'     => [
+        'password' => [
             'min_length' => 7,
             'max_length' => 100,
-            'salt'       => 'random',
+            'salt' => 'random',
         ],
-        'email'        => [
+        'email' => [
             'pattern' => '/^[a-z0-9_\.-]+@([a-z0-9]+([\-]+[a-z0-9]+)*\.)+[a-z]{2,7}$/i',
         ],
         'subscription' => [
             'default' => 1,
         ],
-        'login'        => [
-            'session_email'    => 'USER_EM',
+        'login' => [
+            'session_email' => 'USER_EM',
             'session_password' => 'USER_PW',
-            'cookie_name'      => 'account',
-            'cookie_expire'    => '+1 month',
-            'cookie_path'      => '/',
-            'cookie_domain'    => 'orbitrondev.org',
+            'cookie_name' => 'account',
+            'cookie_expire' => '+1 month',
+            'cookie_path' => '/',
+            'cookie_domain' => 'orbitrondev.org',
         ],
     ];
 
     /**
-     * @var \Doctrine\Common\Persistence\ObjectManager $em
+     * @var \Doctrine\Common\Persistence\ObjectManager
      */
     private $em;
 
     /**
-     * @var \Symfony\Component\HttpFoundation\Request $request
+     * @var \Symfony\Component\HttpFoundation\Request
      */
     private $request;
 
@@ -65,13 +65,14 @@ class AccountHelper
     {
         /** @var User $user */
         $user = $this->em->getRepository(User::class)->findOneBy(['username' => $usernameOrEmail]);
-        if (is_null($user)) {
+        if (null === $user) {
             /** @var User $user */
             $user = $this->em->getRepository(User::class)->findOneBy(['email' => $usernameOrEmail]);
-            if (is_null($user)) {
+            if (null === $user) {
                 return false;
             }
         }
+
         return $user;
     }
 
@@ -87,7 +88,7 @@ class AccountHelper
     {
         $user = $this->em->getRepository(User::class)->findOneBy(['username' => $username]);
 
-        if (is_null($user)) {
+        if (null === $user) {
             return false;
         }
 
@@ -106,13 +107,13 @@ class AccountHelper
     public function usernameBlocked($username)
     {
         foreach (self::$settings['username']['blocked'] as $bl) {
-            if (strtolower($username) == strtolower($bl)) {
+            if (mb_strtolower($username) === mb_strtolower($bl)) {
                 return true;
             }
         }
 
         foreach (self::$settings['username']['blocked_parts'] as $bl) {
-            if (strpos(strtolower($username), strtolower($bl)) !== false) {
+            if (false !== mb_strpos(mb_strtolower($username), mb_strtolower($bl))) {
                 return true;
             }
         }
@@ -145,7 +146,7 @@ class AccountHelper
     {
         $user = $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
 
-        if (is_null($user)) {
+        if (null === $user) {
             return false;
         }
 

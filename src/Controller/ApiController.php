@@ -23,22 +23,19 @@ class ApiController extends Controller
 
         $rootPictureDir = $this->get('kernel')->getProjectDir().'/var/data/profile_pictures';
 
-        if (!is_null($selectedUser)) {
+        if (null !== $selectedUser) {
             $pictureName = $selectedUser->getProfile()->getPicture();
-            if (!is_null($pictureName) && file_exists($fileName = $rootPictureDir.'/'.$pictureName)) {
+            if (null !== $pictureName && file_exists($fileName = $rootPictureDir.'/'.$pictureName)) {
                 $image = new SimpleImage($fileName);
-                $image->resize($width, $height);
-                $image->output();
-                exit;
             } else {
                 $image = new SimpleImage($this->get('kernel')->getProjectDir().'/public/img/user.jpg');
-                $image->resize($width, $height);
-                $image->output();
-                exit;
             }
-        } else {
-            return $this->json(['error' => true, 'error_message' => 'user_not_found']);
+            $image->resize($width, $height);
+            $image->output();
+            exit;
         }
+
+        return $this->json(['error' => true, 'error_message' => 'user_not_found']);
     }
 
     public function updateProfilePic(ObjectManager $em, Request $request)
@@ -50,7 +47,7 @@ class ApiController extends Controller
         $file = $request->files->get('files');
 
         // Validates if the file is in the right format
-        if (!in_array($file->getMimeType(), ['image/png', 'image/jpeg', 'image/gif'])) {
+        if (!in_array($file->getMimeType(), ['image/png', 'image/jpeg', 'image/gif'], true)) {
             return $this->json(['error' => true, 'error_message' => 'mine_type_not_valid']);
         }
 
@@ -69,7 +66,7 @@ class ApiController extends Controller
         // Remove old picture
         $oldPictureName = $user->getProfile()->getPicture();
         $oldPicture = realpath($directory.'/'.$oldPictureName);
-        if ((!is_null($oldPictureName) || (is_string($oldPictureName) && $oldPictureName > 0)) && file_exists($oldPicture) && is_writable($oldPicture)) {
+        if ((null !== $oldPictureName || (is_string($oldPictureName) && $oldPictureName > 0)) && file_exists($oldPicture) && is_writable($oldPicture)) {
             unlink($oldPicture);
         }
 
@@ -86,11 +83,11 @@ class ApiController extends Controller
         // and session.upload_progress.name:
         $session = $this->get('session');
 
-        $s = $session->get('upload_progress_'.intval($request->query->get('PHP_SESSION_UPLOAD_PROGRESS')));
+        $s = $session->get('upload_progress_'.(int) ($request->query->get('PHP_SESSION_UPLOAD_PROGRESS')));
         $progress = [
             'lengthComputable' => true,
-            'loaded'           => $s['bytes_processed'],
-            'total'            => $s['content_length'],
+            'loaded' => $s['bytes_processed'],
+            'total' => $s['content_length'],
         ];
 
         return $progress;
@@ -114,7 +111,7 @@ class ApiController extends Controller
             next($list);
         }
 
-        if (!is_null($key)) {
+        if (null !== $key) {
             if (is_callable('\\App\\Controler\\Panel\\'.$list[$key]['view'])) {
                 $view = $list[$key]['view'];
             }
@@ -123,6 +120,7 @@ class ApiController extends Controller
         $response = $this->forward('App\\Controller\\Panel\\'.$view, [
             'request' => $request,
         ]);
+
         return $response;
     }
 
@@ -131,14 +129,14 @@ class ApiController extends Controller
         $element = $request->query->get('element', null);
         $csrf = $request->request->get('csrf', null);
 
-        if (is_null($element)) {
+        if (null === $element) {
             throw $this->createNotFoundException();
         }
-        if (is_null($csrf)) {
+        if (null === $csrf) {
             throw $this->createAccessDeniedException();
         }
 
-        if ($element === 'username') {
+        if ('username' === $element) {
             if (!$this->isCsrfTokenValid('edit_username', $csrf)) {
                 throw $this->createAccessDeniedException();
             }
@@ -150,8 +148,9 @@ class ApiController extends Controller
 
             $user->setUsername($request->request->get('username'));
             $this->getDoctrine()->getManager()->flush();
+
             return $this->json(['username_updated']);
-        } elseif ($element === 'email') {
+        } elseif ('email' === $element) {
             if (!$this->isCsrfTokenValid('edit_email', $csrf)) {
                 throw $this->createAccessDeniedException();
             }
@@ -164,9 +163,10 @@ class ApiController extends Controller
             $user->setEmail($request->request->get('email'));
             $user->setEmailVerified(false);
             $this->getDoctrine()->getManager()->flush();
+
             return $this->json(['email_updated']);
-        } else {
-            return $this->createNotFoundException();
         }
+
+        return $this->createNotFoundException();
     }
 }

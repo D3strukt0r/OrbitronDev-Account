@@ -44,10 +44,10 @@ class OAuthController extends Controller
         // Pass the doctrine storage objects to the OAuth2 server class
         $this->oauthServer = new Server([
             'client_credentials' => $clientStorage,
-            'user_credentials'   => $userStorage,
-            'access_token'       => $accessTokenStorage,
+            'user_credentials' => $userStorage,
+            'access_token' => $accessTokenStorage,
             'authorization_code' => $authorizationCodeStorage,
-            'refresh_token'      => $refreshTokenStorage,
+            'refresh_token' => $refreshTokenStorage,
         ], [
             'refresh_token_lifetime' => 2419200,
         ]);
@@ -66,7 +66,7 @@ class OAuthController extends Controller
             $supportedScopes[] = $scope->getScope();
         }
         $memory = new Memory([
-            'default_scope'    => $defaultScope,
+            'default_scope' => $defaultScope,
             'supported_scopes' => $supportedScopes,
         ]);
         $scopeUtil = new Scope($memory);
@@ -112,7 +112,7 @@ class OAuthController extends Controller
 
         $scopes = [];
         $scopeList = $request->query->has('scope') ? $request->query->get('scope') : null;
-        if (is_null($scopeList)) {
+        if (null === $scopeList) {
             $scopeList = $clientInfo->getScopes();
         } else {
             $scopeList = explode(' ', $scopeList);
@@ -120,14 +120,14 @@ class OAuthController extends Controller
         foreach ($scopeList as $scope) {
             /** @var \App\Entity\OAuthScope $getScope */
             $getScope = $em->getRepository(OAuthScope::class)->findOneBy(['scope' => $scope]);
-            if (!is_null($getScope)) {
+            if (null !== $getScope) {
                 $scopes[] = $getScope->getName();
             }
         }
-        if ($request->request->count() === 0) {
+        if (0 === $request->request->count()) {
             return $this->render('oauth-authorize.html.twig', [
                 'client_info' => $clientInfo,
-                'scopes'      => $scopes,
+                'scopes' => $scopes,
             ]);
         }
 
@@ -177,7 +177,7 @@ class OAuthController extends Controller
         /** @var \App\Entity\User $user */
         $user = $em->getRepository(User::class)->findOneBy(['id' => $token['user_id']]);
 
-        if (is_null($token['scope'])) {
+        if (null === $token['scope']) {
             return $this->json([]);
         }
 
@@ -198,6 +198,7 @@ class OAuthController extends Controller
                 $responseData[$key] = $value;
             }
         }
+
         return $this->json($responseData);
     }
 
@@ -281,11 +282,11 @@ class OAuthController extends Controller
         $addresses = [];
         foreach ($user->getProfile()->getAddresses() as $address) {
             $addresses[$address->getId()] = [
-                'street'       => $address->getStreet(),
+                'street' => $address->getStreet(),
                 'house_number' => $address->getHouseNumber(),
-                'zip_code'     => $address->getZipCode(),
-                'city'         => $address->getCity(),
-                'country'      => $address->getCountry(),
+                'zip_code' => $address->getZipCode(),
+                'city' => $address->getCity(),
+                'country' => $address->getCountry(),
             ];
         }
 

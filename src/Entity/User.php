@@ -175,14 +175,15 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     /**
      * @param string $password
      *
-     * @return $this
      * @throws \Exception
+     *
+     * @return $this
      */
     public function setPassword(string $password): self
     {
         $newPassword = $this->encryptField($password);
 
-        if (is_bool($newPassword) && $newPassword === false) {
+        if (is_bool($newPassword) && false === $newPassword) {
             throw new \Exception('[Account] A hashed password could not be generated');
         }
 
@@ -446,10 +447,8 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
 
     /**
      * @param \App\Entity\User $user
-     *
-     * @return void
      */
-    public function addFriend(User $user): void
+    public function addFriend(self $user): void
     {
         if ($this->myFriends->contains($user)) {
             return;
@@ -460,10 +459,8 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
 
     /**
      * @param \App\Entity\User $user
-     *
-     * @return void
      */
-    public function removeFriend(User $user): void
+    public function removeFriend(self $user): void
     {
         if (!$this->myFriends->contains($user)) {
             return;
@@ -514,6 +511,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
         if (empty($roles)) {
             $roles[] = 'ROLE_USER';
         }
+
         return array_unique($roles);
     }
 
@@ -561,7 +559,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
      */
     public function unserialize($serialized)
     {
-        list (
+        list(
             $this->id,
             $this->username,
             $this->password,
@@ -576,21 +574,21 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     public function toArray(): array
     {
         return [
-            'user_id'                  => $this->id,
-            'username'                 => $this->username,
-            'password'                 => $this->password,
-            'email'                    => $this->email,
-            'email_verified'           => $this->email_verified,
-            'created_on'               => $this->created_on,
-            'created_ip'               => $this->created_ip,
-            'last_online_at'           => $this->last_online_at,
-            'last_ip'                  => $this->last_ip,
-            'developer_status'         => $this->developer_status,
+            'user_id' => $this->id,
+            'username' => $this->username,
+            'password' => $this->password,
+            'email' => $this->email,
+            'email_verified' => $this->email_verified,
+            'created_on' => $this->created_on,
+            'created_ip' => $this->created_ip,
+            'last_online_at' => $this->last_online_at,
+            'last_ip' => $this->last_ip,
+            'developer_status' => $this->developer_status,
             'preferred_payment_method' => $this->preferred_payment_method,
-            'payment_methods'          => $this->paymentMethods->toArray(),
-            'profile'                  => $this->profile->toArray(),
-            'subscription'             => $this->subscription->toArray(),
-            'scope'                    => null,
+            'payment_methods' => $this->paymentMethods->toArray(),
+            'profile' => $this->profile->toArray(),
+            'subscription' => $this->subscription->toArray(),
+            'scope' => null,
         ];
     }
 }

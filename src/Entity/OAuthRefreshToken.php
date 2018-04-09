@@ -51,7 +51,7 @@ class OAuthRefreshToken
     protected $scope;
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -61,7 +61,7 @@ class OAuthRefreshToken
     }
 
     /**
-     * Get refresh_token
+     * Get refresh_token.
      *
      * @return string
      */
@@ -71,7 +71,7 @@ class OAuthRefreshToken
     }
 
     /**
-     * Set refresh_token
+     * Set refresh_token.
      *
      * @param string $refresh_token
      *
@@ -85,7 +85,7 @@ class OAuthRefreshToken
     }
 
     /**
-     * Get client_id
+     * Get client_id.
      *
      * @return string
      */
@@ -95,7 +95,7 @@ class OAuthRefreshToken
     }
 
     /**
-     * Get user_identifier
+     * Get user_identifier.
      *
      * @return string
      */
@@ -105,7 +105,7 @@ class OAuthRefreshToken
     }
 
     /**
-     * Get expires
+     * Get expires.
      *
      * @return \DateTime
      */
@@ -115,7 +115,7 @@ class OAuthRefreshToken
     }
 
     /**
-     * Set expires
+     * Set expires.
      *
      * @param \DateTime $expires
      *
@@ -129,7 +129,7 @@ class OAuthRefreshToken
     }
 
     /**
-     * Get scope
+     * Get scope.
      *
      * @return string
      */
@@ -139,7 +139,7 @@ class OAuthRefreshToken
     }
 
     /**
-     * Set scope
+     * Set scope.
      *
      * @param string $scope
      *
@@ -153,7 +153,7 @@ class OAuthRefreshToken
     }
 
     /**
-     * Get client
+     * Get client.
      *
      * @return \App\Entity\OAuthClient
      */
@@ -163,7 +163,7 @@ class OAuthRefreshToken
     }
 
     /**
-     * Set client
+     * Set client.
      *
      * @param \App\Entity\OAuthClient $client
      *
@@ -177,7 +177,7 @@ class OAuthRefreshToken
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return User
      */
@@ -187,7 +187,7 @@ class OAuthRefreshToken
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \App\Entity\User|null $user
      *
@@ -207,10 +207,10 @@ class OAuthRefreshToken
     {
         return [
             'refresh_token' => $this->refresh_token,
-            'client_id'     => $this->client->getId(),
-            'user_id'       => $this->user->getId(),
-            'expires'       => $this->expires,
-            'scope'         => $this->scope,
+            'client_id' => $this->client->getId(),
+            'user_id' => $this->user->getId(),
+            'expires' => $this->expires,
+            'scope' => $this->scope,
         ];
     }
 

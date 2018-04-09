@@ -42,7 +42,7 @@ class OAuthClient extends EncryptableFieldEntity
     protected $user_id = -1;
 
     /**
-     * Get id
+     * Get id.
      *
      * @return string
      */
@@ -52,7 +52,7 @@ class OAuthClient extends EncryptableFieldEntity
     }
 
     /**
-     * Get client_identifier
+     * Get client_identifier.
      *
      * @return string
      */
@@ -62,7 +62,7 @@ class OAuthClient extends EncryptableFieldEntity
     }
 
     /**
-     * Set client_identifier
+     * Set client_identifier.
      *
      * @param string $clientIdentifier
      *
@@ -76,7 +76,7 @@ class OAuthClient extends EncryptableFieldEntity
     }
 
     /**
-     * Get client_secret
+     * Get client_secret.
      *
      * @return string
      */
@@ -86,20 +86,21 @@ class OAuthClient extends EncryptableFieldEntity
     }
 
     /**
-     * Set client_secret
+     * Set client_secret.
      *
      * @param string $clientSecret
      * @param bool   $encrypt
      *
-     * @return \App\Entity\OAuthClient
      * @throws \Exception
+     *
+     * @return \App\Entity\OAuthClient
      */
     public function setClientSecret(string $clientSecret, bool $encrypt = false): self
     {
         if ($encrypt) {
             $newSecret = $this->encryptField($clientSecret);
 
-            if (is_bool($newSecret) && $newSecret === false) {
+            if (is_bool($newSecret) && false === $newSecret) {
                 throw new \Exception('[Account][OAuth2] A hashed secret could not be generated');
             }
 
@@ -112,7 +113,7 @@ class OAuthClient extends EncryptableFieldEntity
     }
 
     /**
-     * Verify client's secret
+     * Verify client's secret.
      *
      * @param string $clientSecret
      * @param bool   $encrypt
@@ -123,13 +124,13 @@ class OAuthClient extends EncryptableFieldEntity
     {
         if ($encrypt) {
             return $this->verifyEncryptedFieldValue($this->getClientSecret(), $clientSecret);
-        } else {
-            return $this->getClientSecret() == $clientSecret;
         }
+
+        return $this->getClientSecret() === $clientSecret;
     }
 
     /**
-     * Get redirect_uri
+     * Get redirect_uri.
      *
      * @return string
      */
@@ -139,7 +140,7 @@ class OAuthClient extends EncryptableFieldEntity
     }
 
     /**
-     * Set redirect_uri
+     * Set redirect_uri.
      *
      * @param string $redirectUri
      *
@@ -153,7 +154,7 @@ class OAuthClient extends EncryptableFieldEntity
     }
 
     /**
-     * Get scopes
+     * Get scopes.
      *
      * @return array
      */
@@ -165,7 +166,7 @@ class OAuthClient extends EncryptableFieldEntity
     }
 
     /**
-     * Set scopes
+     * Set scopes.
      *
      * @param array $scopes
      *
@@ -200,8 +201,8 @@ class OAuthClient extends EncryptableFieldEntity
     public function removeScope(string $scope): self
     {
         $scopes = $this->getScopes();
-        if (in_array($scope, $scopes)) {
-            $key = array_search($scope, $scopes);
+        if (in_array($scope, $scopes, true)) {
+            $key = array_search($scope, $scopes, true);
             unset($scopes[$key]);
         }
 
@@ -209,7 +210,7 @@ class OAuthClient extends EncryptableFieldEntity
     }
 
     /**
-     * Get users (in charge)
+     * Get users (in charge).
      *
      * @return int
      */
@@ -219,7 +220,7 @@ class OAuthClient extends EncryptableFieldEntity
     }
 
     /**
-     * Set users (in charge)
+     * Set users (in charge).
      *
      * @param int $users
      *
@@ -238,11 +239,11 @@ class OAuthClient extends EncryptableFieldEntity
     public function toArray(): array
     {
         return [
-            'client_id'     => $this->client_identifier,
+            'client_id' => $this->client_identifier,
             'client_secret' => $this->client_secret,
-            'redirect_uri'  => $this->redirect_uri,
-            'scope'         => $this->scope,
-            'user_id'       => $this->user_id,
+            'redirect_uri' => $this->redirect_uri,
+            'scope' => $this->scope,
+            'user_id' => $this->user_id,
         ];
     }
 }

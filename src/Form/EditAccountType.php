@@ -31,16 +31,16 @@ class EditAccountType extends AbstractType
     {
         $builder
             ->add('new_username', TextType::class, [
-                'label'       => 'panel.form.update_account.new_username.label',
-                'required'    => false,
-                'attr'        => [
+                'label' => 'panel.form.update_account.new_username.label',
+                'required' => false,
+                'attr' => [
                     'placeholder' => 'panel.form.update_account.new_username.placeholder',
                 ],
                 'constraints' => [
                     new Length([
-                        'min'        => AccountHelper::$settings['username']['min_length'],
+                        'min' => AccountHelper::$settings['username']['min_length'],
                         'minMessage' => 'panel.edit_account.new_username.username_short',
-                        'max'        => AccountHelper::$settings['username']['max_length'],
+                        'max' => AccountHelper::$settings['username']['max_length'],
                         'maxMessage' => 'panel.edit_account.new_username.username_long',
                     ]),
                     new Regex([
@@ -58,37 +58,37 @@ class EditAccountType extends AbstractType
                 ],
             ])
             ->add('new_password', RepeatedType::class, [
-                'type'            => PasswordType::class,
+                'type' => PasswordType::class,
                 'invalid_message' => 'panel.edit_account.new_password_verify.do_not_match',
-                'required'        => false,
-                'first_options'   => [
-                    'label'       => 'panel.form.update_account.new_password.label',
-                    'attr'        => [
+                'required' => false,
+                'first_options' => [
+                    'label' => 'panel.form.update_account.new_password.label',
+                    'attr' => [
                         'placeholder' => 'panel.form.update_account.new_password.placeholder',
                     ],
                     'constraints' => [
                         new Length([
-                            'min'        => AccountHelper::$settings['password']['min_length'],
+                            'min' => AccountHelper::$settings['password']['min_length'],
                             'minMessage' => 'panel.edit_account.new_password.password_too_short',
                         ]),
                     ],
                 ],
-                'second_options'  => [
+                'second_options' => [
                     'label' => 'panel.form.update_account.new_password_verify.label',
-                    'attr'  => [
+                    'attr' => [
                         'placeholder' => 'panel.form.update_account.new_password_verify.placeholder',
                     ],
                 ],
             ])
             ->add('new_email', EmailType::class, [
-                'label'       => 'panel.form.update_account.new_email.label',
-                'required'    => false,
-                'attr'        => [
+                'label' => 'panel.form.update_account.new_email.label',
+                'required' => false,
+                'attr' => [
                     'placeholder' => 'panel.form.update_account.new_email.placeholder',
                 ],
                 'constraints' => [
                     new Email([
-                        'strict'  => true,
+                        'strict' => true,
                         'checkMX' => true,
                         'message' => 'panel.edit_account.new_email.valid',
                     ]),
@@ -100,8 +100,8 @@ class EditAccountType extends AbstractType
                 ],
             ])
             ->add('password_verify', PasswordType::class, [
-                'label'       => 'panel.form.update_profile.password_verify.label',
-                'attr'        => [
+                'label' => 'panel.form.update_profile.password_verify.label',
+                'attr' => [
                     'placeholder' => 'panel.form.update_profile.password_verify.placeholder',
                 ],
                 'constraints' => [

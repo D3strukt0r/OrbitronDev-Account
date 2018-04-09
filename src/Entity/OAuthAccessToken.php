@@ -51,7 +51,7 @@ class OAuthAccessToken
     protected $scope;
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -61,7 +61,7 @@ class OAuthAccessToken
     }
 
     /**
-     * Get token
+     * Get token.
      *
      * @return string
      */
@@ -71,7 +71,7 @@ class OAuthAccessToken
     }
 
     /**
-     * Set token
+     * Set token.
      *
      * @param string $token
      *
@@ -85,7 +85,7 @@ class OAuthAccessToken
     }
 
     /**
-     * Get client_id
+     * Get client_id.
      *
      * @return string
      */
@@ -95,7 +95,7 @@ class OAuthAccessToken
     }
 
     /**
-     * Get user_identifier
+     * Get user_identifier.
      *
      * @return int
      */
@@ -105,7 +105,7 @@ class OAuthAccessToken
     }
 
     /**
-     * Get expires
+     * Get expires.
      *
      * @return \DateTime
      */
@@ -115,7 +115,7 @@ class OAuthAccessToken
     }
 
     /**
-     * Set expires
+     * Set expires.
      *
      * @param \DateTime $expires
      *
@@ -129,7 +129,7 @@ class OAuthAccessToken
     }
 
     /**
-     * Get scope
+     * Get scope.
      *
      * @return string
      */
@@ -139,7 +139,7 @@ class OAuthAccessToken
     }
 
     /**
-     * Set scope
+     * Set scope.
      *
      * @param string $scope
      *
@@ -153,7 +153,7 @@ class OAuthAccessToken
     }
 
     /**
-     * Get client
+     * Get client.
      *
      * @return \App\Entity\OAuthClient
      */
@@ -163,7 +163,7 @@ class OAuthAccessToken
     }
 
     /**
-     * Set client
+     * Set client.
      *
      * @param \App\Entity\OAuthClient $client
      *
@@ -177,7 +177,7 @@ class OAuthAccessToken
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return \App\Entity\User
      */
@@ -187,7 +187,7 @@ class OAuthAccessToken
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param \App\Entity\User $user
      *
@@ -206,11 +206,11 @@ class OAuthAccessToken
     public function toArray(): array
     {
         return [
-            'token'     => $this->token,
+            'token' => $this->token,
             'client_id' => $this->client->getId(),
-            'user_id'   => $this->user->getId(),
-            'expires'   => $this->expires,
-            'scope'     => $this->scope,
+            'user_id' => $this->user->getId(),
+            'expires' => $this->expires,
+            'scope' => $this->scope,
         ];
     }
 

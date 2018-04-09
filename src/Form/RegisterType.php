@@ -33,16 +33,16 @@ class RegisterType extends AbstractType
     {
         $builder
             ->add('username', TextType::class, [
-                'label'       => 'register.form.username.label',
-                'attr'        => [
+                'label' => 'register.form.username.label',
+                'attr' => [
                     'placeholder' => 'register.form.username.placeholder',
                 ],
                 'constraints' => [
                     new NotBlank(['message' => 'register.username.not_blank']),
                     new Length([
-                        'min'        => AccountHelper::$settings['username']['min_length'],
+                        'min' => AccountHelper::$settings['username']['min_length'],
                         'minMessage' => 'register.username.username_short',
-                        'max'        => AccountHelper::$settings['username']['max_length'],
+                        'max' => AccountHelper::$settings['username']['max_length'],
                         'maxMessage' => 'register.username.username_long',
                     ]),
                     new Regex([
@@ -60,14 +60,14 @@ class RegisterType extends AbstractType
                 ],
             ])
             ->add('email', EmailType::class, [
-                'label'       => 'register.form.email.label',
-                'attr'        => [
+                'label' => 'register.form.email.label',
+                'attr' => [
                     'placeholder' => 'register.form.email.placeholder',
                 ],
                 'constraints' => [
                     new NotBlank(['message' => 'register.email.not_blank']),
                     new Email([
-                        'strict'  => true,
+                        'strict' => true,
                         'checkMX' => true,
                         'message' => 'register.email.valid',
                     ]),
@@ -79,24 +79,24 @@ class RegisterType extends AbstractType
                 ],
             ])
             ->add('password', RepeatedType::class, [
-                'type'            => PasswordType::class,
+                'type' => PasswordType::class,
                 'invalid_message' => 'register.password_verify.do_not_match',
-                'first_options'   => [
-                    'label'       => 'register.form.password.label',
-                    'attr'        => [
+                'first_options' => [
+                    'label' => 'register.form.password.label',
+                    'attr' => [
                         'placeholder' => 'register.form.password.placeholder',
                     ],
                     'constraints' => [
                         new NotBlank(['message' => 'register.password.not_blank']),
                         new Length([
-                            'min'        => AccountHelper::$settings['password']['min_length'],
+                            'min' => AccountHelper::$settings['password']['min_length'],
                             'minMessage' => 'register.password.password_too_short',
                         ]),
                     ],
                 ],
-                'second_options'  => [
-                    'label'       => 'register.form.password_verify.label',
-                    'attr'        => [
+                'second_options' => [
+                    'label' => 'register.form.password_verify.label',
+                    'attr' => [
                         'placeholder' => 'register.form.password_verify.placeholder',
                     ],
                     'constraints' => [
@@ -105,23 +105,23 @@ class RegisterType extends AbstractType
                 ],
             ])
             ->add('recaptcha', ReCaptchaType::class, [
-                'attr'        => [
+                'attr' => [
                     'options' => [
                         'theme' => 'light',
-                        'type'  => 'image',
-                        'size'  => 'normal',
+                        'type' => 'image',
+                        'size' => 'normal',
                         'defer' => true,
                         'async' => true,
                     ],
                 ],
-                'mapped'      => false,
+                'mapped' => false,
                 'constraints' => [
                     new ReCaptchaTrue(),
                 ],
             ])
             ->add('terms', CheckboxType::class, [
-                'label'       => 'register.form.terms.label',
-                'required'    => true,
+                'label' => 'register.form.terms.label',
+                'required' => true,
                 'constraints' => [
                     new NotBlank(['message' => 'register.terms.not_blank']),
                 ],

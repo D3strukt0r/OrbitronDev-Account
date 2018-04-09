@@ -30,11 +30,11 @@ class OAuthAccessTokenRepository extends EntityRepository implements AccessToken
         $user = $this->_em->getRepository(User::class)->findOneBy(['id' => $userEmail]);
 
         $token = OAuthAccessToken::fromArray([
-            'token'   => $oauthToken,
-            'client'  => $client,
-            'user'    => $user,
+            'token' => $oauthToken,
+            'client' => $client,
+            'user' => $user,
             'expires' => (new \DateTime())->setTimestamp($expires),
-            'scope'   => $scope,
+            'scope' => $scope,
         ]);
         $this->_em->persist($token);
         $this->_em->flush();
@@ -43,7 +43,7 @@ class OAuthAccessTokenRepository extends EntityRepository implements AccessToken
     public function unsetAccessToken($access_token)
     {
         $accessToken = $this->findOneBy(['token' => $access_token]);
-        if (is_null($accessToken)) {
+        if (null === $accessToken) {
             return false;
         }
 

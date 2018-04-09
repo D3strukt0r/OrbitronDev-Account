@@ -31,10 +31,10 @@ class OAuthRefreshTokenRepository extends EntityRepository implements RefreshTok
 
         $refreshToken = OAuthRefreshToken::fromArray([
             'refresh_token' => $refreshToken,
-            'client'        => $client,
-            'user'          => $user,
-            'expires'       => (new \DateTime())->setTimestamp($expires),
-            'scope'         => $scope,
+            'client' => $client,
+            'user' => $user,
+            'expires' => (new \DateTime())->setTimestamp($expires),
+            'scope' => $scope,
         ]);
         $this->_em->persist($refreshToken);
         $this->_em->flush();
@@ -43,7 +43,7 @@ class OAuthRefreshTokenRepository extends EntityRepository implements RefreshTok
     public function unsetRefreshToken($refreshToken)
     {
         $refreshToken = $this->findOneBy(['refresh_token' => $refreshToken]);
-        if (is_null($refreshToken)) {
+        if (null === $refreshToken) {
             return false;
         }
 

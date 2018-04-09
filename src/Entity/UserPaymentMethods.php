@@ -111,9 +111,9 @@ class UserPaymentMethods
     public function toArray(): array
     {
         return [
-            'id'           => $this->id,
+            'id' => $this->id,
             'payment_type' => $this->payment_type,
-            'data'         => $this->data,
+            'data' => $this->data,
         ];
     }
 }

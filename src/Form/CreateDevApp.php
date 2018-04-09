@@ -16,20 +16,20 @@ class CreateDevApp extends AbstractType
     {
         $builder
             ->add('client_name', TextType::class, [
-                'label'       => 'panel.form.create_dev_app.client_name.label',
+                'label' => 'panel.form.create_dev_app.client_name.label',
                 'constraints' => [
                     new NotBlank(['message' => 'panel.create_dev_app.client_name.not_blank']),
                 ],
             ])
             ->add('redirect_uri', TextType::class, [
-                'label'       => 'panel.form.create_dev_app.redirect_uri.label',
+                'label' => 'panel.form.create_dev_app.redirect_uri.label',
                 'constraints' => [
                     new NotBlank(['message' => 'panel.create_dev_app.redirect_uri.not_blank']),
                 ],
             ])
             ->add('scopes', ChoiceType::class, [
-                'label'    => 'panel.form.create_dev_app.scopes.label',
-                'choices'  => $options['scope_choices'],
+                'label' => 'panel.form.create_dev_app.scopes.label',
+                'choices' => $options['scope_choices'],
                 'expanded' => true,
                 'multiple' => true,
             ])

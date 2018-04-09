@@ -110,9 +110,9 @@ class SubscriptionType
     public function toArray(): array
     {
         return [
-            'id'          => $this->id,
-            'title'       => $this->title,
-            'price'       => $this->price,
+            'id' => $this->id,
+            'title' => $this->title,
+            'price' => $this->price,
             'permissions' => $this->permissions,
         ];
     }

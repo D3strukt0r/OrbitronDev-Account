@@ -4,7 +4,6 @@ namespace App\Controller\Panel;
 
 use App\Entity\OAuthClient;
 use App\Entity\OAuthScope;
-use App\Service\AccountHelper;
 use App\Form\CreateDevAccount;
 use App\Form\CreateDevApp;
 use App\Service\TokenGenerator;
@@ -22,44 +21,44 @@ class DeveloperController extends Controller
 
         return [
             [
-                'type'    => 'group',
-                'parent'  => 'root',
-                'id'      => 'developer',
-                'title'   => 'Developer',
-                'icon'    => 'hs-admin-plug',
+                'type' => 'group',
+                'parent' => 'root',
+                'id' => 'developer',
+                'title' => 'Developer',
+                'icon' => 'hs-admin-plug',
                 'display' => $user->getDeveloperStatus() ? true : false,
             ],
             [
-                'type'   => 'link',
+                'type' => 'link',
                 'parent' => 'developer',
-                'id'     => 'developer_create_application',
-                'title'  => 'Create new application',
-                'href'   => 'developer-create-application',
-                'view'   => 'DeveloperController::createApplication',
+                'id' => 'developer_create_application',
+                'title' => 'Create new application',
+                'href' => 'developer-create-application',
+                'view' => 'DeveloperController::createApplication',
             ],
             [
-                'type'   => 'link',
+                'type' => 'link',
                 'parent' => 'developer',
-                'id'     => 'developer_applications',
-                'title'  => 'Your applications',
-                'href'   => 'developer-applications',
-                'view'   => 'DeveloperController::applicationList',
+                'id' => 'developer_applications',
+                'title' => 'Your applications',
+                'href' => 'developer-applications',
+                'view' => 'DeveloperController::applicationList',
             ],
             [
-                'type'   => 'link',
+                'type' => 'link',
                 'parent' => 'null',
-                'id'     => 'developer_show_application',
-                'title'  => 'Show application',
-                'href'   => 'developer-show-application',
-                'view'   => 'DeveloperController::showApplication',
+                'id' => 'developer_show_application',
+                'title' => 'Show application',
+                'href' => 'developer-show-application',
+                'view' => 'DeveloperController::showApplication',
             ],
             [
-                'type'    => 'link',
-                'parent'  => 'root',
-                'id'      => 'create_developer_account',
-                'title'   => 'Create developer account',
-                'href'    => 'developer-register',
-                'view'    => 'DeveloperController::register',
+                'type' => 'link',
+                'parent' => 'root',
+                'id' => 'create_developer_account',
+                'title' => 'Create developer account',
+                'href' => 'developer-register',
+                'view' => 'DeveloperController::register',
                 'display' => $user->getDeveloperStatus() ? false : true,
             ],
         ];
@@ -107,7 +106,7 @@ class DeveloperController extends Controller
 
         return $this->render('panel/developer-create-applications.html.twig', [
             'navigation_links' => $navigation,
-            'create_app_form'  => $createAppForm->createView(),
+            'create_app_form' => $createAppForm->createView(),
         ]);
     }
 
@@ -125,7 +124,7 @@ class DeveloperController extends Controller
 
         return $this->render('panel/developer-list-applications.html.twig', [
             'navigation_links' => $navigation,
-            'app_list'         => $apps,
+            'app_list' => $apps,
         ]);
     }
 
@@ -145,7 +144,7 @@ class DeveloperController extends Controller
         /** @var \App\Entity\OAuthClient $appData */
         $appData = $em->getRepository(OAuthClient::class)->findOneBy(['client_identifier' => $appId]);
 
-        if (is_null($appData)) {
+        if (null === $appData) {
             return $this->render('panel/developer-app-not-found.html.twig', [
                 'navigation_links' => $navigation,
             ]);
@@ -153,7 +152,7 @@ class DeveloperController extends Controller
 
         return $this->render('panel/developer-show-app.html.twig', [
             'navigation_links' => $navigation,
-            'app_data'         => $appData,
+            'app_data' => $appData,
         ]);
     }
 
@@ -171,12 +170,13 @@ class DeveloperController extends Controller
         if ($developerForm->isSubmitted()) {
             $user->setDeveloperStatus(true);
             $em->flush();
+
             return $this->redirectToRoute('panel', ['page' => 'developer-applications']);
         }
 
         return $this->render('panel/developer-register.html.twig', [
             'navigation_links' => $navigation,
-            'developer_form'   => $developerForm->createView(),
+            'developer_form' => $developerForm->createView(),
         ]);
     }
 }

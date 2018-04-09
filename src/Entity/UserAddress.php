@@ -189,12 +189,12 @@ class UserAddress
     public function toArray(): array
     {
         return [
-            'id'           => $this->id,
-            'street'       => $this->street,
+            'id' => $this->id,
+            'street' => $this->street,
             'house_number' => $this->house_number,
-            'zip_code'     => $this->zip_code,
-            'city'         => $this->city,
-            'country'      => $this->country,
+            'zip_code' => $this->zip_code,
+            'city' => $this->city,
+            'country' => $this->country,
         ];
     }
 }

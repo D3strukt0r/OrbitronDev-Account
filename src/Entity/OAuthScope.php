@@ -5,7 +5,8 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * OAuthScope
+ * OAuthScope.
+ *
  * @ORM\Entity
  * @ORM\Table(name="oauth_scopes")
  */
@@ -38,7 +39,7 @@ class OAuthScope
     protected $is_default = false;
 
     /**
-     * Get id
+     * Get id.
      *
      * @return int
      */
@@ -48,7 +49,7 @@ class OAuthScope
     }
 
     /**
-     * Get scope
+     * Get scope.
      *
      * @return string
      */
@@ -58,7 +59,7 @@ class OAuthScope
     }
 
     /**
-     * Set scope
+     * Set scope.
      *
      * @param string $scope
      *
@@ -72,7 +73,7 @@ class OAuthScope
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -82,7 +83,7 @@ class OAuthScope
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
      *
@@ -96,7 +97,7 @@ class OAuthScope
     }
 
     /**
-     * Get is_default
+     * Get is_default.
      *
      * @return bool
      */
@@ -106,7 +107,7 @@ class OAuthScope
     }
 
     /**
-     * Set is_default
+     * Set is_default.
      *
      * @param bool $is_default
      *
@@ -125,9 +126,9 @@ class OAuthScope
     public function toArray(): array
     {
         return [
-            'id'         => $this->id,
-            'scope'      => $this->scope,
-            'name'       => $this->name,
+            'id' => $this->id,
+            'scope' => $this->scope,
+            'name' => $this->name,
             'is_default' => $this->is_default,
         ];
     }
