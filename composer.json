@@ -10,7 +10,6 @@
         "ext-intl": "*",
         "ext-mbstring": "*",
         "bshaffer/oauth2-server-php": "^1.10",
-        "dama/doctrine-test-bundle": "^5.0",
         "google/recaptcha": "^1.1",
         "sensiolabs/security-checker": "^4.1",
         "symfony/apache-pack": "^1.0",
@@ -29,6 +28,7 @@
         "symfony/yaml": "^4.0"
     },
     "require-dev": {
+        "dama/doctrine-test-bundle": "^5.0",
         "deployer/deployer": "^6.1",
         "friendsofphp/php-cs-fixer": "^2.11",
         "symfony/dotenv": "^4.0",
