@@ -25,19 +25,19 @@ class OAuthClient extends EncryptableFieldEntity
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=255, options={"default":""})
+     * @ORM\Column(type="string", length=255, options={"default": ""})
      */
     protected $redirect_uri = '';
 
     /**
      * @var string
-     * @ORM\Column(type="text", options={"default":""})
+     * @ORM\Column(type="text", options={"default": ""})
      */
     protected $scope = '';
 
     /**
      * @var int
-     * @ORM\Column(type="integer", options={"default":-1})
+     * @ORM\Column(type="integer", options={"default": -1})
      */
     protected $user_id = -1;
 

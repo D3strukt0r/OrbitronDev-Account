@@ -40,7 +40,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
 
     /**
      * @var bool
-     * @ORM\Column(type="boolean", options={"default":0})
+     * @ORM\Column(type="boolean", options={"default": 0})
      */
     protected $email_verified = false;
 
@@ -70,7 +70,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
 
     /**
      * @var bool
-     * @ORM\Column(type="boolean", options={"default":false})
+     * @ORM\Column(type="boolean", options={"default": false})
      */
     protected $developer_status = false;
 
@@ -116,7 +116,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
 
     /**
      * @var bool
-     * @ORM\Column(type="boolean", options={"default":false})
+     * @ORM\Column(type="boolean", options={"default": false})
      */
     private $online = false;
 
