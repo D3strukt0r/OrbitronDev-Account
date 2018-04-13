@@ -36,7 +36,7 @@ script:
   - ./bin/console lint:yaml config --parse-tags
   # this checks that the Twig template files contain no syntax errors
   - ./bin/console lint:twig templates
-  # this checks that the XLIFF translations contain no syntax errors
+  # this checks that the YAML translations contain no syntax errors
   - ./bin/console lint:yaml translations
   # this checks that the application doesn't use dependencies with known security vulnerabilities
   # TRAVIS keeps failing "An error occurred: gnutls_handshake() failed: Handshake failed."

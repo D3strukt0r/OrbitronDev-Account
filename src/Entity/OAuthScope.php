@@ -33,6 +33,12 @@ class OAuthScope
     protected $name;
 
     /**
+     * @var null|string
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $description;
+
+    /**
      * @var bool
      * @ORM\Column(type="boolean", options={"default": false})
      */
@@ -92,6 +98,30 @@ class OAuthScope
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get description.
+     *
+     * @return null|string
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set description.
+     *
+     * @param null|string description
+     *
+     * @return $this
+     */
+    public function setDescription(string $description = null): self
+    {
+        $this->description = $description;
 
         return $this;
     }

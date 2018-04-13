@@ -62,38 +62,47 @@ class SetupController extends Controller
                 $scope[] = (new OAuthScope())
                     ->setScope('user:id')
                     ->setName('User ID')
+                    ->setDescription('Your unique user id')
                     ->setDefault(true);
                 $scope[] = (new OAuthScope())
                     ->setScope('user:username')
                     ->setName('Username')
+                    ->setDescription('Your unique username')
                     ->setDefault(false);
                 $scope[] = (new OAuthScope())
                     ->setScope('user:email')
                     ->setName('Email address')
+                    ->setDescription('Your email address')
                     ->setDefault(false);
                 $scope[] = (new OAuthScope())
                     ->setScope('user:name')
                     ->setName('Profile -> First name')
+                    ->setDescription('Your first name')
                     ->setDefault(false);
                 $scope[] = (new OAuthScope())
                     ->setScope('user:surname')
                     ->setName('Profile -> Surname')
+                    ->setDescription('Your surname')
                     ->setDefault(false);
                 $scope[] = (new OAuthScope())
                     ->setScope('user:birthday')
                     ->setName('Profile -> Birthday')
+                    ->setDescription('Your birthday')
                     ->setDefault(false);
                 $scope[] = (new OAuthScope())
                     ->setScope('user:activeaddresses')
-                    ->setName('Profile -> The address which is selected as default')
+                    ->setName('Profile -> Default address')
+                    ->setDescription('The current default address (requires access to all addresses)')
                     ->setDefault(false);
                 $scope[] = (new OAuthScope())
                     ->setScope('user:addresses')
-                    ->setName('Profile -> A list of all saved addresses')
+                    ->setName('Profile -> All addresses')
+                    ->setDescription('All your saved addresses')
                     ->setDefault(false);
                 $scope[] = (new OAuthScope())
                     ->setScope('user:subscription')
-                    ->setName('Current subscription status')
+                    ->setName('Subscription status')
+                    ->setDescription('Your current subscription status')
                     ->setDefault(false);
 
                 foreach ($scope as $item) {

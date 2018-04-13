@@ -114,37 +114,37 @@
                         <div class="col-sm-8">
 
                             <div class="mb-2">
-                                <input id="pac-input" class="form-control" autocomplete="off" placeholder="{{ 'panel.page.add_address.block1.address'|trans }}" onfocus="geolocate()" />
+                                <input id="pac-input" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10" autocomplete="nope" onfocus="geolocate()" placeholder="{{ 'panel.page.add_address.block1.address'|trans }}" />
                             </div>
 
                             <div class="form-row mb-2">
                                 <div class="col-8">
-                                    {{ form_widget(add_address_form.location_street, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_widget(add_address_form.location_street, {'attr': {'class': 'form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10'}}) }}
                                 </div>
 
                                 <div class="col-4">
-                                    {{ form_widget(add_address_form.location_street_number, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_widget(add_address_form.location_street_number, {'attr': {'class': 'form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10'}}) }}
                                 </div>
                             </div>
 
                             <div class="form-row mb-2">
                                 <div class="col-4">
-                                    {{ form_widget(add_address_form.location_postal_code, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_widget(add_address_form.location_postal_code, {'attr': {'class': 'form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10'}}) }}
                                 </div>
 
                                 <div class="col-8">
-                                    {{ form_widget(add_address_form.location_city, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_widget(add_address_form.location_city, {'attr': {'class': 'form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10'}}) }}
                                 </div>
                             </div>
 
-                            {{ form_widget(add_address_form.location_country, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_widget(add_address_form.location_country, {'attr': {'class': 'form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10'}}) }}
                         </div>
                     </div>
                 </div>
                 <div class="card-footer">
                     <div class="form-row">
                         <div class="col">
-                            {{ form_widget(add_address_form.password_verify, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_widget(add_address_form.password_verify, {'attr': {'class': 'form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10'}}) }}
                         </div>
                         {{ form_widget(add_address_form.send, {'attr': {'class': 'btn u-btn-blue'}}) }}
                     </div>

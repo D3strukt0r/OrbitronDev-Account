@@ -121,7 +121,7 @@ class OAuthController extends Controller
             /** @var \App\Entity\OAuthScope $getScope */
             $getScope = $em->getRepository(OAuthScope::class)->findOneBy(['scope' => $scope]);
             if (null !== $getScope) {
-                $scopes[] = $getScope->getName();
+                $scopes[] = $getScope;
             }
         }
         if (0 === $request->request->count()) {

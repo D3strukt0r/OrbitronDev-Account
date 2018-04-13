@@ -24,12 +24,29 @@
                     </header>
 
                     <h4>{{ 'oauth_authorize.text2'|trans({'%client_id%': client_info.clientIdentifier})|raw }}</h4>
-                    <ul>
+                    <div id="accordion-scopes" class="u-accordion" role="tablist" aria-multiselectable="true">
+                        {% set i = 0 %}
                         {% for scope in scopes %}
-                            <li>{{ scope }}</li>
+                            <!-- Card -->
+                            <div class="card rounded-0 g-mb-5">
+                                <div id="accordion-scopes-heading-{{ i }}" class="u-accordion__header" role="tab">
+                                    <h5 class="mb-0">
+                                        <a class="collapsed d-flex u-link-v5 g-color-main g-color-primary--hover g-font-size-16" href="#accordion-scopes-body-{{ i }}" data-toggle="collapse" data-parent="#accordion-scopes" aria-expanded="false" aria-controls="accordion-scopes-body-{{ i }}">
+                                            {{ scope.name }}
+                                        </a>
+                                    </h5>
+                                </div>
+                                <div id="accordion-scopes-body-{{ i }}" class="collapse" role="tabpanel" aria-labelledby="accordion-scopes-heading-{{ i }}" data-parent="#accordion-scopes">
+                                    <div class="u-accordion__body g-brd-top g-brd-gray-light-v4 g-color-gray-dark-v5">
+                                        {{ scope.description }}
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Card -->
+                            {% set i = i + 1 %}
                         {% endfor %}
-                    </ul>
-
+                    </div>
+                    <br />
                     <footer class="text-center">
                         <form method="post">
                             <button type="submit" name="not_authorized" class="btn btn-md u-btn-red rounded">{{ 'oauth_authorize.no'|trans }}</button>

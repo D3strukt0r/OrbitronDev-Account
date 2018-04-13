@@ -4,7 +4,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.19.1/css/jquery.fileupload.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/blueimp-file-upload@9/css/jquery.fileupload.min.css" />
 {% endblock %}
 
 {% block breadcrumb %}
@@ -137,19 +137,19 @@
         </div>
 
         <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.19.2/js/vendor/jquery.ui.widget.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/blueimp-file-upload@9/js/vendor/jquery.ui.widget.min.js"></script>
         <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-load-image/2.17.0/load-image.all.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/blueimp-load-image@2/js/load-image.all.min.js"></script>
         <!-- The Canvas to Blob plugin is included for image resizing functionality -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/javascript-canvas-to-blob/3.14.0/js/canvas-to-blob.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/blueimp-canvas-to-blob@3/js/canvas-to-blob.min.js"></script>
         <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.19.2/js/jquery.iframe-transport.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/blueimp-file-upload@9/js/jquery.iframe-transport.min.js"></script>
         <!-- The basic File Upload plugin -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.19.2/js/jquery.fileupload.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/blueimp-file-upload@9/js/jquery.fileupload.min.js"></script>
         <!-- The File Upload processing plugin -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.19.2/js/jquery.fileupload-process.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/blueimp-file-upload@9/js/jquery.fileupload-process.min.js"></script>
         <!-- The File Upload image preview & resize plugin -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-file-upload/9.19.2/js/jquery.fileupload-image.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/blueimp-file-upload@9/js/jquery.fileupload-image.min.js"></script>
 
         <script>
             // Initialize the jQuery File Upload widget:
@@ -185,8 +185,9 @@
                 },
                 progressall: function(e, data) {
                     var progress = parseInt(data.loaded / data.total * 100, 10);
-                    $('#upload-progress').css('width', progress + '%');
-                    $('#upload-progress').text(progress + '%');
+                    $('#upload-progress')
+                        .css('width', progress + '%')
+                        .text(progress + '%');
 
                     var uploadSpeed = data.bitrate; //  // Bps
                     var uploadSpeedText = 'B/s';

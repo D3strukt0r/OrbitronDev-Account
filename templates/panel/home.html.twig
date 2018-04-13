@@ -1,11 +1,11 @@
 {% extends 'layout_admin.html.twig' %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/noty@3/lib/noty.min.css" />
 {% endblock %}
 
 {% block javascripts %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/noty@3/lib/noty.min.js"></script>
     <script src="https://web-assets.orbitrondev.org/unify-admin-2.5.1/vendor/table-edits/build/table-edits.min.js"></script>
     <script>
         $(document).on('ready', function() {
@@ -147,11 +147,11 @@
                                     <td>{% if not app.user.emailVerified %}<a href="{{ path('confirm') }}" class="btn u-btn-yellow btn-sm">{{ 'panel.activate'|trans }}</a>{% endif %}</td>
                                 </tr>
                                 </tbody>
-                            </table><!-- /.table .table-hover -->
-                        </div><!-- /.table-responsive -->
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div><!-- /#page -->
+        </div>
     </div>
 {% endblock %}
