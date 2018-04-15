@@ -84,6 +84,9 @@ panel:
         logout: 'Logout'
     message:
         close: 'Close'
+    faq: 'FAQ'
+    support: 'Support'
+    contact: 'Contact US'
     edit: 'Edit'
     yes: 'Yes'
     no: 'No'
