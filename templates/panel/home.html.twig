@@ -6,7 +6,7 @@
 
 {% block javascripts %}
     <script src="https://cdn.jsdelivr.net/npm/noty@3/lib/noty.min.js"></script>
-    <script src="https://web-assets.orbitrondev.org/unify-admin-2.5.1/vendor/table-edits/build/table-edits.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/table-edits@0.0.3/build/table-edits.min.js"></script>
     <script>
         $(document).on('ready', function() {
             // initialization of editable table
@@ -113,8 +113,7 @@
                                     <td data-field="username">{{ app.user.username }}</td>
                                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('edit_username') }}"/>
                                     <td>
-                                        <a class="js-edit u-link-v5 g-color-gray-light-v6 g-color-lightblue-v3--hover"
-                                           href="{{ path('panel', {'page': 'account'}) }}">
+                                        <a class="js-edit u-link-v5 g-color-gray-light-v6 g-color-lightblue-v3--hover" href="{{ path('panel', {'page': 'account'}) }}">
                                             <i class="hs-admin-pencil"></i>
                                         </a>
                                     </td>
@@ -124,8 +123,7 @@
                                     <td data-field="password">**********</td>
                                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('edit_password') }}"/>
                                     <td>
-                                        <a class="js-edit u-link-v5 g-color-gray-light-v6 g-color-lightblue-v3--hover"
-                                           href="{{ path('panel', {'page': 'account'}) }}">
+                                        <a class="js-edit u-link-v5 g-color-gray-light-v6 g-color-lightblue-v3--hover" href="{{ path('panel', {'page': 'account'}) }}">
                                             <i class="hs-admin-pencil"></i>
                                         </a>
                                     </td>
@@ -135,8 +133,7 @@
                                     <td data-field="email">{{ app.user.email }}</td>
                                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('edit_email') }}"/>
                                     <td>
-                                        <a class="js-edit u-link-v5 g-color-gray-light-v6 g-color-lightblue-v3--hover"
-                                           href="{{ path('panel', {'page': 'account'}) }}">
+                                        <a class="js-edit u-link-v5 g-color-gray-light-v6 g-color-lightblue-v3--hover" href="{{ path('panel', {'page': 'account'}) }}">
                                             <i class="hs-admin-pencil"></i>
                                         </a>
                                     </td>
