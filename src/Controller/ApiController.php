@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Service\AdminControlPanel;
-use App\Service\SimpleImage;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,54 +13,75 @@ class ApiController extends Controller
     public function getImg(ObjectManager $em, Request $request)
     {
         $userId = $request->query->getInt('user_id');
-
-        /** @var \App\Entity\User|null $selectedUser */
-        $selectedUser = $em->find(User::class, $userId);
-
-        $width = $request->query->getInt('width', 1000);
-        $height = $request->query->getInt('height', 1000);
-
-        $rootPictureDir = $this->get('kernel')->getProjectDir().'/var/data/profile_pictures';
-
-        if (null !== $selectedUser) {
-            $pictureName = $selectedUser->getProfile()->getPicture();
-            if (null !== $pictureName && file_exists($fileName = $rootPictureDir.'/'.$pictureName)) {
-                $image = new SimpleImage($fileName);
-            } else {
-                $image = new SimpleImage($this->get('kernel')->getProjectDir().'/public/img/user.jpg');
-            }
-            $image->resize($width, $height);
-            $image->output();
-            exit;
+        if (null === $userId) {
+            return $this->json(['error' => true, 'error_message' => 'userid_not_given']);
         }
 
-        return $this->json(['error' => true, 'error_message' => 'user_not_found']);
+        /** @var \App\Entity\User|null $user */
+        $user = $em->find(User::class, $userId);
+        if (null === $user) {
+            return $this->json(['error' => true, 'error_message' => 'user_not_found']);
+        }
+
+        $requestedWidth = $request->query->getInt('width', 1000);
+        $requestedHeight = $request->query->getInt('height', 1000);
+        $rootPictureDir = $this->get('kernel')->getProjectDir().'/var/data/profile_pictures';
+        $pictureName = $user->getProfile()->getPicture();
+
+        $imagine = new \Imagine\Gd\Imagine();
+        if (null !== $pictureName && file_exists($fileName = $rootPictureDir.'/'.$pictureName)) {
+            $image = $imagine->open($fileName);
+        } else {
+            $image = $imagine->open($this->get('kernel')->getProjectDir().'/public/img/user.jpg');
+        }
+        $boxSize = $image->getSize()->getHeight() > $image->getSize()->getWidth() ? $image->getSize()->getHeight() : $image->getSize()->getWidth();
+
+        $collage = $imagine->create(new \Imagine\Image\Box($boxSize, $boxSize));
+
+        $x = ($boxSize - $image->getSize()->getWidth()) / 2;
+        $y = ($boxSize - $image->getSize()->getHeight()) / 2;
+        $collage->paste($image, new \Imagine\Image\Point($x, $y));
+
+        $collage->resize(new \Imagine\Image\Box($requestedWidth, $requestedHeight));
+
+        $collage->show('jpg');
+        exit;
     }
 
     public function updateProfilePic(ObjectManager $em, Request $request)
     {
+        // Method has to be post (So that an image can be sent)
+        if ('POST' !== $request->getMethod()) {
+            throw $this->createNotFoundException('Has to be POST method');
+        }
+
+        // Find user
         /** @var \App\Entity\User|null $user */
         $user = $em->find(User::class, $request->query->getInt('user_id'));
+        if (null === $user) {
+            throw $this->createNotFoundException('User not found');
+        }
 
+        // Check whether an image was sent
         /** @var \Symfony\Component\HttpFoundation\File\UploadedFile $file */
-        $file = $request->files->get('files');
+        $file = $request->files->get('avatar');
+        if (null === $file) {
+            throw $this->createNotFoundException('No file has been sent');
+        }
 
         // Validates if the file is in the right format
         if (!in_array($file->getMimeType(), ['image/png', 'image/jpeg', 'image/gif'], true)) {
-            return $this->json(['error' => true, 'error_message' => 'mine_type_not_valid']);
+            return $this->json(['success' => false, 'error' => 'mine_type_not_valid']);
         }
 
         // Generate a unique name for the file before saving it
         $fileName = md5(uniqid()).'.'.$file->guessExtension();
 
-        // Move the file to the directory where brochures are stored
+        // Prepare the directory
         $directory = $this->get('kernel')->getProjectDir().'/var/data/profile_pictures';
         if (!file_exists($directory)) {
             mkdir($directory, 0777, true);
         }
-
-        // Move the file
-        $file->move($directory, $fileName);
 
         // Remove old picture
         $oldPictureName = $user->getProfile()->getPicture();
@@ -70,11 +90,14 @@ class ApiController extends Controller
             unlink($oldPicture);
         }
 
+        // Move the file
+        $file->move($directory, $fileName);
+
         // Update db with new picture
         $user->getProfile()->setPicture($fileName);
         $em->flush();
 
-        return $this->json(['files' => ['name' => $fileName]]);
+        return $this->json(['success' => true]);
     }
 
     public function uploadProgress(Request $request)
@@ -90,7 +113,7 @@ class ApiController extends Controller
             'total' => $s['content_length'],
         ];
 
-        return $progress;
+        return $this->json($progress);
     }
 
     public function panelPages(Request $request)

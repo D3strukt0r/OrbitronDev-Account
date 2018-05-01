@@ -207,7 +207,12 @@ panel:
                 add_address: 'Add address'
             block2:
                 title: 'Profile picture'
-                upload: 'Upload file...'
+                tooltip: 'Change your avatar'
+                modal_title: 'Crop the image'
+                cancel: 'Cancel'
+                crop: 'Crop'
+                error: 'Upload error'
+                success: 'Upload success'
         add_address:
             title: 'Profile info'
             breadcrumb_link: 'Profile'
