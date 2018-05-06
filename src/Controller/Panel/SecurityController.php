@@ -53,14 +53,14 @@ class SecurityController extends Controller
 
     public function inactivity($navigation)
     {
-        return $response = $this->forward('App\\Controller\\Panel\\DefaultController::notFound', [
+        return $this->forward('App\\Controller\\Panel\\DefaultController::notFound', [
             'navigation' => $navigation,
         ]);
     }
 
     public function activityHistory($navigation)
     {
-        return $response = $this->forward('App\\Controller\\Panel\\DefaultController::notFound', [
+        return $this->forward('App\\Controller\\Panel\\DefaultController::notFound', [
             'navigation' => $navigation,
         ]);
     }

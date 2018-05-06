@@ -100,7 +100,7 @@ class OAuthClient extends EncryptableFieldEntity
         if ($encrypt) {
             $newSecret = $this->encryptField($clientSecret);
 
-            if (is_bool($newSecret) && false === $newSecret) {
+            if (false === $newSecret) {
                 throw new \Exception('[Account][OAuth2] A hashed secret could not be generated');
             }
 

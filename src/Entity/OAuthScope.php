@@ -115,7 +115,7 @@ class OAuthScope
     /**
      * Set description.
      *
-     * @param null|string description
+     * @param null|string $description
      *
      * @return $this
      */

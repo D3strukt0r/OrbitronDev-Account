@@ -183,7 +183,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     {
         $newPassword = $this->encryptField($password);
 
-        if (is_bool($newPassword) && false === $newPassword) {
+        if (false === $newPassword) {
             throw new \Exception('[Account] A hashed password could not be generated');
         }
 
