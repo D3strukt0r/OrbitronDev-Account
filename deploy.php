@@ -29,7 +29,7 @@ set('writable_dirs', []);
 // Hosts
 host('local')
     ->hostname('local')
-    ->set('deploy_path', '/var/www/html/{{application}}')
+    ->set('deploy_path', '/var/www/{{application}}')
     ->set('http_user', 'www-data')
     ->set('ssh_multiplexing', true);
 host('remote')
