@@ -34,7 +34,7 @@ register:
             label: 'Repeat Password'
             placeholder: 'Password'
         terms:
-            label: 'I accept the %link%Terms and Conditions%/link%'
+            label: 'I have read and accept the %link%Terms of Service%/link% and the %link2%Privacy Policy%/link2%'
         send:
             label: 'Register'
     unknown_error: 'Unknown error'
