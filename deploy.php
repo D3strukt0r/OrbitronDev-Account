@@ -20,7 +20,7 @@ set('branch', 'master');
 set('git_tty', true);
 
 // Shared files/dirs between deploys
-add('shared_files', ['.htaccess']);
+add('shared_files', []);
 add('shared_dirs', ['var/data']);
 
 // Writable dirs by web server
