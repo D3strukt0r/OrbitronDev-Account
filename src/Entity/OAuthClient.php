@@ -42,6 +42,12 @@ class OAuthClient extends EncryptableFieldEntity
     protected $user_id = -1;
 
     /**
+     * @var string
+     * @ORM\Column(type="string", length=255, options={"default": ""})
+     */
+    protected $callbackUrl = '';
+
+    /**
      * Get id.
      *
      * @return string
@@ -229,6 +235,30 @@ class OAuthClient extends EncryptableFieldEntity
     public function setUsers(int $users): self
     {
         $this->user_id = $users;
+
+        return $this;
+    }
+
+    /**
+     * Get callbackUrl.
+     *
+     * @return string
+     */
+    public function getCallbackUrl(): string
+    {
+        return $this->callbackUrl;
+    }
+
+    /**
+     * Set callbackUrl.
+     *
+     * @param string $callbackUrl
+     *
+     * @return $this
+     */
+    public function setCallbackUrl(string $callbackUrl): self
+    {
+        $this->callbackUrl = $callbackUrl;
 
         return $this;
     }

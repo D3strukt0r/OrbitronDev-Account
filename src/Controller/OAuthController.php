@@ -302,4 +302,37 @@ class OAuthController extends Controller
     {
         return ['subscription_type' => $user->getSubscription()->getSubscription()->getTitle()];
     }
+
+    /**
+     * @param \App\Entity\User $user
+     *
+     * @return array
+     */
+    private function scopePaymentMethods($user)
+    {
+        return ['payment_methods' => $user->getPaymentMethods()];
+    }
+
+    public static function sendCallback(ObjectManager $em, User $user, $data = [])
+    {
+        $websites = $em->getRepository(OAuthAccessToken::class)->findBy(['user' => $user]);
+        $callbackList = [];
+        foreach ($websites as $website) {
+            if ($url = $website->getClient()->getCallbackUrl()) {
+                $callbackList[$website->getClientId()] = $url;
+            }
+        }
+        foreach ($callbackList as $service => $url) {
+            $options = array(
+                'http' => array(
+                    'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                    'method'  => 'POST',
+                    'content' => http_build_query($data)
+                )
+            );
+            $context  = stream_context_create($options);
+            $result = @file_get_contents($url, false, $context);
+            if ($result === false) { /* Handle error */ }
+        }
+    }
 }

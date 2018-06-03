@@ -27,6 +27,12 @@ class CreateDevApp extends AbstractType
                     new NotBlank(['message' => 'panel.create_dev_app.redirect_uri.not_blank']),
                 ],
             ])
+            ->add('callback_url', TextType::class, [
+                'label' => 'Callback URL',
+                'constraints' => [
+                    new NotBlank(['message' => 'Please enter an url where you handle updates']),
+                ],
+            ])
             ->add('scopes', ChoiceType::class, [
                 'label' => 'panel.form.create_dev_app.scopes.label',
                 'choices' => $options['scope_choices'],

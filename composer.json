@@ -8,6 +8,7 @@
         "ext-gd": "*",
         "ext-iconv": "*",
         "ext-intl": "*",
+        "ext-json": "*",
         "ext-mbstring": "*",
         "bshaffer/oauth2-server-php": "^1.10",
         "google/recaptcha": "^1.1",

@@ -1,0 +1,239 @@
+<script>
+    class PaymentMethod {
+        constructor(options) {
+            // Set all options
+            this.options = {
+                'current_method': ''
+            };
+            // Override defaults
+            $.extend(true, this.options, options);
+
+            $('#add_payment_method_type').change({obj: this}, function(event) {
+                if ($(this).val() === 'mastercard') {
+                    event.data.obj.options.current_method = 'mastercard';
+                    event.data.obj.changeToMasterCardForm();
+                } else if ($(this).val() === 'visa') {
+                    event.data.obj.options.current_method = 'visa';
+                    event.data.obj.changeToVisaForm();
+                } else if ($(this).val() === 'paypal') {
+                    event.data.obj.options.current_method = 'paypal';
+                    event.data.obj.changeToPayPalForm();
+                }
+            });
+        }
+
+        updateFormData() {
+            if (this.options.current_method === 'mastercard') {
+                let number = $('#js-mastercard-number').val();
+                let ccv = $('#js-mastercard-ccv').val();
+                let month = $('#js-mastercard-valid-month').val();
+                let year = $('#js-mastercard-valid-year').val();
+
+                $('#add_payment_method_data').val(JSON.stringify({'number': number, 'ccv': ccv, 'month': month, 'year': year}));
+            } else if (this.options.current_method === 'visa') {
+                let number = $('#js-visa-number').val();
+                let ccv = $('#js-visa-ccv').val();
+                let month = $('#js-visa-valid-month').val();
+                let year = $('#js-visa-valid-year').val();
+
+                $('#add_payment_method_data').val(JSON.stringify({'number': number, 'ccv': ccv, 'month': month, 'year': year}));
+            } else if (this.options.current_method === 'paypal') {
+                let email = $('#js-paypal-email').val();
+
+                $('#add_payment_method_data').val(JSON.stringify({'email': email}));
+            }
+        }
+
+        changeToMasterCardForm() {
+            let output = '' +
+                '<div class="form-group row">' +
+                '   <label class="col-sm-4 col-form-label required" for="creditcard">Credit Card Nr.</label>' +
+                '   <div class="col-sm-8 input-group">' +
+                '       <input id="js-mastercard-number" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10" type="text" placeholder="XXXX-XXXX-XXXX-XXXX" data-mask="9999-9999-9999-9999" />' +
+                '       <div class="input-group-append">' +
+                '           <span class="input-group-text rounded-0 g-color-gray-dark-v5"><i class="icon-credit-card"></i></span>' +
+                '       </div>' +
+                '   </div>' +
+                '</div>';
+
+            output += '' +
+                '<div class="form-group row">' +
+                '   <label class="col-sm-4 col-form-label required" for="ccv">CCV</label>' +
+                '   <div class="col-sm-8">' +
+                '       <input id="js-mastercard-ccv" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10" type="number" min="0" max="999" />' +
+                '   </div>' +
+                '</div>';
+
+            output += '' +
+                '<div class="form-group row">' +
+                '   <label class="col-sm-4 col-form-label required" for="valid">Valid until</label>' +
+                '   <div class="col-sm-4">' +
+                '       <div class="form-group u-select--v3 g-pos-rel g-brd-gray-light-v7 g-rounded-4 mb-0">' +
+                '           <select id="js-mastercard-valid-month" class="u-select--v3-select u-sibling w-100" tabindex="-98">' +
+                '               <option value="0">-- Choose month --</option>' +
+                '               <option value="1">January</option>' +
+                '               <option value="2">February</option>' +
+                '               <option value="3">March</option>' +
+                '               <option value="4">April</option>' +
+                '               <option value="5">May</option>' +
+                '               <option value="6">June</option>' +
+                '               <option value="7">July</option>' +
+                '               <option value="8">August</option>' +
+                '               <option value="9">September</option>' +
+                '               <option value="10">October</option>' +
+                '               <option value="11">November</option>' +
+                '               <option value="12">December</option>' +
+                '           </select>' +
+                '       </div>' +
+                '   </div>' +
+                '   <div class="col-sm-4">' +
+                '       <div class="form-group u-select--v3 g-pos-rel g-brd-gray-light-v7 g-rounded-4 mb-0">' +
+                '           <select id="js-mastercard-valid-year" class="u-select--v3-select u-sibling w-100" tabindex="-98">' +
+                '               <option value="0">-- Choose year --</option>' +
+                '               <option value="2018">2018</option>' +
+                '               <option value="2019">2019</option>' +
+                '               <option value="2020">2020</option>' +
+                '               <option value="2021">2021</option>' +
+                '               <option value="2022">2022</option>' +
+                '           </select>' +
+                '       </div>' +
+                '   </div>' +
+                '</div>';
+            $('#js-card-form').html(output);
+
+            $.HSCore.components.HSMaskedInput.init('[data-mask]');
+            $('.js-select').selectpicker();
+
+            $('#js-mastercard-number').change({obj: this}, function(event) {
+                event.data.obj.updateFormData();
+            });
+            $('#js-mastercard-ccv').change({obj: this}, function(event) {
+                event.data.obj.updateFormData();
+            });
+            $('#js-mastercard-valid-month').change({obj: this}, function(event) {
+                event.data.obj.updateFormData();
+            });
+            $('#js-mastercard-valid-year').change({obj: this}, function(event) {
+                event.data.obj.updateFormData();
+            });
+        }
+
+        changeToVisaForm() {
+            let output = '' +
+                '<div class="form-group row">' +
+                '   <label class="col-sm-4 col-form-label required" for="creditcard">Credit Card Nr.</label>' +
+                '   <div class="col-sm-8 input-group">' +
+                '       <input id="js-visa-number" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10" type="text" placeholder="XXXX-XXXX-XXXX-XXXX" data-mask="9999-9999-9999-9999" />' +
+                '       <div class="input-group-append">' +
+                '           <span class="input-group-text rounded-0 g-color-gray-dark-v5"><i class="icon-credit-card"></i></span>' +
+                '       </div>' +
+                '   </div>' +
+                '</div>';
+
+            output += '' +
+                '<div class="form-group row">' +
+                '   <label class="col-sm-4 col-form-label required" for="ccv">CCV</label>' +
+                '   <div class="col-sm-8">' +
+                '       <input id="js-visa-ccv" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10" type="text" placeholder="XXX" data-mask="999" />' +
+                '   </div>' +
+                '</div>';
+
+            output += '' +
+                '<div class="form-group row">' +
+                '   <label class="col-sm-4 col-form-label required" for="valid">Valid until</label>' +
+                '   <div class="col-sm-4">' +
+                '       <div class="form-group u-select--v3 g-pos-rel g-brd-gray-light-v7 g-rounded-4 mb-0">' +
+                '           <select id="js-visa-month" class="u-select--v3-select u-sibling w-100" tabindex="-98">' +
+                '               <option value="0">-- Choose month --</option>' +
+                '               <option value="1">January</option>' +
+                '               <option value="2">February</option>' +
+                '               <option value="3">March</option>' +
+                '               <option value="4">April</option>' +
+                '               <option value="5">May</option>' +
+                '               <option value="6">June</option>' +
+                '               <option value="7">July</option>' +
+                '               <option value="8">August</option>' +
+                '               <option value="9">September</option>' +
+                '               <option value="10">October</option>' +
+                '               <option value="11">November</option>' +
+                '               <option value="12">December</option>' +
+                '           </select>' +
+                '       </div>' +
+                '   </div>' +
+                '   <div class="col-sm-4">' +
+                '       <div class="form-group u-select--v3 g-pos-rel g-brd-gray-light-v7 g-rounded-4 mb-0">' +
+                '           <select id="js-visa-year" class="u-select--v3-select u-sibling w-100" tabindex="-98">' +
+                '               <option value="0">-- Choose year --</option>' +
+                '               <option value="2018">2018</option>' +
+                '               <option value="2019">2019</option>' +
+                '               <option value="2020">2020</option>' +
+                '               <option value="2021">2021</option>' +
+                '               <option value="2022">2022</option>' +
+                '           </select>' +
+                '       </div>' +
+                '   </div>' +
+                '</div>';
+            $('#js-card-form').html(output);
+
+            $.HSCore.components.HSMaskedInput.init('[data-mask]');
+            $('.js-select').selectpicker();
+
+            $('#js-visa-number').change({obj: this}, function(event) {
+                event.data.obj.updateFormData();
+            });
+            $('#js-visa-ccv').change({obj: this}, function(event) {
+                event.data.obj.updateFormData();
+            });
+            $('#js-visa-valid-month').change({obj: this}, function(event) {
+                event.data.obj.updateFormData();
+            });
+            $('#js-visa-valid-year').change({obj: this}, function(event) {
+                event.data.obj.updateFormData();
+            });
+        }
+
+        changeToPayPalForm() {
+            let output = '' +
+                '<div class="form-group row">' +
+                '   <label class="col-sm-4 col-form-label required" for="email">PayPal email</label>' +
+                '   <div class="col-sm-8">' +
+                '       <input id="js-paypal-email" type="text" class="form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10" />' +
+                '   </div>' +
+                '</div>';
+            $('#js-card-form').html(output);
+
+            $('#js-paypal-email').change({obj: this}, function(event) {
+                event.data.obj.updateFormData();
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        let pm = new PaymentMethod();
+    });
+</script>
+{{ form_start(form, {'attr': {'class': 'card'}, 'action': action}) }}
+<div class="card-header">{{ 'Payment method'|trans }}</div>
+<div class="card-body">
+    {{ form_errors(form) }}
+
+    <div class="form-group row">
+        {{ form_label(form.type, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+        <div class="col-sm-8">
+            <div class="form-group u-select--v3 g-pos-rel g-brd-gray-light-v7 g-rounded-4 mb-0">
+                {{ form_widget(form.type, {'attr': {'class': 'js-select u-select--v3-select u-sibling w-100'}}) }}
+                <div class="d-flex align-items-center g-absolute-centered--y g-right-0 g-color-gray-light-v6 g-color-lightblue-v9--sibling-opened g-mr-15">
+                    <i class="hs-admin-angle-down"></i>
+                </div>
+            </div>
+            <small class="form-text text-danger">{{ form_errors(form.type) }}</small>
+        </div>
+    </div>
+
+    <div id="js-card-form"></div>
+
+</div>
+<div class="card-footer">
+    {{ form_widget(form.send, {'attr': {'class': 'btn btn-success btn-block'}}) }}
+</div>
+{{ form_end(form) }}

@@ -43,6 +43,14 @@
                             </div>
 
                             <div class="form-group row">
+                                {{ form_label(create_app_form.callback_url, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
+                                <div class="col-sm-8">
+                                    {{ form_widget(create_app_form.callback_url, {'attr': {'class': 'form-control form-control-md g-brd-gray-light-v7 g-brd-gray-light-v3--focus g-rounded-4 g-px-14 g-py-10'}}) }}
+                                    <small class="form-text text-danger">{{ form_errors(create_app_form.callback_url) }}</small>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
                                 {{ form_label(create_app_form.scopes, null, {'label_attr': {'class': 'col-sm-4 col-form-label'}}) }}
                                 <div class="col-sm-8">
                                     {% for key, type in create_app_form.scopes %}

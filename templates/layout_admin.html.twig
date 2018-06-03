@@ -377,6 +377,7 @@
 
 <!-- JS Implementing Plugins -->
 <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1/src/jquery.maskedinput.min.js"></script>
 
 <!-- JS Unify -->
 <script src="https://web-assets.orbitrondev.org/unify-2.5.1/js/hs.core.js"></script>
@@ -386,6 +387,7 @@
 <script src="https://web-assets.orbitrondev.org/unify-admin-2.5.1/js/components/hs.side-nav.js"></script>
 <script src="https://web-assets.orbitrondev.org/unify-admin-2.5.1/js/components/hs.range-datepicker.js"></script>
 <script src="https://web-assets.orbitrondev.org/unify-admin-2.5.1/js/components/hs.bar-chart.js"></script>
+<script src="https://web-assets.orbitrondev.org/unify-2.5.1/js/components/hs.masked-input.js"></script>
 
 <!-- JS Custom -->
 <script src="/js/custom.js?v={{ 'now'|date('d-m-Y') }}"></script>
@@ -413,6 +415,9 @@
 
         // initialization of charts
         $.HSCore.components.HSBarChart.init('.js-bar-chart');
+
+        // initialization of forms
+        $.HSCore.components.HSMaskedInput.init('[data-mask]');
     });
 </script>
 

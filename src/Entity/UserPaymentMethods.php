@@ -31,6 +31,11 @@ class UserPaymentMethods
      */
     protected $payment_type;
 
+    const PAYMENT_VISA = 'visa';
+    const PAYMENT_MASTERCARD = 'mastercard';
+    const PAYMENT_MAESTRO = 'maestro';
+    const PAYMENT_PAYPAL = 'paypal';
+
     /**
      * @var array
      * @ORM\Column(type="array")

@@ -1,0 +1,27 @@
+{% extends 'layout_admin.html.twig' %}
+
+{% block breadcrumb %}
+    <div class="g-hidden-sm-down g-bg-gray-light-v8 g-pa-20">
+        <ul class="u-list-inline g-color-gray-dark-v6">
+            <li class="list-inline-item g-mr-10">
+                <a class="u-link-v5 g-color-gray-dark-v6 g-color-lightblue-v3--hover g-valign-middle" href="{{ path('panel', {'page': 'payment'}) }}">{{ 'Payment'|trans }}</a>
+                <i class="hs-admin-angle-right g-font-size-12 g-color-gray-light-v6 g-valign-middle g-ml-10"></i>
+            </li>
+
+            <li class="list-inline-item">
+                <span class="g-valign-middle">{{ 'Add payment method'|trans }}</span>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="g-pa-20">
+        <h1 class="g-font-weight-300 g-font-size-28 g-color-black g-mb-40">{{ 'Add payment method'|trans }}</h1>
+        <div class="row">
+            <div class="col-lg-6">
+                {{ include('panel/_form_payment_method.html.twig', {'form': form, 'action': path('panel', {'page': 'add-payment-method'}) }) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

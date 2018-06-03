@@ -2,6 +2,8 @@
 
 namespace App\Controller\Panel;
 
+use App\Controller\OAuthController;
+use App\Entity\OAuthAccessToken;
 use App\Entity\UserAddress;
 use App\Form\AddAddressType;
 use App\Form\EditAccountType;
@@ -75,6 +77,8 @@ class AccountController extends Controller
                 $user->setEmailVerified(false);
             }
             $em->flush();
+
+            OAuthController::sendCallback($em, $user);
         }
 
         return $this->render('panel/account.html.twig', [
@@ -108,6 +112,7 @@ class AccountController extends Controller
 
             $em->flush();
 
+            OAuthController::sendCallback($em, $user);
             return $this->redirectToRoute('panel', ['page' => 'profile']);
         }
 
@@ -138,6 +143,7 @@ class AccountController extends Controller
 
             $em->flush();
 
+            OAuthController::sendCallback($em, $user);
             return $this->redirectToRoute('panel', ['page' => 'profile']);
         }
 

@@ -2,7 +2,11 @@
 
 namespace App\Controller\Panel;
 
+use App\Entity\UserPaymentMethods;
+use App\Form\AddPaymentMethod;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class PaymentController extends Controller
 {
@@ -19,18 +23,28 @@ class PaymentController extends Controller
             [
                 'type' => 'link',
                 'parent' => 'payment',
-                'id' => 'plans',
-                'title' => 'Plans',
-                'href' => 'plans',
-                'view' => 'PaymentController::plans',
-            ],
-            [
-                'type' => 'link',
-                'parent' => 'payment',
                 'id' => 'payment_methods',
                 'title' => 'Payment methods',
                 'href' => 'payment',
                 'view' => 'PaymentController::payment',
+            ],
+            [
+                'type' => 'link',
+                'parent' => 'payment',
+                'id' => 'add_payment_method',
+                'title' => null,
+                'display' => false,
+                'href' => 'add-payment-method',
+                'view' => 'PaymentController::addMethod',
+            ],
+            [
+                'type' => 'link',
+                'parent' => 'payment',
+                'id' => 'remove_payment_method',
+                'title' => null,
+                'display' => false,
+                'href' => 'remove-payment-method',
+                'view' => 'PaymentController::removeMethod',
             ],
         ];
     }
@@ -40,17 +54,39 @@ class PaymentController extends Controller
         return 20;
     }
 
-    public function plans($navigation)
+    public function payment($navigation)
     {
-        return $this->render('panel/plans.html.twig', [
+        /** @var \App\Entity\User $user */
+        $user = $this->getUser();
+
+        return $this->render('panel/payment_methods.html.twig', [
             'navigation_links' => $navigation,
+            'payment_methods' => $user->getPaymentMethods(),
         ]);
     }
 
-    public function payment($navigation)
+    public function addMethod(ObjectManager $em, Request $request, $navigation)
     {
-        return $this->forward('App\\Controller\\Panel\\DefaultController::notFound', [
-            'navigation' => $navigation,
+        $form = $this->createForm(AddPaymentMethod::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $formData = $form->getData();
+
+            /** @var \App\Entity\User $user */
+            $user = $this->getUser();
+            $obj = (new UserPaymentMethods())
+                ->setUser($user)
+                ->setType($formData['type'])
+                ->setData(json_decode($formData['data'], true));
+            $user->addPaymentMethod($obj);
+
+            $em->flush();
+            $this->addFlash('add_payment_method', 'Successfully added payment method');
+        }
+
+        return $this->render('panel/add_payment_methods.html.twig', [
+            'navigation_links' => $navigation,
+            'form' => $form->createView(),
         ]);
     }
 }
