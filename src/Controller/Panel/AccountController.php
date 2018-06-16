@@ -3,7 +3,6 @@
 namespace App\Controller\Panel;
 
 use App\Controller\OAuthController;
-use App\Entity\OAuthAccessToken;
 use App\Entity\UserAddress;
 use App\Form\AddAddressType;
 use App\Form\EditAccountType;
