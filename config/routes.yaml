@@ -1,8 +1,3 @@
-easy_admin_bundle:
-    resource: "@EasyAdminBundle/Controller/AdminController.php"
-    type:     annotation
-    prefix:   /admin
-
 panel_default:
     path: /p
     controller: FrameworkBundle:Redirect:redirect
