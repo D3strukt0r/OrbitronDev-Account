@@ -19,6 +19,7 @@ use OAuth2\Server;
 use OAuth2\Storage\Memory;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class OAuthController extends Controller
@@ -87,6 +88,9 @@ class OAuthController extends Controller
         ]));
     }
 
+    /**
+     * @Route("/oauth/authorize", name="oauth_authorize")
+     */
     public function authorize(ObjectManager $em, Request $request)
     {
         /** @var \App\Entity\User|null $user */
@@ -144,6 +148,9 @@ class OAuthController extends Controller
     }
 
     // curl http://localhost/oauth/token -d 'grant_type=authorization_code&code=AUTHORIZATION_CODE&client_id=testclient&client_secret=testpass&redirect_uri=http://d3strukt0r.esy.es'
+    /**
+     * @Route("/oauth/token", name="oauth_token")
+     */
     public function token()
     {
         $this->oauthServer();
@@ -158,6 +165,9 @@ class OAuthController extends Controller
     }
 
     // curl http://localhost/oauth/resource -d 'access_token=YOUR_TOKEN'
+    /**
+     * @Route("/oauth/resource", name="oauth_resource")
+     */
     public function resource(ObjectManager $em, Request $request)
     {
         $this->oauthServer();

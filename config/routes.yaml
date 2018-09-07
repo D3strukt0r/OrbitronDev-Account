@@ -1,33 +1,7 @@
-setup:
-    path: /setup
-    controller: App\Controller\SetupController::setup
-
 easy_admin_bundle:
     resource: "@EasyAdminBundle/Controller/AdminController.php"
     type:     annotation
     prefix:   /admin
-
-index:
-    path: /
-    controller: App\Controller\DefaultController::index
-
-login:
-    path: /login
-    controller: App\Controller\DefaultController::login
-    #schemes: [https]
-register:
-    path: /register
-    controller: App\Controller\DefaultController::register
-    #schemes: [https]
-forgot:
-    path: /forgot
-    controller: App\Controller\DefaultController::forgot
-    #schemes: [https]
-logout:
-    path: /logout
-confirm:
-    path: /confirm-email
-    controller: App\Controller\DefaultController::confirm
 
 panel_default:
     path: /p
@@ -36,22 +10,3 @@ panel_default:
         route: panel
         permanent: true
         page: home
-panel:
-    path: /p/{page}
-    controller: App\Controller\DefaultController::panel
-    #schemes: [https]
-
-api:
-    path: /api/{function}
-    controller: App\Controller\DefaultController::api
-
-oauth_authorize:
-    path: /oauth/authorize
-    controller: App\Controller\OAuthController::authorize
-    #schemes: [https]
-oauth_token:
-    path: /oauth/token
-    controller: App\Controller\OAuthController::token
-oauth_resource:
-    path: /oauth/resource
-    controller: App\Controller\OAuthController::resource

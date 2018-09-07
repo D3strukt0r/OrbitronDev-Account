@@ -19,6 +19,7 @@ use Swift_Message;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -26,6 +27,9 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 class DefaultController extends Controller
 {
+    /**
+     * @Route("/", name="index")
+     */
     public function index()
     {
         //////////// TEST IF USER IS LOGGED IN ////////////
@@ -38,6 +42,9 @@ class DefaultController extends Controller
         //////////// END TEST IF USER IS LOGGED IN ////////////
     }
 
+    /**
+     * @Route("/login", name="login")
+     */
     public function login(Request $request, AuthenticationUtils $authUtils)
     {
         //////////// TEST IF USER IS LOGGED IN ////////////
@@ -63,6 +70,22 @@ class DefaultController extends Controller
         ]);
     }
 
+    /**
+     * This is the route the user can use to logout.
+     *
+     * But, this will never be executed. Symfony will intercept this first
+     * and handle the logout automatically. See logout in config/packages/security.yaml
+     *
+     * @Route("/logout", name="logout")
+     */
+    public function logout(): void
+    {
+        throw new \Exception('This should never be reached!');
+    }
+
+    /**
+     * @Route("/register", name="register")
+     */
     public function register(ObjectManager $em, Request $request, Swift_Mailer $mailer)
     {
         //////////// TEST IF USER IS LOGGED IN ////////////
@@ -145,6 +168,10 @@ class DefaultController extends Controller
         ]);
     }
 
+
+    /**
+     * @Route("/p/{page}", name="panel")
+     */
     public function panel(Request $request, $page)
     {
         //////////// TEST IF USER IS LOGGED IN ////////////
@@ -184,6 +211,9 @@ class DefaultController extends Controller
         return $response;
     }
 
+    /**
+     * @Route("/api/{function}", name="api")
+     */
     public function api(Request $request, $function)
     {
         // Get function name
@@ -201,6 +231,9 @@ class DefaultController extends Controller
         return $result;
     }
 
+    /**
+     * @Route("/forgot", name="forgot")
+     */
     public function forgot(ObjectManager $em, Request $request)
     {
         //////////// TEST IF USER IS LOGGED IN ////////////
@@ -287,6 +320,9 @@ class DefaultController extends Controller
         ]);
     }
 
+    /**
+     * @Route("/confirm-email", name="confirm")
+     */
     public function confirm(ObjectManager $em, Request $request)
     {
         /** @var \App\Entity\User|null $user */
