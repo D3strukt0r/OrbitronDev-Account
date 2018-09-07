@@ -23,7 +23,7 @@ A step by step series of examples that tell you have to get a development env ru
 Clone the project from github
 
 ```bash
-$ git clone https://github.com/OrbitronDev/service-account
+$ git clone https://github.com/D3strukt0r/service-account
 ```
 
 Setup the project with composer
@@ -62,17 +62,17 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/OrbitronDev/service-account/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/D3strukt0r/service-account/tags).
 
 ## Authors
 
 * **Manuele Vaccari** - *Initial work* - Copied work from previous project [OrbitronDev](https://github.com/D3strukt0r/OrbitronDev)
 
-See also the list of [contributors](https://github.com/OrbitronDev/service-account/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/D3strukt0r/service-account/contributors) who participated in this project.
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0 - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under a copy of the MEGA Limited Code Review License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
 
