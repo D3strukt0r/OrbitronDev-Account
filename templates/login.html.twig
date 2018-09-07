@@ -47,7 +47,7 @@
                         <input type="hidden" name="_target_path" value="{{ redirect_url }}" />
                         <div class="form-group {% if error %}u-has-error-v1{% endif %} mb-4">
                             <label class="g-color-gray-dark-v2 g-font-weight-600 g-font-size-13" for="login_email">{{ 'login.form.email.label'|trans }}</label>
-                            <input type="email" id="login_email" name="_username" required="required" placeholder="{{ 'login.form.email.placeholder'|trans }}" class="form-control g-brd-gray-light-v4 g-brd-primary--hover rounded g-py-15 g-px-15" />
+                            <input type="email" id="login_email" name="_username" required="required" placeholder="{{ 'login.form.email.placeholder'|trans }}" tabindex=1 class="form-control g-brd-gray-light-v4 g-brd-primary--hover rounded g-py-20 g-px-20" />
                         </div>
 
                         <div class="form-group {% if error %}u-has-error-v1{% endif %} mb-3">
@@ -59,13 +59,13 @@
                                     <a class="d-inline-block g-font-size-12 mb-2" href="{{ path('forgot') }}">{{ 'login.forgot'|trans }}</a>
                                 </div>
                             </div>
-                            <input type="password" id="login_password" name="_password" required="required" placeholder="{{ 'login.form.password.placeholder'|trans }}" class="form-control g-brd-gray-light-v4 g-brd-primary--hover rounded g-py-15 g-px-15" />
+                            <input type="password" id="login_password" name="_password" required="required" placeholder="{{ 'login.form.password.placeholder'|trans }}" tabindex=2 class="form-control g-brd-gray-light-v4 g-brd-primary--hover rounded g-py-20 g-px-20" />
                         </div>
                         <div class="g-mb-35">
                             <div class="row justify-content-between">
                                 <div class="col-8 align-self-center">
                                     <label class="form-check-inline u-check g-color-gray-dark-v5 g-font-size-13 g-pl-25 mb-0">
-                                        <input type="checkbox" id="login_remember" name="_remember_me" class="g-hidden-xs-up g-pos-abs g-top-0 g-left-0" />
+                                        <input type="checkbox" id="login_remember" name="_remember_me" tabindex=3 class="g-hidden-xs-up g-pos-abs g-top-0 g-left-0" />
                                         <span class="u-check-icon-checkbox-v6 g-absolute-centered--y g-left-0">
                                             <i class="fa" data-check-icon="&#xf00c"></i>
                                         </span>
@@ -73,7 +73,7 @@
                                     </label>
                                 </div>
                                 <div class="col-4 align-self-center text-right">
-                                    <button type="submit" id="login_send" name="login" class="btn btn-md u-btn-primary rounded g-py-13 g-px-25">{{ 'login.form.login'|trans }}</button>
+                                    <button type="submit" id="login_send" name="login" tabindex=4 class="btn btn-md u-btn-primary rounded g-py-13 g-px-25">{{ 'login.form.login'|trans }}</button>
                                 </div>
                             </div>
                         </div>

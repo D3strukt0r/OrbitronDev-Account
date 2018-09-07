@@ -2,6 +2,11 @@ setup:
     path: /setup
     controller: App\Controller\SetupController::setup
 
+easy_admin_bundle:
+    resource: "@EasyAdminBundle/Controller/AdminController.php"
+    type:     annotation
+    prefix:   /admin
+
 index:
     path: /
     controller: App\Controller\DefaultController::index

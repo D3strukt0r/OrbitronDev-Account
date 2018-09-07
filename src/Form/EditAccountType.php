@@ -88,7 +88,7 @@ class EditAccountType extends AbstractType
                 ],
                 'constraints' => [
                     new Email([
-                        'strict' => true,
+                        'mode' => 'strict',
                         'checkMX' => true,
                         'message' => 'panel.edit_account.new_email.valid',
                     ]),

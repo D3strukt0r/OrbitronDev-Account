@@ -67,7 +67,7 @@ class RegisterType extends AbstractType
                 'constraints' => [
                     new NotBlank(['message' => 'register.email.not_blank']),
                     new Email([
-                        'strict' => true,
+                        'mode' => 'strict',
                         'checkMX' => true,
                         'message' => 'register.email.valid',
                     ]),

@@ -2,11 +2,11 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
-    recaptcha.public_key:  '%env(RECAPTCHA_PUBLIC_KEY)%'
-    recaptcha.private_key: '%env(RECAPTCHA_PRIVATE_KEY)%'
     recaptcha.enabled: true
     recaptcha.verify_host: false
     recaptcha.ajax: false
+    google_recaptcha_secret: '%env(GOOGLE_RECAPTCHA_SECRET)%'
+    google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
 
 services:
     # default configuration for services in *this* file
@@ -38,7 +38,7 @@ services:
         class: App\Form\Type\ReCaptchaType
         public: true
         arguments:
-            - '%recaptcha.public_key%'
+            - '%google_recaptcha_site_key%'
             - '%recaptcha.enabled%'
             - '%recaptcha.ajax%'
         tags:
@@ -49,7 +49,7 @@ services:
         public: true
         arguments:
             - '%recaptcha.enabled%'
-            - '%recaptcha.private_key%'
+            - '%google_recaptcha_secret%'
             - '@request_stack'
             - '%recaptcha.verify_host%'
         tags:
