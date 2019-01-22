@@ -37,7 +37,10 @@ host('prod')
     ->hostname('prod')
     ->multiplexing(true)
     ->set('deploy_path', '/home/manuelec/public_html/{{application}}')
-    ->stage('prod');
+    ->stage('prod')
+    ->set('bin/php', function () {
+        return locateBinaryPath('/usr/local/bin/php72');
+    });
 
 // Tasks
 task('build', function () {
