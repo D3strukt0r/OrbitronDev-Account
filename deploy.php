@@ -5,7 +5,7 @@ namespace Deployer;
 require 'recipe/symfony4.php';
 
 // Project name
-set('application', 'account');
+set('application', 'orbitrondev_account');
 
 // Environment vars
 add('env', [
@@ -27,19 +27,17 @@ add('shared_dirs', ['var/data']);
 set('writable_dirs', []);
 
 // Hosts
+set('default_stage', 'dev');
 host('local')
     ->hostname('local')
     ->set('deploy_path', '/var/www/{{application}}')
     ->set('http_user', 'www-data')
     ->set('ssh_multiplexing', true);
-host('remote')
-    ->hostname('hostpoint')
-    ->set('deploy_path', '/home/manuelev/www/{{application}}')
-    ->set('http_user', 'manuelev')
-    ->set('keep_releases', 1)
-    ->set('bin/php', function () {
-        return locateBinaryPath('/usr/local/php72/bin/php');
-    });
+host('prod')
+    ->hostname('prod')
+    ->multiplexing(true)
+    ->set('deploy_path', '/home/manuelec/public_html/{{application}}')
+    ->stage('prod');
 
 // Tasks
 task('build', function () {
