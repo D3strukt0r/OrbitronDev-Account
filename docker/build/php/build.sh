@@ -23,6 +23,11 @@ apk add --virtual .phpexts-rundeps $RUN_DEPS
 # Remove building tools for smaller container size
 apk del .build-deps
 
+# Install composer
+cd /usr/local/bin
+/build/install-composer.sh
+mv composer.phar composer
+
 # Install Symfony tool
 apk add --no-cache git
 wget https://get.symfony.com/cli/installer -O - | bash
@@ -54,4 +59,4 @@ find . -type f -exec chmod 644 {} \;
 
 # Cleanup
 rm -r /build
-rm /usr/bin/composer
+#rm /usr/bin/composer

@@ -8,7 +8,6 @@ ARG DEV=false
 COPY docker/bin/php /usr/local/bin
 COPY docker/build/php /build
 COPY . /build/src
-COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 RUN set -eux; \
     apk update; \
