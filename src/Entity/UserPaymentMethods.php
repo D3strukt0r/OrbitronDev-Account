@@ -19,7 +19,7 @@ class UserPaymentMethods
     protected $id;
 
     /**
-     * @var \App\Entity\User
+     * @var User
      * @ORM\ManyToOne(targetEntity="User", inversedBy="paymentMethods")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
@@ -51,7 +51,7 @@ class UserPaymentMethods
     }
 
     /**
-     * @return \App\Entity\User
+     * @return User
      */
     public function getUser(): User
     {
@@ -59,7 +59,7 @@ class UserPaymentMethods
     }
 
     /**
-     * @param \App\Entity\User $user
+     * @param User $user
      *
      * @return $this
      */

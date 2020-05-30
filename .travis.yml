@@ -1,5 +1,11 @@
 language: php
-sudo: false
+os: linux
+dist: bionic
+services:
+  - docker
+
+notifications:
+  email: false
 
 cache:
   directories:
@@ -14,8 +20,9 @@ env:
 matrix:
   fast_finish: true
   include:
-    - php: 7.1
     - php: 7.2
+    - php: 7.3
+    - php: 7.4
     - php: nightly
   allow_failures:
     - php: nightly
@@ -45,6 +52,3 @@ script:
   - composer validate --strict
   # this checks that Doctrine's mapping configurations are valid
   - ./bin/console doctrine:schema:validate --skip-sync -vvv --no-interaction
-
-notifications:
-  email: false

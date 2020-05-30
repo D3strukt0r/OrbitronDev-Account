@@ -11,8 +11,12 @@ class ConfirmEmailType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('send', SubmitType::class, [
-                'label' => 'confirm.form.send.label',
-            ]);
+            ->add(
+                'send',
+                SubmitType::class,
+                [
+                    'label' => 'confirm.form.send.label',
+                ]
+            );
     }
 }

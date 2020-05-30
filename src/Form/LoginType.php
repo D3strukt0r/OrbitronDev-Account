@@ -28,40 +28,62 @@ class LoginType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('redirect', HiddenType::class, [
-                'data' => $options['redirect'],
-            ])
-            ->add('email', EmailType::class, [
-                'label' => 'login.form.email.label',
-                'attr' => [
-                    'placeholder' => 'login.form.email.placeholder',
-                ],
-                'constraints' => [
-                    new NotBlank(['message' => 'login.email.not_blank']),
-                    new Email(['message' => 'login.email.valid']),
-                    new Callback(function ($object, ExecutionContextInterface $context, $payload) {
-                        if (!$this->helper->emailExists($object)) {
-                            $context->addViolation('login.email.user_does_not_exist');
-                        }
-                    }),
-                ],
-            ])
-            ->add('password', PasswordType::class, [
-                'label' => 'login.form.password.label',
-                'attr' => [
-                    'placeholder' => 'login.form.password.placeholder',
-                ],
-                'constraints' => [
-                    new NotBlank(['message' => 'login.password.not_blank']),
-                ],
-            ])
-            ->add('remember', CheckboxType::class, [
-                'label' => 'login.form.remember',
-                'required' => false,
-            ])
-            ->add('send', SubmitType::class, [
-                'label' => 'login.form.login',
-            ]);
+            ->add(
+                'redirect',
+                HiddenType::class,
+                [
+                    'data' => $options['redirect'],
+                ]
+            )
+            ->add(
+                'email',
+                EmailType::class,
+                [
+                    'label' => 'login.form.email.label',
+                    'attr' => [
+                        'placeholder' => 'login.form.email.placeholder',
+                    ],
+                    'constraints' => [
+                        new NotBlank(['message' => 'login.email.not_blank']),
+                        new Email(['message' => 'login.email.valid']),
+                        new Callback(
+                            function ($object, ExecutionContextInterface $context, $payload) {
+                                if (!$this->helper->emailExists($object)) {
+                                    $context->addViolation('login.email.user_does_not_exist');
+                                }
+                            }
+                        ),
+                    ],
+                ]
+            )
+            ->add(
+                'password',
+                PasswordType::class,
+                [
+                    'label' => 'login.form.password.label',
+                    'attr' => [
+                        'placeholder' => 'login.form.password.placeholder',
+                    ],
+                    'constraints' => [
+                        new NotBlank(['message' => 'login.password.not_blank']),
+                    ],
+                ]
+            )
+            ->add(
+                'remember',
+                CheckboxType::class,
+                [
+                    'label' => 'login.form.remember',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'send',
+                SubmitType::class,
+                [
+                    'label' => 'login.form.login',
+                ]
+            );
     }
 
     /**
@@ -69,8 +91,10 @@ class LoginType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'redirect' => null,
-        ]);
+        $resolver->setDefaults(
+            [
+                'redirect' => null,
+            ]
+        );
     }
 }

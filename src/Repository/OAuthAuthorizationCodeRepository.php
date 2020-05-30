@@ -29,14 +29,16 @@ class OAuthAuthorizationCodeRepository extends EntityRepository implements Autho
         /** @var \App\Entity\User $user */
         $user = $this->_em->getRepository(User::class)->findOneBy(['id' => $userEmail]);
 
-        $authCode = OAuthAuthorizationCode::fromArray([
-            'code' => $code,
-            'client' => $client,
-            'user' => $user,
-            'redirect_uri' => $redirectUri,
-            'expires' => (new \DateTime())->setTimestamp($expires),
-            'scope' => $scope,
-        ]);
+        $authCode = OAuthAuthorizationCode::fromArray(
+            [
+                'code' => $code,
+                'client' => $client,
+                'user' => $user,
+                'redirect_uri' => $redirectUri,
+                'expires' => (new \DateTime())->setTimestamp($expires),
+                'scope' => $scope,
+            ]
+        );
         $this->_em->persist($authCode);
         $this->_em->flush();
     }

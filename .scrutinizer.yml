@@ -1,7 +1,4 @@
 build:
-    environment:
-        php:
-            version: 7.1 # Common versions: 5.4, 5.5, 5.6, 7.0, 7.1, or hhvm
     nodes:
         analysis:
             project_setup:
@@ -10,6 +7,10 @@ build:
                 override:
                     - php-scrutinizer-run
                     - phpcs-run --standard=psr2 ./src
+    environment:
+        php:
+            # Common versions: 5.4, 5.5, 5.6, 7.0, 7.1, or hhvm
+            version: 7.4
 #    tests:
 #        override:
 #            -
@@ -21,6 +22,8 @@ filter:
     excluded_paths:
         - 'bin/*'
         - 'tests/*'
+        - 'public/assets/*'
+        - 'public/assets-admin/*'
         - 'public/vendor/*'
         - '*.min.js'
 checks:

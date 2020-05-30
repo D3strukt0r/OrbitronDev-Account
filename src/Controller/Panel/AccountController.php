@@ -3,15 +3,16 @@
 namespace App\Controller\Panel;
 
 use App\Controller\OAuthController;
+use App\Entity\User;
 use App\Entity\UserAddress;
 use App\Form\AddAddressType;
 use App\Form\EditAccountType;
 use App\Form\EditProfileType;
-use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use DateTime;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
-class AccountController extends Controller
+class AccountController extends AbstractController
 {
     public static function __setupNavigation()
     {
@@ -55,14 +56,14 @@ class AccountController extends Controller
         return 10;
     }
 
-    public function account(ObjectManager $em, Request $request, $navigation)
+    public function account(Request $request, $navigation)
     {
         $editAccountForm = $this->createForm(EditAccountType::class);
         $editAccountForm->handleRequest($request);
         if ($editAccountForm->isSubmitted() && $editAccountForm->isValid()) {
             $formData = $editAccountForm->getData();
 
-            /** @var \App\Entity\User $user */
+            /** @var User $user */
             $user = $this->getUser();
 
             if (null !== ($newUsername = $formData['new_username'])) {
@@ -75,29 +76,37 @@ class AccountController extends Controller
                 $user->setEmail($newEmail);
                 $user->setEmailVerified(false);
             }
-            $em->flush();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
 
-            OAuthController::sendCallback($em, $user);
+            OAuthController::sendCallback($entityManager, $user);
         }
 
-        return $this->render('panel/account.html.twig', [
-            'navigation_links' => $navigation,
-            'edit_account_form' => $editAccountForm->createView(),
-        ]);
+        return $this->render(
+            'panel/account.html.twig',
+            [
+                'navigation_links' => $navigation,
+                'edit_account_form' => $editAccountForm->createView(),
+            ]
+        );
     }
 
-    public function profile(ObjectManager $em, Request $request, $navigation)
+    public function profile(Request $request, $navigation)
     {
-        /** @var \App\Entity\User $user */
+        /** @var User $user */
         $user = $this->getUser();
 
-        $editProfileForm = $this->createForm(EditProfileType::class, null, [
-            'name' => $user->getProfile()->getName(),
-            'surname' => $user->getProfile()->getSurname(),
-            'gender' => $user->getProfile()->getGender(),
-            'birthday' => null !== ($bd = $user->getProfile()->getBirthday()) ? $bd->format('d/m/Y') : null,
-            'website' => $user->getProfile()->getWebsite(),
-        ]);
+        $editProfileForm = $this->createForm(
+            EditProfileType::class,
+            null,
+            [
+                'name' => $user->getProfile()->getName(),
+                'surname' => $user->getProfile()->getSurname(),
+                'gender' => $user->getProfile()->getGender(),
+                'birthday' => null !== ($bd = $user->getProfile()->getBirthday()) ? $bd->format('d/m/Y') : null,
+                'website' => $user->getProfile()->getWebsite(),
+            ]
+        );
         $editProfileForm->handleRequest($request);
         if ($editProfileForm->isSubmitted() && $editProfileForm->isValid()) {
             $formData = $editProfileForm->getData();
@@ -106,24 +115,28 @@ class AccountController extends Controller
                 ->setName($formData['first_name'])
                 ->setSurname($formData['last_name'])
                 ->setGender($formData['gender'])
-                ->setBirthday(\DateTime::createFromFormat('d/m/Y', $formData['birthday']) ?: null)
+                ->setBirthday(DateTime::createFromFormat('d/m/Y', $formData['birthday']) ?: null)
                 ->setWebsite($formData['website']);
 
-            $em->flush();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
 
-            OAuthController::sendCallback($em, $user);
+            OAuthController::sendCallback($entityManager, $user);
             return $this->redirectToRoute('panel', ['page' => 'profile']);
         }
 
-        return $this->render('panel/profile.html.twig', [
-            'navigation_links' => $navigation,
-            'edit_profile_form' => $editProfileForm->createView(),
-        ]);
+        return $this->render(
+            'panel/profile.html.twig',
+            [
+                'navigation_links' => $navigation,
+                'edit_profile_form' => $editProfileForm->createView(),
+            ]
+        );
     }
 
-    public function addAddress(ObjectManager $em, Request $request, $navigation)
+    public function addAddress(Request $request, $navigation)
     {
-        /** @var \App\Entity\User $user */
+        /** @var User $user */
         $user = $this->getUser();
 
         $addAddressForm = $this->createForm(AddAddressType::class);
@@ -140,15 +153,19 @@ class AccountController extends Controller
                 ->setCountry($formData['location_country']);
             $user->getProfile()->addAddress($newAddress);
 
-            $em->flush();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
 
-            OAuthController::sendCallback($em, $user);
+            OAuthController::sendCallback($entityManager, $user);
             return $this->redirectToRoute('panel', ['page' => 'profile']);
         }
 
-        return $this->render('panel/add-address.html.twig', [
-            'navigation_links' => $navigation,
-            'add_address_form' => $addAddressForm->createView(),
-        ]);
+        return $this->render(
+            'panel/add-address.html.twig',
+            [
+                'navigation_links' => $navigation,
+                'add_address_form' => $addAddressForm->createView(),
+            ]
+        );
     }
 }

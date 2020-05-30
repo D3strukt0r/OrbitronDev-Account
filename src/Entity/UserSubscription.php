@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -19,27 +20,27 @@ class UserSubscription
     protected $id;
 
     /**
-     * @var \App\Entity\User
+     * @var User
      * @ORM\OneToOne(targetEntity="User", inversedBy="subscription")
      * @ORM\JoinColumn(name="id", referencedColumnName="id", nullable=false)
      */
     protected $user;
 
     /**
-     * @var \App\Entity\SubscriptionType
+     * @var SubscriptionType
      * @ORM\ManyToOne(targetEntity="SubscriptionType")
      * @ORM\JoinColumn(name="subscription_id", referencedColumnName="id", nullable=false)
      */
     protected $subscription;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      * @ORM\Column(type="datetime")
      */
     protected $activated_at;
 
     /**
-     * @var null|\DateTime
+     * @var null|DateTime
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $expires_at;
@@ -53,7 +54,7 @@ class UserSubscription
     }
 
     /**
-     * @return \App\Entity\User
+     * @return User
      */
     public function getUser(): User
     {
@@ -61,7 +62,7 @@ class UserSubscription
     }
 
     /**
-     * @param \App\Entity\User $user
+     * @param User $user
      *
      * @return $this
      */
@@ -73,7 +74,7 @@ class UserSubscription
     }
 
     /**
-     * @return \App\Entity\SubscriptionType
+     * @return SubscriptionType
      */
     public function getSubscription(): SubscriptionType
     {
@@ -81,7 +82,7 @@ class UserSubscription
     }
 
     /**
-     * @param \App\Entity\SubscriptionType $subscription
+     * @param SubscriptionType $subscription
      *
      * @return $this
      */
@@ -93,19 +94,19 @@ class UserSubscription
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getActivatedAt(): \DateTime
+    public function getActivatedAt(): DateTime
     {
         return $this->activated_at;
     }
 
     /**
-     * @param \DateTime $activatedAt
+     * @param DateTime $activatedAt
      *
      * @return $this
      */
-    public function setActivatedAt(\DateTime $activatedAt): self
+    public function setActivatedAt(DateTime $activatedAt): self
     {
         $this->activated_at = $activatedAt;
 
@@ -113,19 +114,19 @@ class UserSubscription
     }
 
     /**
-     * @return null|\DateTime
+     * @return null|DateTime
      */
-    public function getExpiresAt(): ?\DateTime
+    public function getExpiresAt(): ?DateTime
     {
         return $this->expires_at;
     }
 
     /**
-     * @param null|\DateTime $expiresAt
+     * @param null|DateTime $expiresAt
      *
      * @return $this
      */
-    public function setExpiresAt(\DateTime $expiresAt = null): self
+    public function setExpiresAt(DateTime $expiresAt = null): self
     {
         $this->expires_at = $expiresAt;
 

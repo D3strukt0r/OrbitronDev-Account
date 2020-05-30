@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -19,14 +20,14 @@ class OAuthRefreshToken
     protected $id;
 
     /**
-     * @var \App\Entity\OAuthClient
+     * @var OAuthClient
      * @ORM\ManyToOne(targetEntity="OAuthClient")
      * @ORM\JoinColumn(name="client_id", referencedColumnName="client_identifier", onDelete="CASCADE")
      */
     protected $client;
 
     /**
-     * @var \App\Entity\User
+     * @var User
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
@@ -39,7 +40,7 @@ class OAuthRefreshToken
     protected $refresh_token;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      * @ORM\Column(type="datetime")
      */
     protected $expires;
@@ -107,9 +108,9 @@ class OAuthRefreshToken
     /**
      * Get expires.
      *
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getExpires(): \DateTime
+    public function getExpires(): DateTime
     {
         return $this->expires;
     }
@@ -117,11 +118,11 @@ class OAuthRefreshToken
     /**
      * Set expires.
      *
-     * @param \DateTime $expires
+     * @param DateTime $expires
      *
      * @return $this
      */
-    public function setExpires(\DateTime $expires): self
+    public function setExpires(DateTime $expires): self
     {
         $this->expires = $expires;
 
@@ -155,7 +156,7 @@ class OAuthRefreshToken
     /**
      * Get client.
      *
-     * @return \App\Entity\OAuthClient
+     * @return OAuthClient
      */
     public function getClient(): OAuthClient
     {
@@ -165,7 +166,7 @@ class OAuthRefreshToken
     /**
      * Set client.
      *
-     * @param \App\Entity\OAuthClient $client
+     * @param OAuthClient $client
      *
      * @return $this
      */
@@ -189,7 +190,7 @@ class OAuthRefreshToken
     /**
      * Set user.
      *
-     * @param \App\Entity\User|null $user
+     * @param User|null $user
      *
      * @return $this
      */

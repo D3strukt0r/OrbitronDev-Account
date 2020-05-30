@@ -2,13 +2,14 @@
 
 namespace App\Controller\Panel;
 
+use App\Entity\User;
 use App\Entity\UserPaymentMethods;
 use App\Form\AddPaymentMethod;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
-class PaymentController extends Controller
+class PaymentController extends AbstractController
 {
     public static function __setupNavigation()
     {
@@ -56,23 +57,26 @@ class PaymentController extends Controller
 
     public function payment($navigation)
     {
-        /** @var \App\Entity\User $user */
+        /** @var User $user */
         $user = $this->getUser();
 
-        return $this->render('panel/payment_methods.html.twig', [
-            'navigation_links' => $navigation,
-            'payment_methods' => $user->getPaymentMethods(),
-        ]);
+        return $this->render(
+            'panel/payment_methods.html.twig',
+            [
+                'navigation_links' => $navigation,
+                'payment_methods' => $user->getPaymentMethods(),
+            ]
+        );
     }
 
-    public function addMethod(ObjectManager $em, Request $request, $navigation)
+    public function addMethod(Request $request, $navigation)
     {
         $form = $this->createForm(AddPaymentMethod::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $form->getData();
 
-            /** @var \App\Entity\User $user */
+            /** @var User $user */
             $user = $this->getUser();
             $obj = (new UserPaymentMethods())
                 ->setUser($user)
@@ -80,13 +84,17 @@ class PaymentController extends Controller
                 ->setData(json_decode($formData['data'], true));
             $user->addPaymentMethod($obj);
 
-            $em->flush();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
             $this->addFlash('add_payment_method', 'Successfully added payment method');
         }
 
-        return $this->render('panel/add_payment_methods.html.twig', [
-            'navigation_links' => $navigation,
-            'form' => $form->createView(),
-        ]);
+        return $this->render(
+            'panel/add_payment_methods.html.twig',
+            [
+                'navigation_links' => $navigation,
+                'form' => $form->createView(),
+            ]
+        );
     }
 }

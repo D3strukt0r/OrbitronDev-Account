@@ -14,19 +14,27 @@ class AddPaymentMethod extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('type', ChoiceType::class, [
-                'label' => 'Payment type',
-                'choices' => [
-                    '-- Choose method --' => false,
-                    'Mastercard' => UserPaymentMethods::PAYMENT_MASTERCARD,
-                    'Visa' => UserPaymentMethods::PAYMENT_VISA,
-                    'PayPal' => UserPaymentMethods::PAYMENT_PAYPAL,
-                    'Maestro' => UserPaymentMethods::PAYMENT_MAESTRO,
-                ],
-            ])
+            ->add(
+                'type',
+                ChoiceType::class,
+                [
+                    'label' => 'Payment type',
+                    'choices' => [
+                        '-- Choose method --' => false,
+                        'Mastercard' => UserPaymentMethods::PAYMENT_MASTERCARD,
+                        'Visa' => UserPaymentMethods::PAYMENT_VISA,
+                        'PayPal' => UserPaymentMethods::PAYMENT_PAYPAL,
+                        'Maestro' => UserPaymentMethods::PAYMENT_MAESTRO,
+                    ],
+                ]
+            )
             ->add('data', HiddenType::class)
-            ->add('send', SubmitType::class, [
-                'label' => 'panel.form.add_address.send.label',
-            ]);
+            ->add(
+                'send',
+                SubmitType::class,
+                [
+                    'label' => 'panel.form.add_address.send.label',
+                ]
+            );
     }
 }

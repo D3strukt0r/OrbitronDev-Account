@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\OAuthScope;
 use App\Entity\SubscriptionType;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,10 +14,16 @@ use Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class SetupController extends Controller
+class SetupController extends AbstractController
 {
     /**
      * @Route("/setup", name="setup")
+     *
+     * @param Request           $request
+     * @param KernelInterface   $kernel
+     * @param PdoSessionHandler $sessionHandlerService
+     *
+     * @return Response
      */
     public function setup(Request $request, KernelInterface $kernel, PdoSessionHandler $sessionHandlerService)
     {
@@ -30,13 +36,15 @@ class SetupController extends Controller
                 $application->run(new ArrayInput(['command' => 'doctrine:schema:create', '--force']), new NullOutput());
                 $output .= '[ <span style="color:green">OK</span> ] Database updated<br />';
             } catch (\Exception $exception) {
-                $output .= '[<span style="color:red">FAIL</span>] Database updated ('.$exception->getMessage().')<br />';
+                $output .= '[<span style="color:red">FAIL</span>] Database updated (' . $exception->getMessage(
+                    ) . ')<br />';
             }
             try {
                 $sessionHandlerService->createTable();
                 $output .= '[ <span style="color:green">OK</span> ] Session table added<br />';
             } catch (\Exception $exception) {
-                $output .= '[<span style="color:red">FAIL</span>] Session table added ('.$exception->getMessage().')<br />';
+                $output .= '[<span style="color:red">FAIL</span>] Session table added (' . $exception->getMessage(
+                    ) . ')<br />';
             }
             try {
                 $subscriptions = [];
@@ -59,7 +67,8 @@ class SetupController extends Controller
                 $em->flush();
                 $output .= '[ <span style="color:green">OK</span> ] Default subscription types added<br />';
             } catch (\Exception $exception) {
-                $output .= '[<span style="color:red">FAIL</span>] Default subscription types added ('.$exception->getMessage().')<br />';
+                $output .= '[<span style="color:red">FAIL</span>] Default subscription types added (' . $exception->getMessage(
+                    ) . ')<br />';
             }
             try {
                 $scope = [];
@@ -115,10 +124,13 @@ class SetupController extends Controller
                 $em->flush();
                 $output .= '[ <span style="color:green">OK</span> ] Default OAuth2 scopes added<br />';
             } catch (\Exception $exception) {
-                $output .= '[<span style="color:red">FAIL</span>] Default OAuth2 scopes added ('.$exception->getMessage().')<br />';
+                $output .= '[<span style="color:red">FAIL</span>] Default OAuth2 scopes added (' . $exception->getMessage(
+                    ) . ')<br />';
             }
 
-            return new Response('<body style="background-color: black;color: white;"><pre>'.$output.'</pre></body>');
+            return new Response(
+                '<body style="background-color: black;color: white;"><pre>' . $output . '</pre></body>'
+            );
         }
         throw $this->createNotFoundException('The given key is wrong');
     }

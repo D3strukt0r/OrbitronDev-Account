@@ -2,8 +2,11 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -45,7 +48,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     protected $email_verified = false;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      * @ORM\Column(type="datetime")
      */
     protected $created_on;
@@ -57,7 +60,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     protected $created_ip;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      * @ORM\Column(type="datetime")
      */
     protected $last_online_at;
@@ -81,31 +84,33 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     protected $preferred_payment_method;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     * @ORM\OneToMany(targetEntity="UserPaymentMethods", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @var Collection
+     * @ORM\OneToMany(targetEntity="UserPaymentMethods", mappedBy="user", cascade={"persist", "remove"},
+     *                                                   orphanRemoval=true)
      */
     protected $paymentMethods;
 
     /**
-     * @var \App\Entity\UserProfiles
+     * @var UserProfiles
      * @ORM\OneToOne(targetEntity="UserProfiles", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
      */
     protected $profile;
 
     /**
-     * @var \App\Entity\UserSubscription
-     * @ORM\OneToOne(targetEntity="UserSubscription", mappedBy="user", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @var UserSubscription
+     * @ORM\OneToOne(targetEntity="UserSubscription", mappedBy="user", cascade={"persist", "remove"},
+     *                                                orphanRemoval=true)
      */
     protected $subscription;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      * @ORM\ManyToMany(targetEntity="User", mappedBy="myFriends")
      */
     private $friendsWithMe;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      * @ORM\ManyToMany(targetEntity="User", inversedBy="friendsWithMe")
      * @ORM\JoinTable(name="user_friends",
      *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
@@ -175,16 +180,15 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     /**
      * @param string $password
      *
-     * @throws \Exception
-     *
      * @return $this
+     * @throws Exception
      */
     public function setPassword(string $password): self
     {
         $newPassword = $this->encryptField($password);
 
         if (false === $newPassword) {
-            throw new \Exception('[Account] A hashed password could not be generated');
+            throw new Exception('[Account] A hashed password could not be generated');
         }
 
         $this->password = $newPassword;
@@ -243,19 +247,19 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getCreatedOn(): \DateTime
+    public function getCreatedOn(): DateTime
     {
         return $this->created_on;
     }
 
     /**
-     * @param \DateTime $createdOn
+     * @param DateTime $createdOn
      *
      * @return $this
      */
-    public function setCreatedOn(\DateTime $createdOn): self
+    public function setCreatedOn(DateTime $createdOn): self
     {
         $this->created_on = $createdOn;
 
@@ -283,19 +287,19 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getLastOnlineAt(): \DateTime
+    public function getLastOnlineAt(): DateTime
     {
         return $this->last_online_at;
     }
 
     /**
-     * @param \DateTime $lastOnlineAt
+     * @param DateTime $lastOnlineAt
      *
      * @return $this
      */
-    public function setLastOnlineAt(\DateTime $lastOnlineAt): self
+    public function setLastOnlineAt(DateTime $lastOnlineAt): self
     {
         $this->last_online_at = $lastOnlineAt;
 
@@ -363,7 +367,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return \App\Entity\UserPaymentMethods[]
+     * @return UserPaymentMethods[]
      */
     public function getPaymentMethods(): array
     {
@@ -371,7 +375,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @param \App\Entity\UserPaymentMethods $paymentMethod
+     * @param UserPaymentMethods $paymentMethod
      *
      * @return $this
      */
@@ -384,7 +388,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @param \App\Entity\UserPaymentMethods $paymentMethod
+     * @param UserPaymentMethods $paymentMethod
      *
      * @return $this
      */
@@ -398,7 +402,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return \App\Entity\UserProfiles
+     * @return UserProfiles
      */
     public function getProfile(): UserProfiles
     {
@@ -406,7 +410,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @param \App\Entity\UserProfiles $profile
+     * @param UserProfiles $profile
      *
      * @return $this
      */
@@ -418,7 +422,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return \App\Entity\UserSubscription
+     * @return UserSubscription
      */
     public function getSubscription(): UserSubscription
     {
@@ -426,7 +430,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @param \App\Entity\UserSubscription $subscription
+     * @param UserSubscription $subscription
      *
      * @return $this
      */
@@ -438,7 +442,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return \App\Entity\User[]
+     * @return User[]
      */
     public function getFriends(): array
     {
@@ -446,7 +450,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @param \App\Entity\User $user
+     * @param User $user
      */
     public function addFriend(self $user): void
     {
@@ -458,7 +462,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @param \App\Entity\User $user
+     * @param User $user
      */
     public function removeFriend(self $user): void
     {
@@ -537,35 +541,38 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
+     * @return string
      * @see \Serializable::serialize()
      *
-     * @return string
      */
     public function serialize(): string
     {
-        return serialize([
-            $this->id,
-            $this->username,
-            $this->password,
-            // see section on salt below
-            // $this->salt,
-        ]);
+        return serialize(
+            [
+                $this->id,
+                $this->username,
+                $this->password,
+                // see section on salt below
+                // $this->salt,
+            ]
+        );
     }
 
     /**
+     * @param $serialized
+     *
      * @see \Serializable::unserialize()
      *
-     * @param $serialized
      */
     public function unserialize($serialized)
     {
-        list(
+        [
             $this->id,
             $this->username,
             $this->password,
             // see section on salt below
             // $this->salt
-            ) = unserialize($serialized);
+        ] = unserialize($serialized);
     }
 
     /**

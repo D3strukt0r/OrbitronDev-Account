@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\OAuthClientRepository")
@@ -97,9 +98,8 @@ class OAuthClient extends EncryptableFieldEntity
      * @param string $clientSecret
      * @param bool   $encrypt
      *
-     * @throws \Exception
-     *
-     * @return \App\Entity\OAuthClient
+     * @return OAuthClient
+     * @throws Exception
      */
     public function setClientSecret(string $clientSecret, bool $encrypt = false): self
     {
@@ -107,7 +107,7 @@ class OAuthClient extends EncryptableFieldEntity
             $newSecret = $this->encryptField($clientSecret);
 
             if (false === $newSecret) {
-                throw new \Exception('[Account][OAuth2] A hashed secret could not be generated');
+                throw new Exception('[Account][OAuth2] A hashed secret could not be generated');
             }
 
             $this->client_secret = $newSecret;
@@ -166,9 +166,7 @@ class OAuthClient extends EncryptableFieldEntity
      */
     public function getScopes(): array
     {
-        $scopes = explode(' ', $this->scope);
-
-        return $scopes;
+        return explode(' ', $this->scope);
     }
 
     /**

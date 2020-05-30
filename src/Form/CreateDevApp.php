@@ -15,33 +15,53 @@ class CreateDevApp extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('client_name', TextType::class, [
-                'label' => 'panel.form.create_dev_app.client_name.label',
-                'constraints' => [
-                    new NotBlank(['message' => 'panel.create_dev_app.client_name.not_blank']),
-                ],
-            ])
-            ->add('redirect_uri', TextType::class, [
-                'label' => 'panel.form.create_dev_app.redirect_uri.label',
-                'constraints' => [
-                    new NotBlank(['message' => 'panel.create_dev_app.redirect_uri.not_blank']),
-                ],
-            ])
-            ->add('callback_url', TextType::class, [
-                'label' => 'Callback URL',
-                'constraints' => [
-                    new NotBlank(['message' => 'Please enter an url where you handle updates']),
-                ],
-            ])
-            ->add('scopes', ChoiceType::class, [
-                'label' => 'panel.form.create_dev_app.scopes.label',
-                'choices' => $options['scope_choices'],
-                'expanded' => true,
-                'multiple' => true,
-            ])
-            ->add('send', SubmitType::class, [
-                'label' => 'panel.form.create_dev_app.send.label',
-            ]);
+            ->add(
+                'client_name',
+                TextType::class,
+                [
+                    'label' => 'panel.form.create_dev_app.client_name.label',
+                    'constraints' => [
+                        new NotBlank(['message' => 'panel.create_dev_app.client_name.not_blank']),
+                    ],
+                ]
+            )
+            ->add(
+                'redirect_uri',
+                TextType::class,
+                [
+                    'label' => 'panel.form.create_dev_app.redirect_uri.label',
+                    'constraints' => [
+                        new NotBlank(['message' => 'panel.create_dev_app.redirect_uri.not_blank']),
+                    ],
+                ]
+            )
+            ->add(
+                'callback_url',
+                TextType::class,
+                [
+                    'label' => 'Callback URL',
+                    'constraints' => [
+                        new NotBlank(['message' => 'Please enter an url where you handle updates']),
+                    ],
+                ]
+            )
+            ->add(
+                'scopes',
+                ChoiceType::class,
+                [
+                    'label' => 'panel.form.create_dev_app.scopes.label',
+                    'choices' => $options['scope_choices'],
+                    'expanded' => true,
+                    'multiple' => true,
+                ]
+            )
+            ->add(
+                'send',
+                SubmitType::class,
+                [
+                    'label' => 'panel.form.create_dev_app.send.label',
+                ]
+            );
     }
 
     /**
@@ -49,8 +69,10 @@ class CreateDevApp extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'scope_choices' => [],
-        ]);
+        $resolver->setDefaults(
+            [
+                'scope_choices' => [],
+            ]
+        );
     }
 }

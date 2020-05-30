@@ -19,7 +19,7 @@ class UserAddress
     protected $id;
 
     /**
-     * @var \App\Entity\UserProfiles
+     * @var UserProfiles
      * @ORM\ManyToOne(targetEntity="UserProfiles", inversedBy="addresses")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
@@ -64,7 +64,7 @@ class UserAddress
     }
 
     /**
-     * @return \App\Entity\UserProfiles
+     * @return UserProfiles
      */
     public function getUserProfile(): UserProfiles
     {
@@ -72,7 +72,7 @@ class UserAddress
     }
 
     /**
-     * @param \App\Entity\UserProfiles $userProfile
+     * @param UserProfiles $userProfile
      *
      * @return $this
      */

@@ -2,9 +2,9 @@
 
 namespace App\Controller\Panel;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class DefaultController extends Controller
+class DefaultController extends AbstractController
 {
     public static function __setupNavigation()
     {
@@ -24,8 +24,11 @@ class DefaultController extends Controller
 
     public function notFound($navigation)
     {
-        return $this->render('panel/not-found.html.twig', [
-            'navigation_links' => $navigation,
-        ]);
+        return $this->render(
+            'panel/not-found.html.twig',
+            [
+                'navigation_links' => $navigation,
+            ]
+        );
     }
 }

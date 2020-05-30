@@ -32,102 +32,138 @@ class RegisterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username', TextType::class, [
-                'label' => 'register.form.username.label',
-                'attr' => [
-                    'placeholder' => 'register.form.username.placeholder',
-                ],
-                'constraints' => [
-                    new NotBlank(['message' => 'register.username.not_blank']),
-                    new Length([
-                        'min' => AccountHelper::$settings['username']['min_length'],
-                        'minMessage' => 'register.username.username_short',
-                        'max' => AccountHelper::$settings['username']['max_length'],
-                        'maxMessage' => 'register.username.username_long',
-                    ]),
-                    new Regex([
-                        'pattern' => AccountHelper::$settings['username']['pattern'],
-                        'message' => 'register.username.regex',
-                    ]),
-                    new Callback(function ($object, ExecutionContextInterface $context, $payload) {
-                        if ($this->helper->usernameExists($object)) {
-                            $context->addViolation('register.username.user_exists');
-                        }
-                        if ($this->helper->usernameBlocked($object)) {
-                            $context->addViolation('register.username.blocked_name');
-                        }
-                    }),
-                ],
-            ])
-            ->add('email', EmailType::class, [
-                'label' => 'register.form.email.label',
-                'attr' => [
-                    'placeholder' => 'register.form.email.placeholder',
-                ],
-                'constraints' => [
-                    new NotBlank(['message' => 'register.email.not_blank']),
-                    new Email([
-                        'mode' => 'strict',
-                        'checkMX' => true,
-                        'message' => 'register.email.valid',
-                    ]),
-                    new Callback(function ($object, ExecutionContextInterface $context, $payload) {
-                        if ($this->helper->emailExists($object)) {
-                            $context->addViolation('register.email.exists');
-                        }
-                    }),
-                ],
-            ])
-            ->add('password', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'invalid_message' => 'register.password_verify.do_not_match',
-                'first_options' => [
-                    'label' => 'register.form.password.label',
+            ->add(
+                'username',
+                TextType::class,
+                [
+                    'label' => 'register.form.username.label',
                     'attr' => [
-                        'placeholder' => 'register.form.password.placeholder',
+                        'placeholder' => 'register.form.username.placeholder',
                     ],
                     'constraints' => [
-                        new NotBlank(['message' => 'register.password.not_blank']),
-                        new Length([
-                            'min' => AccountHelper::$settings['password']['min_length'],
-                            'minMessage' => 'register.password.password_too_short',
-                        ]),
+                        new NotBlank(['message' => 'register.username.not_blank']),
+                        new Length(
+                            [
+                                'min' => AccountHelper::$settings['username']['min_length'],
+                                'minMessage' => 'register.username.username_short',
+                                'max' => AccountHelper::$settings['username']['max_length'],
+                                'maxMessage' => 'register.username.username_long',
+                            ]
+                        ),
+                        new Regex(
+                            [
+                                'pattern' => AccountHelper::$settings['username']['pattern'],
+                                'message' => 'register.username.regex',
+                            ]
+                        ),
+                        new Callback(
+                            function ($object, ExecutionContextInterface $context, $payload) {
+                                if ($this->helper->usernameExists($object)) {
+                                    $context->addViolation('register.username.user_exists');
+                                }
+                                if ($this->helper->usernameBlocked($object)) {
+                                    $context->addViolation('register.username.blocked_name');
+                                }
+                            }
+                        ),
                     ],
-                ],
-                'second_options' => [
-                    'label' => 'register.form.password_verify.label',
+                ]
+            )
+            ->add(
+                'email',
+                EmailType::class,
+                [
+                    'label' => 'register.form.email.label',
                     'attr' => [
-                        'placeholder' => 'register.form.password_verify.placeholder',
+                        'placeholder' => 'register.form.email.placeholder',
                     ],
                     'constraints' => [
-                        new NotBlank(['message' => 'register.password_verify.not_blank']),
+                        new NotBlank(['message' => 'register.email.not_blank']),
+                        new Email(
+                            [
+                                'mode' => 'strict',
+                                //'checkMX' => true, // Has been removed
+                                'message' => 'register.email.valid',
+                            ]
+                        ),
+                        new Callback(
+                            function ($object, ExecutionContextInterface $context, $payload) {
+                                if ($this->helper->emailExists($object)) {
+                                    $context->addViolation('register.email.exists');
+                                }
+                            }
+                        ),
                     ],
-                ],
-            ])
-            ->add('recaptcha', ReCaptchaType::class, [
-                'attr' => [
-                    'options' => [
-                        'theme' => 'light',
-                        'type' => 'image',
-                        'size' => 'normal',
-                        'defer' => true,
-                        'async' => true,
+                ]
+            )
+            ->add(
+                'password',
+                RepeatedType::class,
+                [
+                    'type' => PasswordType::class,
+                    'invalid_message' => 'register.password_verify.do_not_match',
+                    'first_options' => [
+                        'label' => 'register.form.password.label',
+                        'attr' => [
+                            'placeholder' => 'register.form.password.placeholder',
+                        ],
+                        'constraints' => [
+                            new NotBlank(['message' => 'register.password.not_blank']),
+                            new Length(
+                                [
+                                    'min' => AccountHelper::$settings['password']['min_length'],
+                                    'minMessage' => 'register.password.password_too_short',
+                                ]
+                            ),
+                        ],
                     ],
-                ],
-                'mapped' => false,
-                'constraints' => [
-                    new ReCaptchaTrue(),
-                ],
-            ])
-            ->add('terms', CheckboxType::class, [
-                'label' => 'register.form.terms.label',
-                'required' => true,
-                'constraints' => [
-                    new NotBlank(['message' => 'register.terms.not_blank']),
-                ],
-            ])
-            ->add('send', SubmitType::class, [
-                'label' => 'register.form.send.label',
-            ]);
+                    'second_options' => [
+                        'label' => 'register.form.password_verify.label',
+                        'attr' => [
+                            'placeholder' => 'register.form.password_verify.placeholder',
+                        ],
+                        'constraints' => [
+                            new NotBlank(['message' => 'register.password_verify.not_blank']),
+                        ],
+                    ],
+                ]
+            )
+            ->add(
+                'recaptcha',
+                ReCaptchaType::class,
+                [
+                    'attr' => [
+                        'options' => [
+                            'theme' => 'light',
+                            'type' => 'image',
+                            'size' => 'normal',
+                            'defer' => true,
+                            'async' => true,
+                        ],
+                    ],
+                    'mapped' => false,
+                    'constraints' => [
+                        new ReCaptchaTrue(),
+                    ],
+                ]
+            )
+            ->add(
+                'terms',
+                CheckboxType::class,
+                [
+                    'label' => 'register.form.terms.label',
+                    'required' => true,
+                    'constraints' => [
+                        new NotBlank(['message' => 'register.terms.not_blank']),
+                    ],
+                ]
+            )
+            ->add(
+                'send',
+                SubmitType::class,
+                [
+                    'label' => 'register.form.send.label',
+                ]
+            );
     }
 }

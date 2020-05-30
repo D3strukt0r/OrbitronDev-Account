@@ -11,8 +11,12 @@ class CreateDevAccount extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('send', SubmitType::class, [
-                'label' => 'panel.form.create_dev_account.send.label',
-            ]);
+            ->add(
+                'send',
+                SubmitType::class,
+                [
+                    'label' => 'panel.form.create_dev_account.send.label',
+                ]
+            );
     }
 }

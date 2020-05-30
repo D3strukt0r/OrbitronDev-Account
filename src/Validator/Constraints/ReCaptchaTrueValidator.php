@@ -38,7 +38,7 @@ class ReCaptchaTrueValidator extends ConstraintValidator
     protected $httpProxy;
 
     /**
-     * Enable serverside host check.
+     * Enable server side host check.
      *
      * @var bool
      */
@@ -79,9 +79,7 @@ class ReCaptchaTrueValidator extends ConstraintValidator
 
         if (!$response->isSuccess()) {
             $this->context->addViolation($constraint->message);
-        }
-
-        // Perform server side hostname check
+        } // Perform server side hostname check
         elseif ($this->verifyHost && $response['hostname'] !== $masterRequest->getHost()) {
             $this->context->addViolation($constraint->invalidHostMessage);
         }

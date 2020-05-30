@@ -13,19 +13,23 @@ use App\Form\ResetPasswordType;
 use App\Service\AccountHelper;
 use App\Service\AdminControlPanel;
 use App\Service\TokenGenerator;
-use Doctrine\Common\Persistence\ObjectManager;
+use Exception;
 use Swift_Mailer;
 use Swift_Message;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
-class DefaultController extends Controller
+class DefaultController extends AbstractController
 {
     /**
      * @Route("/", name="index")
@@ -33,7 +37,7 @@ class DefaultController extends Controller
     public function index()
     {
         //////////// TEST IF USER IS LOGGED IN ////////////
-        /** @var \App\Entity\User|null $user */
+        /** @var User|null $user */
         $user = $this->getUser();
         if ($user instanceof UserInterface) {
             return $this->redirectToRoute('panel_default');
@@ -44,11 +48,16 @@ class DefaultController extends Controller
 
     /**
      * @Route("/login", name="login")
+     *
+     * @param Request             $request
+     * @param AuthenticationUtils $authUtils
+     *
+     * @return RedirectResponse|Response
      */
     public function login(Request $request, AuthenticationUtils $authUtils)
     {
         //////////// TEST IF USER IS LOGGED IN ////////////
-        /** @var \App\Entity\User|null $user */
+        /** @var User|null $user */
         $user = $this->getUser();
         if ($user instanceof UserInterface) {
             return $this->redirectToRoute('panel_default');
@@ -63,11 +72,14 @@ class DefaultController extends Controller
         // last username entered by the user
         $lastUsername = $authUtils->getLastUsername();
 
-        return $this->render('login.html.twig', [
-            'redirect_url' => $redirectUrl,
-            'last_username' => $lastUsername,
-            'error' => $error,
-        ]);
+        return $this->render(
+            'login.html.twig',
+            [
+                'redirect_url' => $redirectUrl,
+                'last_username' => $lastUsername,
+                'error' => $error,
+            ]
+        );
     }
 
     /**
@@ -77,19 +89,28 @@ class DefaultController extends Controller
      * and handle the logout automatically. See logout in config/packages/security.yaml
      *
      * @Route("/logout", name="logout")
+     *
+     * @throws Exception
      */
     public function logout(): void
     {
-        throw new \Exception('This should never be reached!');
+        throw new Exception('This should never be reached!');
     }
 
     /**
      * @Route("/register", name="register")
+     *
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param Request                  $request
+     * @param Swift_Mailer             $mailer
+     *
+     * @return RedirectResponse|Response
+     * @throws Exception
      */
-    public function register(ObjectManager $em, Request $request, Swift_Mailer $mailer)
+    public function register(EventDispatcherInterface $eventDispatcher, Request $request, Swift_Mailer $mailer)
     {
         //////////// TEST IF USER IS LOGGED IN ////////////
-        /** @var \App\Entity\User|null $user */
+        /** @var User|null $user */
         $user = $this->getUser();
         if ($user instanceof UserInterface) {
             return $this->redirectToRoute('panel_default');
@@ -118,7 +139,9 @@ class DefaultController extends Controller
             $user->setProfile($userProfile);
 
             /** @var SubscriptionType $defaultSubscription */
-            $defaultSubscription = $em->find(SubscriptionType::class, AccountHelper::$settings['subscription']['default']);
+            $defaultSubscription = $this->getDoctrine()->getRepository(SubscriptionType::class)->find(
+                AccountHelper::$settings['subscription']['default']
+            );
 
             $userSubscription = (new UserSubscription())
                 ->setUser($user)
@@ -127,21 +150,28 @@ class DefaultController extends Controller
                 ->setExpiresAt(new \DateTime());
             $user->setSubscription($userSubscription);
 
-            $em->persist($user);
-            $em->flush();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
 
             // Send verification email
-            $tokenGenerator = new TokenGenerator($this->getDoctrine()->getManager());
+            $tokenGenerator = new TokenGenerator($entityManager);
             $token = $tokenGenerator->generateToken('confirm_email', (new \DateTime())->modify('+1 day'));
 
             $message = (new Swift_Message())
                 ->setSubject('[Account] Email activation')
                 ->setFrom(['no-reply-account@orbitrondev.org' => 'OrbitronDev'])
                 ->setTo([$formData['email']])
-                ->setBody($this->renderView('mail/confirm-email.html.twig', [
-                    'email' => $formData['email'],
-                    'token' => $token,
-                ]), 'text/html');
+                ->setBody(
+                    $this->renderView(
+                        'mail/confirm-email.html.twig',
+                        [
+                            'email' => $formData['email'],
+                            'token' => $token,
+                        ]
+                    ),
+                    'text/html'
+                );
             $mailSent = $mailer->send($message);
 
             if ($mailSent) {
@@ -149,7 +179,10 @@ class DefaultController extends Controller
             } else {
                 $this->addFlash('failed', 'register.confirmation_mail.not_sent');
             }
-            $url = $request->query->has('page') ? urldecode($request->query->get('page')) : $this->generateUrl('panel', ['page' => 'home']);
+            $url = $request->query->has('page') ? urldecode($request->query->get('page')) : $this->generateUrl(
+                'panel',
+                ['page' => 'home']
+            );
 
             //Handle getting or creating the user entity likely with a posted form
             // The third parameter "main" can change according to the name of your firewall in security.yml
@@ -157,32 +190,40 @@ class DefaultController extends Controller
             $this->get('security.token_storage')->setToken($token);
 
             // Fire the login event manually
-            $event = new InteractiveLoginEvent($request, $token);
-            $this->get('event_dispatcher')->dispatch('security.interactive_login', $event);
+            $eventDispatcher->dispatch(new InteractiveLoginEvent($request, $token));
 
             return $this->redirect($url);
         }
 
-        return $this->render('register.html.twig', [
-            'register_form' => $registerForm->createView(),
-        ]);
+        return $this->render(
+            'register.html.twig',
+            [
+                'register_form' => $registerForm->createView(),
+            ]
+        );
     }
 
 
     /**
      * @Route("/p/{page}", name="panel")
+     *
+     * @param KernelInterface $kernel
+     * @param Request         $request
+     * @param                 $page
+     *
+     * @return Response
      */
-    public function panel(Request $request, $page)
+    public function panel(KernelInterface $kernel, Request $request, $page)
     {
         //////////// TEST IF USER IS LOGGED IN ////////////
-        /** @var \App\Entity\User|null $user */
+        /** @var User|null $user */
         $user = $this->getUser();
         if (!$user instanceof UserInterface) {
             throw $this->createAccessDeniedException();
         }
         //////////// END TEST IF USER IS LOGGED IN ////////////
 
-        AdminControlPanel::loadLibs($this->get('kernel')->getProjectDir(), $this->container);
+        AdminControlPanel::loadLibs($kernel->getProjectDir(), $this->container);
 
         $navigationLinks = AdminControlPanel::getTree();
 
@@ -199,20 +240,26 @@ class DefaultController extends Controller
         }
 
         if (null !== $key) {
-            if (is_callable('\\App\\Controller\\Panel\\'.$list[$key]['view'])) {
+            if (is_callable('\\App\\Controller\\Panel\\' . $list[$key]['view'])) {
                 $view = $list[$key]['view'];
             }
         }
-        $response = $this->forward('App\\Controller\\Panel\\'.$view, [
-            'navigation' => $navigationLinks,
-            'request' => $request,
-        ]);
-
-        return $response;
+        return $this->forward(
+            'App\\Controller\\Panel\\' . $view,
+            [
+                'navigation' => $navigationLinks,
+                'request' => $request,
+            ]
+        );
     }
 
     /**
      * @Route("/api/{function}", name="api")
+     *
+     * @param Request $request
+     * @param         $function
+     *
+     * @return Response
      */
     public function api(Request $request, $function)
     {
@@ -224,20 +271,28 @@ class DefaultController extends Controller
         $function = implode('', $functionProcess);
         $function = lcfirst($function);
 
-        $result = $this->forward('App\\Controller\\ApiController::'.$function, [
-            'request' => $request,
-        ]);
+        $result = $this->forward(
+            'App\\Controller\\ApiController::' . $function,
+            [
+                'request' => $request,
+            ]
+        );
 
         return $result;
     }
 
     /**
      * @Route("/forgot", name="forgot")
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
+     * @throws Exception
      */
-    public function forgot(ObjectManager $em, Request $request)
+    public function forgot(Request $request)
     {
         //////////// TEST IF USER IS LOGGED IN ////////////
-        /** @var \App\Entity\User|null $user */
+        /** @var User|null $user */
         $user = $this->getUser();
         if ($user instanceof UserInterface) {
             return $this->redirectToRoute('panel_default');
@@ -245,15 +300,18 @@ class DefaultController extends Controller
         //////////// END TEST IF USER IS LOGGED IN ////////////
 
         $forgotForm = $this->createForm(ForgotType::class);
+        $entityManager = $this->getDoctrine()->getManager();
 
         if (null !== ($token = $request->query->get('token'))) {
             // Token was received
-            $token = new TokenGenerator($em, $token);
+            $token = new TokenGenerator($entityManager, $token);
             $job = $token->getJob();
             if (null === $job || false === $job) {
                 if (is_string($job) && 'reset_password' !== $job) {
                     // Wrong token
-                    $forgotForm->addError(new FormError('This token is not for resetting a password')); // TODO: Missing translation
+                    $forgotForm->addError(
+                        new FormError('This token is not for resetting a password')
+                    ); // TODO: Missing translation
                 } else {
                     $forgotForm->addError(new FormError('Token not found')); // TODO: Missing translation
                 }
@@ -265,23 +323,29 @@ class DefaultController extends Controller
                     $formData = $resetForm->getData();
 
                     $userId = $token->getInformation()['user_id'];
-                    /** @var \App\Entity\User|null $user */
-                    $user = $em->find(User::class, $userId);
+                    /** @var User|null $user */
+                    $user = $entityManager->getRepository(User::class)->find($userId);
                     $user->setPassword($formData['password']);
-                    $em->flush();
+                    $entityManager->flush();
                     $token->remove();
 
                     $this->addFlash('success', 'Successfully changed your password'); // TODO: Missing translation
 
-                    return $this->render('forgot-password-form.html.twig', [
-                        'reset_form' => $resetForm->createView(),
-                        'redirect' => $this->generateUrl('login'),
-                    ]);
+                    return $this->render(
+                        'forgot-password-form.html.twig',
+                        [
+                            'reset_form' => $resetForm->createView(),
+                            'redirect' => $this->generateUrl('login'),
+                        ]
+                    );
                 }
 
-                return $this->render('forgot-password-form.html.twig', [
-                    'reset_form' => $resetForm->createView(),
-                ]);
+                return $this->render(
+                    'forgot-password-form.html.twig',
+                    [
+                        'reset_form' => $resetForm->createView(),
+                    ]
+                );
             }
         }
 
@@ -290,49 +354,69 @@ class DefaultController extends Controller
         if ($forgotForm->isSubmitted() && $forgotForm->isValid()) {
             $formData = $forgotForm->getData();
 
-            /** @var \App\Entity\User|null $user */
-            $user = $em->getRepository(User::class)->findOneBy(['email' => $formData['email']]);
+            /** @var User|null $user */
+            $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $formData['email']]);
             if (null !== $user) {
-                $tokenGenerator = new TokenGenerator($em);
-                $token = $tokenGenerator->generateToken('reset_password', (new \DateTime())->modify('+1 day'), ['user_id' => $user->getId()]);
+                $tokenGenerator = new TokenGenerator($entityManager);
+                $token = $tokenGenerator->generateToken(
+                    'reset_password',
+                    (new \DateTime())->modify('+1 day'),
+                    ['user_id' => $user->getId()]
+                );
 
                 $message = (new Swift_Message())
                     ->setSubject('[Account] Reset password')
                     ->setFrom(['no-reply-account@orbitrondev.org' => 'OrbitronDev'])
                     ->setTo([$user->getEmail()])
-                    ->setBody($this->renderView('mail/reset-password.html.twig', [
-                        'email' => $user->getEmail(),
-                        'token' => $token,
-                    ]), 'text/html');
+                    ->setBody(
+                        $this->renderView(
+                            'mail/reset-password.html.twig',
+                            [
+                                'email' => $user->getEmail(),
+                                'token' => $token,
+                            ]
+                        ),
+                        'text/html'
+                    );
                 $this->get('mailer')->send($message);
 
                 // Email sent
                 $this->addFlash('success', 'Email sent'); // TODO: Missing translation
             } else {
                 // Email does not exist
-                $forgotForm->get('email')->addError(new FormError('A user with this email does not exist.')); // TODO: Missing translation
+                $forgotForm->get('email')->addError(
+                    new FormError('A user with this email does not exist.')
+                ); // TODO: Missing translation
             }
         }
 
         // Enter email to send mail
-        return $this->render('forgot-password.html.twig', [
-            'forgot_form' => $forgotForm->createView(),
-        ]);
+        return $this->render(
+            'forgot-password.html.twig',
+            [
+                'forgot_form' => $forgotForm->createView(),
+            ]
+        );
     }
 
     /**
      * @Route("/confirm-email", name="confirm")
+     *
+     * @param Request $request
+     *
+     * @return Response
      */
-    public function confirm(ObjectManager $em, Request $request)
+    public function confirm(Request $request)
     {
-        /** @var \App\Entity\User|null $user */
+        /** @var User|null $user */
         $user = $this->getUser();
 
         $sendEmailForm = $this->createForm(ConfirmEmailType::class);
+        $entityManager = $this->getDoctrine()->getManager();
 
         if (null !== ($token = $request->query->get('token'))) {
             // Token was received
-            $token = new TokenGenerator($em, $token);
+            $token = new TokenGenerator($entityManager, $token);
             $job = $token->getJob();
             if (null === $job || false === $job) {
                 $errorMessage = 'Token not found';
@@ -342,7 +426,7 @@ class DefaultController extends Controller
                 $this->addFlash('failure', $errorMessage);
             } else {
                 $user->setEmailVerified(true);
-                $em->flush();
+                $entityManager->flush();
                 $token->remove();
                 $this->addFlash('success', 'Successfully verified your email'); // TODO: Missing translation
 
@@ -353,24 +437,33 @@ class DefaultController extends Controller
         // Show send window
         $sendEmailForm->handleRequest($request);
         if ($sendEmailForm->isSubmitted()) {
-            $tokenGenerator = new TokenGenerator($em);
+            $tokenGenerator = new TokenGenerator($entityManager);
             $token = $tokenGenerator->generateToken('confirm_email', (new \DateTime())->modify('+1 day'));
 
             $message = (new Swift_Message())
                 ->setSubject('[Account] Email activation')
                 ->setFrom(['no-reply-account@orbitrondev.org' => 'OrbitronDev'])
                 ->setTo([$user->getEmail()])
-                ->setBody($this->renderView('mail/confirm-email.html.twig', [
-                    'email' => $user->getEmail(),
-                    'token' => $token,
-                ]), 'text/html');
+                ->setBody(
+                    $this->renderView(
+                        'mail/confirm-email.html.twig',
+                        [
+                            'email' => $user->getEmail(),
+                            'token' => $token,
+                        ]
+                    ),
+                    'text/html'
+                );
             $this->get('mailer')->send($message);
 
             $this->addFlash('success', 'Email sent'); // TODO: Missing translation
         }
 
-        return $this->render('confirm-email.html.twig', [
-            'send_email_form' => $sendEmailForm->createView(),
-        ]);
+        return $this->render(
+            'confirm-email.html.twig',
+            [
+                'send_email_form' => $sendEmailForm->createView(),
+            ]
+        );
     }
 }

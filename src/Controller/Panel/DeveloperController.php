@@ -4,19 +4,19 @@ namespace App\Controller\Panel;
 
 use App\Entity\OAuthClient;
 use App\Entity\OAuthScope;
+use App\Entity\User;
 use App\Form\CreateDevAccount;
 use App\Form\CreateDevApp;
 use App\Service\TokenGenerator;
-use Doctrine\Common\Persistence\ObjectManager;
 use Psr\Container\ContainerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
-class DeveloperController extends Controller
+class DeveloperController extends AbstractController
 {
     public static function __setupNavigation(ContainerInterface $container)
     {
-        /** @var \App\Entity\User $user */
+        /** @var User $user */
         $user = $container->get('security.token_storage')->getToken()->getUser();
 
         return [
@@ -26,7 +26,7 @@ class DeveloperController extends Controller
                 'id' => 'developer',
                 'title' => 'Developer',
                 'icon' => 'hs-admin-plug',
-                'display' => $user->getDeveloperStatus() ? true : false,
+                'display' => $user->getDeveloperStatus(),
             ],
             [
                 'type' => 'link',
@@ -69,17 +69,18 @@ class DeveloperController extends Controller
         return 40;
     }
 
-    public function createApplication(ObjectManager $em, Request $request, $navigation)
+    public function createApplication(Request $request, $navigation)
     {
-        /** @var \App\Entity\User $user */
+        /** @var User $user */
         $user = $this->getUser();
 
         if (!$user->getDeveloperStatus()) {
             return $this->redirectToRoute('panel', ['page' => 'developer-register']);
         }
 
-        /** @var \App\Entity\OAuthScope[] $scopes */
-        $scopes = $em->getRepository(OAuthScope::class)->findAll();
+        $entityManager = $this->getDoctrine()->getManager();
+        /** @var OAuthScope[] $scopes */
+        $scopes = $entityManager->getRepository(OAuthScope::class)->findAll();
 
         $scope_choices = [];
         foreach ($scopes as $scope) {
@@ -98,39 +99,46 @@ class DeveloperController extends Controller
                 ->setScopes($formData['scopes'])
                 ->setUsers($user->getId());
 
-            $em->persist($addClient);
-            $em->flush();
+            $entityManager->persist($addClient);
+            $entityManager->flush();
 
             return $this->redirectToRoute('panel', ['page' => 'developer-applications']);
         }
 
-        return $this->render('panel/developer-create-applications.html.twig', [
-            'navigation_links' => $navigation,
-            'create_app_form' => $createAppForm->createView(),
-        ]);
+        return $this->render(
+            'panel/developer-create-applications.html.twig',
+            [
+                'navigation_links' => $navigation,
+                'create_app_form' => $createAppForm->createView(),
+            ]
+        );
     }
 
-    public function applicationList(ObjectManager $em, $navigation)
+    public function applicationList($navigation)
     {
-        /** @var \App\Entity\User $user */
+        /** @var User $user */
         $user = $this->getUser();
 
         if (!$user->getDeveloperStatus()) {
             return $this->redirectToRoute('panel', ['page' => 'developer-register']);
         }
 
-        /** @var \App\Entity\OAuthClient[] $apps */
-        $apps = $em->getRepository(OAuthClient::class)->findBy(['user_id' => $user->getId()]);
+        $entityManager = $this->getDoctrine()->getManager();
+        /** @var OAuthClient[] $apps */
+        $apps = $entityManager->getRepository(OAuthClient::class)->findBy(['user_id' => $user->getId()]);
 
-        return $this->render('panel/developer-list-applications.html.twig', [
-            'navigation_links' => $navigation,
-            'app_list' => $apps,
-        ]);
+        return $this->render(
+            'panel/developer-list-applications.html.twig',
+            [
+                'navigation_links' => $navigation,
+                'app_list' => $apps,
+            ]
+        );
     }
 
-    public function showApplication(ObjectManager $em, Request $request, $navigation)
+    public function showApplication(Request $request, $navigation)
     {
-        /** @var \App\Entity\User $user */
+        /** @var User $user */
         $user = $this->getUser();
 
         if (!$user->getDeveloperStatus()) {
@@ -141,24 +149,31 @@ class DeveloperController extends Controller
             return $this->redirectToRoute('panel', ['page' => 'developer-applications']);
         }
         $appId = $request->query->get('app');
-        /** @var \App\Entity\OAuthClient $appData */
-        $appData = $em->getRepository(OAuthClient::class)->findOneBy(['client_identifier' => $appId]);
+        $entityManager = $this->getDoctrine()->getManager();
+        /** @var OAuthClient $appData */
+        $appData = $entityManager->getRepository(OAuthClient::class)->findOneBy(['client_identifier' => $appId]);
 
         if (null === $appData) {
-            return $this->render('panel/developer-app-not-found.html.twig', [
-                'navigation_links' => $navigation,
-            ]);
+            return $this->render(
+                'panel/developer-app-not-found.html.twig',
+                [
+                    'navigation_links' => $navigation,
+                ]
+            );
         }
 
-        return $this->render('panel/developer-show-app.html.twig', [
-            'navigation_links' => $navigation,
-            'app_data' => $appData,
-        ]);
+        return $this->render(
+            'panel/developer-show-app.html.twig',
+            [
+                'navigation_links' => $navigation,
+                'app_data' => $appData,
+            ]
+        );
     }
 
-    public function register(ObjectManager $em, Request $request, $navigation)
+    public function register(Request $request, $navigation)
     {
-        /** @var \App\Entity\User $user */
+        /** @var User $user */
         $user = $this->getUser();
 
         if ($user->getDeveloperStatus()) {
@@ -169,14 +184,18 @@ class DeveloperController extends Controller
         $developerForm->handleRequest($request);
         if ($developerForm->isSubmitted()) {
             $user->setDeveloperStatus(true);
-            $em->flush();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
 
             return $this->redirectToRoute('panel', ['page' => 'developer-applications']);
         }
 
-        return $this->render('panel/developer-register.html.twig', [
-            'navigation_links' => $navigation,
-            'developer_form' => $developerForm->createView(),
-        ]);
+        return $this->render(
+            'panel/developer-register.html.twig',
+            [
+                'navigation_links' => $navigation,
+                'developer_form' => $developerForm->createView(),
+            ]
+        );
     }
 }

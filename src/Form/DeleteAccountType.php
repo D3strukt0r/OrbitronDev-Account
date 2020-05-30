@@ -11,8 +11,12 @@ class DeleteAccountType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('send', SubmitType::class, [
-                'label' => 'panel.form.delete_account.send.label',
-            ]);
+            ->add(
+                'send',
+                SubmitType::class,
+                [
+                    'label' => 'panel.form.delete_account.send.label',
+                ]
+            );
     }
 }

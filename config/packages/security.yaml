@@ -6,7 +6,7 @@ security:
             algorithm: bcrypt
             cost: 12
 
-    # https://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
         # In this example, users are stored via Doctrine in the database
@@ -19,12 +19,10 @@ security:
                 # if you're using multiple entity managers
                 # manager_name: customer
 
-    # https://symfony.com/doc/current/security.html#initial-security-yml-setup-authentication
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
         main:
             # this firewall applies to all URLs
             pattern: ^/
@@ -60,10 +58,20 @@ security:
                 lifetime: 604800 # 1 week in seconds
                 path:     /
 
+            #provider: users_in_memory
+
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
     role_hierarchy:
         ROLE_ADMIN:      [ROLE_USER]
         ROLE_SUPERADMIN: [ROLE_ADMIN]
 
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }

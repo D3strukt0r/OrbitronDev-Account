@@ -8,7 +8,12 @@ use App\Entity\OAuthClient;
 use App\Entity\OAuthRefreshToken;
 use App\Entity\OAuthScope;
 use App\Entity\User;
-use Doctrine\Common\Persistence\ObjectManager;
+use App\Repository\OAuthAccessTokenRepository;
+use App\Repository\OAuthAuthorizationCodeRepository;
+use App\Repository\OAuthClientRepository;
+use App\Repository\OAuthRefreshTokenRepository;
+use App\Repository\UserRepository;
+use Doctrine\Persistence\ObjectManager;
 use OAuth2\GrantType\AuthorizationCode;
 use OAuth2\GrantType\ClientCredentials;
 use OAuth2\GrantType\RefreshToken;
@@ -17,44 +22,49 @@ use OAuth2\Response as OAuthResponse;
 use OAuth2\Scope;
 use OAuth2\Server;
 use OAuth2\Storage\Memory;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class OAuthController extends Controller
+class OAuthController extends AbstractController
 {
-    /** @var \OAuth2\Server $oauthServer */
+    /** @var Server $oauthServer */
     private $oauthServer = null;
 
     public function oauthServer()
     {
         $em = $this->getDoctrine()->getManager();
 
-        /** @var \App\Repository\OAuthClientRepository $clientStorage */
+        /** @var OAuthClientRepository $clientStorage */
         $clientStorage = $em->getRepository(OAuthClient::class);
-        /** @var \App\Repository\UserRepository $userStorage */
+        /** @var UserRepository $userStorage */
         $userStorage = $em->getRepository(User::class);
-        /** @var \App\Repository\OAuthAccessTokenRepository $accessTokenStorage */
+        /** @var OAuthAccessTokenRepository $accessTokenStorage */
         $accessTokenStorage = $em->getRepository(OAuthAccessToken::class);
-        /** @var \App\Repository\OAuthAuthorizationCodeRepository $authorizationCodeStorage */
+        /** @var OAuthAuthorizationCodeRepository $authorizationCodeStorage */
         $authorizationCodeStorage = $em->getRepository(OAuthAuthorizationCode::class);
-        /** @var \App\Repository\OAuthRefreshTokenRepository $refreshTokenStorage */
+        /** @var OAuthRefreshTokenRepository $refreshTokenStorage */
         $refreshTokenStorage = $em->getRepository(OAuthRefreshToken::class);
 
         // Pass the doctrine storage objects to the OAuth2 server class
-        $this->oauthServer = new Server([
-            'client_credentials' => $clientStorage,
-            'user_credentials' => $userStorage,
-            'access_token' => $accessTokenStorage,
-            'authorization_code' => $authorizationCodeStorage,
-            'refresh_token' => $refreshTokenStorage,
-        ], [
-            'refresh_token_lifetime' => 2419200,
-        ]);
+        $this->oauthServer = new Server(
+            [
+                'client_credentials' => $clientStorage,
+                'user_credentials' => $userStorage,
+                'access_token' => $accessTokenStorage,
+                'authorization_code' => $authorizationCodeStorage,
+                'refresh_token' => $refreshTokenStorage,
+            ], [
+                'refresh_token_lifetime' => 2419200,
+            ]
+        );
 
         // Get all SCOPES
-        /** @var \App\Entity\OAuthScope[] $scopesList */
+        /** @var OAuthScope[] $scopesList */
         $scopesList = $em->getRepository(OAuthScope::class)->findAll();
 
         $defaultScope = '';
@@ -66,10 +76,12 @@ class OAuthController extends Controller
             }
             $supportedScopes[] = $scope->getScope();
         }
-        $memory = new Memory([
-            'default_scope' => $defaultScope,
-            'supported_scopes' => $supportedScopes,
-        ]);
+        $memory = new Memory(
+            [
+                'default_scope' => $defaultScope,
+                'supported_scopes' => $supportedScopes,
+            ]
+        );
         $scopeUtil = new Scope($memory);
         $this->oauthServer->setScopeUtil($scopeUtil);
 
@@ -81,19 +93,27 @@ class OAuthController extends Controller
         $this->oauthServer->addGrantType(new AuthorizationCode($authorizationCodeStorage));
 
         // Add the "Refresh Token" grant type
-        $this->oauthServer->addGrantType(new RefreshToken($refreshTokenStorage, [
-            // the refresh token grant request will have a "refresh_token" field
-            // with a new refresh token on each request
-            'always_issue_new_refresh_token' => true,
-        ]));
+        $this->oauthServer->addGrantType(
+            new RefreshToken(
+                $refreshTokenStorage, [
+                                        // the refresh token grant request will have a "refresh_token" field
+                                        // with a new refresh token on each request
+                                        'always_issue_new_refresh_token' => true,
+                                    ]
+            )
+        );
     }
 
     /**
      * @Route("/oauth/authorize", name="oauth_authorize")
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse|Response
      */
-    public function authorize(ObjectManager $em, Request $request)
+    public function authorize(Request $request)
     {
-        /** @var \App\Entity\User|null $user */
+        /** @var User|null $user */
         $user = $this->getUser();
         if (!$user instanceof UserInterface) {
             return $this->redirectToRoute('login', ['_target_path' => $request->server->get('REQUEST_URI')]);
@@ -111,8 +131,11 @@ class OAuthController extends Controller
         }
         // display an authorization form
         // Get all information about the Client requesting an Auth code
-        /** @var \App\Entity\OAuthClient $clientInfo */
-        $clientInfo = $em->getRepository(OAuthClient::class)->findOneBy(['client_identifier' => $request->query->get('client_id')]);
+        $entityManager = $this->getDoctrine()->getManager();
+        /** @var OAuthClient $clientInfo */
+        $clientInfo = $entityManager->getRepository(OAuthClient::class)->findOneBy(
+            ['client_identifier' => $request->query->get('client_id')]
+        );
 
         $scopes = [];
         $scopeList = $request->query->has('scope') ? $request->query->get('scope') : null;
@@ -122,17 +145,20 @@ class OAuthController extends Controller
             $scopeList = explode(' ', $scopeList);
         }
         foreach ($scopeList as $scope) {
-            /** @var \App\Entity\OAuthScope $getScope */
-            $getScope = $em->getRepository(OAuthScope::class)->findOneBy(['scope' => $scope]);
+            /** @var OAuthScope $getScope */
+            $getScope = $entityManager->getRepository(OAuthScope::class)->findOneBy(['scope' => $scope]);
             if (null !== $getScope) {
                 $scopes[] = $getScope;
             }
         }
         if (0 === $request->request->count()) {
-            return $this->render('oauth-authorize.html.twig', [
-                'client_info' => $clientInfo,
-                'scopes' => $scopes,
-            ]);
+            return $this->render(
+                'oauth-authorize.html.twig',
+                [
+                    'client_info' => $clientInfo,
+                    'scopes' => $scopes,
+                ]
+            );
         }
 
         // print the authorization code if the user has authorized your client
@@ -148,6 +174,7 @@ class OAuthController extends Controller
     }
 
     // curl http://localhost/oauth/token -d 'grant_type=authorization_code&code=AUTHORIZATION_CODE&client_id=testclient&client_secret=testpass&redirect_uri=http://d3strukt0r.esy.es'
+
     /**
      * @Route("/oauth/token", name="oauth_token")
      */
@@ -158,17 +185,22 @@ class OAuthController extends Controller
         // Handle a request for an OAuth2.0 Access Token and send the response to the client
         $request = OAuthRequest::createFromGlobals();
 
-        /** @var \OAuth2\Response $response */
+        /** @var OAuthResponse $response */
         $response = $this->oauthServer->handleTokenRequest($request);
         $response->send();
         exit;
     }
 
     // curl http://localhost/oauth/resource -d 'access_token=YOUR_TOKEN'
+
     /**
      * @Route("/oauth/resource", name="oauth_resource")
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
      */
-    public function resource(ObjectManager $em, Request $request)
+    public function resource(Request $request)
     {
         $this->oauthServer();
         $requestOAuth = OAuthRequest::createFromGlobals();
@@ -184,8 +216,9 @@ class OAuthController extends Controller
 
         $token = $this->oauthServer->getAccessTokenData($requestOAuth);
 
-        /** @var \App\Entity\User $user */
-        $user = $em->getRepository(User::class)->findOneBy(['id' => $token['user_id']]);
+        $entityManager = $this->getDoctrine()->getManager();
+        /** @var User $user */
+        $user = $entityManager->getRepository(User::class)->findOneBy(['id' => $token['user_id']]);
 
         if (null === $token['scope']) {
             return $this->json([]);
@@ -200,7 +233,7 @@ class OAuthController extends Controller
             foreach ($functionProcess as $key => $item) {
                 $functionProcess[$key] = ucfirst($item);
             }
-            $function = 'scope'.implode('', $functionProcess);
+            $function = 'scope' . implode('', $functionProcess);
 
             // Call function
             $data = $this->{$function}($user);
@@ -213,7 +246,7 @@ class OAuthController extends Controller
     }
 
     /**
-     * @param \App\Entity\User $user
+     * @param User $user
      *
      * @return array
      */
@@ -223,7 +256,7 @@ class OAuthController extends Controller
     }
 
     /**
-     * @param \App\Entity\User $user
+     * @param User $user
      *
      * @return array
      */
@@ -233,7 +266,7 @@ class OAuthController extends Controller
     }
 
     /**
-     * @param \App\Entity\User $user
+     * @param User $user
      *
      * @return array
      */
@@ -243,7 +276,7 @@ class OAuthController extends Controller
     }
 
     /**
-     * @param \App\Entity\User $user
+     * @param User $user
      *
      * @return array
      */
@@ -253,7 +286,7 @@ class OAuthController extends Controller
     }
 
     /**
-     * @param \App\Entity\User $user
+     * @param User $user
      *
      * @return array
      */
@@ -263,7 +296,7 @@ class OAuthController extends Controller
     }
 
     /**
-     * @param \App\Entity\User $user
+     * @param User $user
      *
      * @return array
      */
@@ -273,17 +306,17 @@ class OAuthController extends Controller
     }
 
     /**
-     * @param \App\Entity\User $user
+     * @param User $user
      *
      * @return array
      */
-    private function scopeUserActiveaddresses($user)
+    private function scopeUserActiveAddresses($user)
     {
         return ['active_address' => $user->getProfile()->getActiveAddress()];
     }
 
     /**
-     * @param \App\Entity\User $user
+     * @param User $user
      *
      * @return array
      */
@@ -304,7 +337,7 @@ class OAuthController extends Controller
     }
 
     /**
-     * @param \App\Entity\User $user
+     * @param User $user
      *
      * @return array
      */
@@ -314,7 +347,7 @@ class OAuthController extends Controller
     }
 
     /**
-     * @param \App\Entity\User $user
+     * @param User $user
      *
      * @return array
      */
@@ -333,16 +366,18 @@ class OAuthController extends Controller
             }
         }
         foreach ($callbackList as $service => $url) {
-            $options = array(
-                'http' => array(
-                    'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-                    'method'  => 'POST',
+            $options = [
+                'http' => [
+                    'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                    'method' => 'POST',
                     'content' => http_build_query($data)
-                )
-            );
-            $context  = stream_context_create($options);
+                ]
+            ];
+            $context = stream_context_create($options);
             $result = @file_get_contents($url, false, $context);
-            if ($result === false) { /* Handle error */ }
+            if ($result === false) {
+                // TODO: Handle error
+            }
         }
     }
 }

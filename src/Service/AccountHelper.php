@@ -3,7 +3,8 @@
 namespace App\Service;
 
 use App\Entity\User;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class AccountHelper
@@ -38,16 +39,16 @@ class AccountHelper
     ];
 
     /**
-     * @var \Doctrine\Common\Persistence\ObjectManager
+     * @var ManagerRegistry
      */
     private $em;
 
     /**
-     * @var \Symfony\Component\HttpFoundation\Request
+     * @var Request
      */
     private $request;
 
-    public function __construct(ObjectManager $manager, RequestStack $request)
+    public function __construct(ManagerRegistry $manager, RequestStack $request)
     {
         $this->em = $manager;
         $this->request = $request->getCurrentRequest();
@@ -59,7 +60,7 @@ class AccountHelper
      *
      * @param string $usernameOrEmail
      *
-     * @return \App\Entity\User|bool
+     * @return User|bool
      */
     public function userExists($usernameOrEmail)
     {

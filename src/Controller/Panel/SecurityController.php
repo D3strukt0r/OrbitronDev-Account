@@ -2,12 +2,12 @@
 
 namespace App\Controller\Panel;
 
+use App\Entity\User;
 use App\Form\DeleteAccountType;
-use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
-class SecurityController extends Controller
+class SecurityController extends AbstractController
 {
     public static function __setupNavigation()
     {
@@ -53,35 +53,46 @@ class SecurityController extends Controller
 
     public function inactivity($navigation)
     {
-        return $this->forward('App\\Controller\\Panel\\DefaultController::notFound', [
-            'navigation' => $navigation,
-        ]);
+        return $this->forward(
+            'App\\Controller\\Panel\\DefaultController::notFound',
+            [
+                'navigation' => $navigation,
+            ]
+        );
     }
 
     public function activityHistory($navigation)
     {
-        return $this->forward('App\\Controller\\Panel\\DefaultController::notFound', [
-            'navigation' => $navigation,
-        ]);
+        return $this->forward(
+            'App\\Controller\\Panel\\DefaultController::notFound',
+            [
+                'navigation' => $navigation,
+            ]
+        );
     }
 
-    public function deleteAccount(ObjectManager $em, Request $request, $navigation)
+    public function deleteAccount(Request $request, $navigation)
     {
-        /** @var \App\Entity\User $user */
+        /** @var User $user */
         $user = $this->getUser();
 
         $deleteAccountForm = $this->createForm(DeleteAccountType::class);
         $deleteAccountForm->handleRequest($request);
         if ($deleteAccountForm->isSubmitted() && $deleteAccountForm->isValid()) {
-            $em->remove($user);
-            $em->flush();
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($user);
+            $entityManager->flush();
 
-            return $this->redirectToRoute('logout'); // TODO: Logout causes an error! Probably because the user doesn't exist then anymore.
+            // TODO: Logout causes an error! Probably because the user doesn't exist then anymore.
+            return $this->redirectToRoute('logout');
         }
 
-        return $this->render('panel/delete-account.html.twig', [
-            'navigation_links' => $navigation,
-            'delete_account_form' => $deleteAccountForm->createView(),
-        ]);
+        return $this->render(
+            'panel/delete-account.html.twig',
+            [
+                'navigation_links' => $navigation,
+                'delete_account_form' => $deleteAccountForm->createView(),
+            ]
+        );
     }
 }

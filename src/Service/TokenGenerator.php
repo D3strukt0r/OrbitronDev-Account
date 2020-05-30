@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Token;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 
 class TokenGenerator
 {
@@ -13,14 +13,14 @@ class TokenGenerator
     private $isGenerated = false;
 
     /**
-     * @var \App\Entity\Token|null
+     * @var Token|null
      */
     private $token = null;
 
     /**
-     * @var \Doctrine\Common\Persistence\ObjectManager|null
+     * @var ObjectManager|null
      */
-    private $em = null;
+    private $em;
 
     /**
      * @var bool
@@ -30,15 +30,15 @@ class TokenGenerator
     /**
      * TokenGenerator constructor.
      *
-     * @param \Doctrine\Common\Persistence\ObjectManager $entityManager
-     * @param string|null                                $token
+     * @param ObjectManager $entityManager
+     * @param string|null   $token
      */
     public function __construct(ObjectManager $entityManager, $token = null)
     {
         $this->em = $entityManager;
 
         if (null !== $token && is_string($token)) {
-            /** @var \App\Entity\Token $token */
+            /** @var Token $token */
             $token = $this->em->getRepository(Token::class)->findOneBy(['token' => $token]);
 
             if (null !== $token) {

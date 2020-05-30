@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -25,21 +26,21 @@ class OAuthAuthorizationCode
     protected $code;
 
     /**
-     * @var \App\Entity\OAuthClient
+     * @var OAuthClient
      * @ORM\ManyToOne(targetEntity="OAuthClient")
      * @ORM\JoinColumn(name="client_id", referencedColumnName="client_identifier", nullable=false, onDelete="CASCADE")
      */
     protected $client;
 
     /**
-     * @var \App\Entity\User
+     * @var User
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $user;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      * @ORM\Column(type="datetime")
      */
     protected $expires;
@@ -113,9 +114,9 @@ class OAuthAuthorizationCode
     /**
      * Get expires.
      *
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getExpires(): \DateTime
+    public function getExpires(): DateTime
     {
         return $this->expires;
     }
@@ -123,11 +124,11 @@ class OAuthAuthorizationCode
     /**
      * Set expires.
      *
-     * @param \DateTime $expires
+     * @param DateTime $expires
      *
      * @return $this
      */
-    public function setExpires(\DateTime $expires): self
+    public function setExpires(DateTime $expires): self
     {
         $this->expires = $expires;
 
@@ -185,7 +186,7 @@ class OAuthAuthorizationCode
     /**
      * Get client.
      *
-     * @return \App\Entity\OAuthClient
+     * @return OAuthClient
      */
     public function getClient(): OAuthClient
     {
@@ -195,7 +196,7 @@ class OAuthAuthorizationCode
     /**
      * Set client.
      *
-     * @param \App\Entity\OAuthClient|null $client
+     * @param OAuthClient|null $client
      *
      * @return $this
      */
@@ -209,7 +210,7 @@ class OAuthAuthorizationCode
     /**
      * Get user.
      *
-     * @return \App\Entity\User
+     * @return User
      */
     public function getUser(): User
     {
@@ -219,7 +220,7 @@ class OAuthAuthorizationCode
     /**
      * Set user.
      *
-     * @param \App\Entity\User|null $user
+     * @param User|null $user
      *
      * @return $this
      */

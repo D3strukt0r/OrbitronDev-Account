@@ -1,6 +1,6 @@
 panel_default:
     path: /p
-    controller: FrameworkBundle:Redirect:redirect
+    controller: Symfony\Bundle\FrameworkBundle\Controller\RedirectController::redirectAction
     defaults:
         route: panel
         permanent: true
