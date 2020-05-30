@@ -7,12 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=SessionRepository::class)
- * @ORM\Table(name="sessions", options={"collate"="utf8mb4_bin"})
+ * @ORM\Table(name="sessions", options={"collate": "utf8mb4_bin"})
  */
 class Session
 {
     /**
-     * @ORM\Id()
+     * @ORM\Id
      * @ORM\Column(type="binary")
      */
     private $sess_id;
@@ -28,7 +28,7 @@ class Session
     private $sess_lifetime;
 
     /**
-     * @ORM\Column(type="integer", options={"unsigned"=true})
+     * @ORM\Column(type="integer", options={"unsigned": true})
      */
     private $sess_time;
 
