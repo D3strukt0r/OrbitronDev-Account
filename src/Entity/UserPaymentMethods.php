@@ -10,6 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class UserPaymentMethods
 {
+    public const PAYMENT_VISA = 'visa';
+    public const PAYMENT_MASTERCARD = 'mastercard';
+    public const PAYMENT_MAESTRO = 'maestro';
+    public const PAYMENT_PAYPAL = 'paypal';
+
     /**
      * @var int
      * @ORM\Id
@@ -31,11 +36,6 @@ class UserPaymentMethods
      */
     protected $payment_type;
 
-    const PAYMENT_VISA = 'visa';
-    const PAYMENT_MASTERCARD = 'mastercard';
-    const PAYMENT_MAESTRO = 'maestro';
-    const PAYMENT_PAYPAL = 'paypal';
-
     /**
      * @var array
      * @ORM\Column(type="array")
@@ -43,7 +43,7 @@ class UserPaymentMethods
     protected $data;
 
     /**
-     * @return int
+     * @return int The ID
      */
     public function getId(): int
     {
@@ -51,7 +51,7 @@ class UserPaymentMethods
     }
 
     /**
-     * @return User
+     * @return User The user
      */
     public function getUser(): User
     {
@@ -59,7 +59,7 @@ class UserPaymentMethods
     }
 
     /**
-     * @param User $user
+     * @param User $user The user
      *
      * @return $this
      */
@@ -71,7 +71,7 @@ class UserPaymentMethods
     }
 
     /**
-     * @return string
+     * @return string The type
      */
     public function getType(): string
     {
@@ -79,7 +79,7 @@ class UserPaymentMethods
     }
 
     /**
-     * @param string $type
+     * @param string $type The type
      *
      * @return $this
      */
@@ -91,7 +91,7 @@ class UserPaymentMethods
     }
 
     /**
-     * @return array
+     * @return array The data
      */
     public function getData(): array
     {
@@ -99,7 +99,7 @@ class UserPaymentMethods
     }
 
     /**
-     * @param array $data
+     * @param array $data The data
      *
      * @return $this
      */
@@ -111,7 +111,7 @@ class UserPaymentMethods
     }
 
     /**
-     * @return array
+     * @return array An array of all the attributes in the object
      */
     public function toArray(): array
     {

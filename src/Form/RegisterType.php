@@ -164,6 +164,7 @@ class RegisterType extends AbstractType
                 [
                     'label' => 'register.form.send.label',
                 ]
-            );
+            )
+        ;
     }
 }

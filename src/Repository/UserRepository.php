@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use OAuth2\Storage\UserCredentialsInterface;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
@@ -15,15 +16,16 @@ class UserRepository extends EntityRepository implements UserCredentialsInterfac
             ->setParameter('username', $username)
             ->setParameter('email', $username)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getOneOrNullResult()
+            ;
     }
 
     public function checkUserCredentials($emailOrUsername, $password)
     {
-        /** @var \App\Entity\User $user */
+        /** @var User $user */
         $user = $this->findOneBy(['email' => $emailOrUsername]);
         if (null === $user) {
-            /** @var \App\Entity\User $user */
+            /** @var User $user */
             $user = $this->findOneBy(['username' => $emailOrUsername]);
         }
         if ($user) {
@@ -57,8 +59,8 @@ class UserRepository extends EntityRepository implements UserCredentialsInterfac
     }
 
     /**
-     * @param \App\Entity\User $user
-     * @param \App\Entity\User $friend
+     * @param User $user
+     * @param User $friend
      *
      * @return bool
      */
@@ -74,8 +76,8 @@ class UserRepository extends EntityRepository implements UserCredentialsInterfac
     }
 
     /**
-     * @param \App\Entity\User $user
-     * @param bool             $onlineOnly
+     * @param User $user
+     * @param bool $onlineOnly
      *
      * @return int
      */

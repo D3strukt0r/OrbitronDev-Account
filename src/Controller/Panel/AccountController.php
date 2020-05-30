@@ -116,12 +116,14 @@ class AccountController extends AbstractController
                 ->setSurname($formData['last_name'])
                 ->setGender($formData['gender'])
                 ->setBirthday(DateTime::createFromFormat('d/m/Y', $formData['birthday']) ?: null)
-                ->setWebsite($formData['website']);
+                ->setWebsite($formData['website'])
+            ;
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
 
             OAuthController::sendCallback($entityManager, $user);
+
             return $this->redirectToRoute('panel', ['page' => 'profile']);
         }
 
@@ -150,7 +152,8 @@ class AccountController extends AbstractController
                 ->setHouseNumber($formData['location_street_number'])
                 ->setZipCode($formData['location_postal_code'])
                 ->setCity($formData['location_city'])
-                ->setCountry($formData['location_country']);
+                ->setCountry($formData['location_country'])
+            ;
             $user->getProfile()->addAddress($newAddress);
 
             $entityManager = $this->getDoctrine()->getManager();

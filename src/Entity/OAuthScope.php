@@ -33,7 +33,7 @@ class OAuthScope
     protected $name;
 
     /**
-     * @var null|string
+     * @var string|null
      * @ORM\Column(type="text", nullable=true)
      */
     protected $description;
@@ -47,7 +47,7 @@ class OAuthScope
     /**
      * Get id.
      *
-     * @return int
+     * @return int The ID
      */
     public function getId(): int
     {
@@ -57,7 +57,7 @@ class OAuthScope
     /**
      * Get scope.
      *
-     * @return string
+     * @return string The scopes
      */
     public function getScope(): string
     {
@@ -67,7 +67,7 @@ class OAuthScope
     /**
      * Set scope.
      *
-     * @param string $scope
+     * @param string $scope The scopes
      *
      * @return $this
      */
@@ -81,7 +81,7 @@ class OAuthScope
     /**
      * Get name.
      *
-     * @return string
+     * @return string The name
      */
     public function getName(): string
     {
@@ -91,7 +91,7 @@ class OAuthScope
     /**
      * Set name.
      *
-     * @param string $name
+     * @param string $name The name
      *
      * @return $this
      */
@@ -105,7 +105,7 @@ class OAuthScope
     /**
      * Get description.
      *
-     * @return null|string
+     * @return string|null The description
      */
     public function getDescription(): ?string
     {
@@ -115,7 +115,7 @@ class OAuthScope
     /**
      * Set description.
      *
-     * @param null|string $description
+     * @param string|null $description The description
      *
      * @return $this
      */
@@ -129,7 +129,7 @@ class OAuthScope
     /**
      * Get is_default.
      *
-     * @return bool
+     * @return bool Whether to be used by default
      */
     public function isDefault(): bool
     {
@@ -139,7 +139,7 @@ class OAuthScope
     /**
      * Set is_default.
      *
-     * @param bool $is_default
+     * @param bool $is_default Whether to be used by default
      *
      * @return $this
      */
@@ -151,7 +151,7 @@ class OAuthScope
     }
 
     /**
-     * @return array
+     * @return array An array of all the attributes in the object
      */
     public function toArray(): array
     {
@@ -164,15 +164,15 @@ class OAuthScope
     }
 
     /**
-     * @param $params
+     * @param array $params All the attributes
      *
-     * @return self
+     * @return self An object initialized from the array's information
      */
-    public static function fromArray($params): self
+    public static function fromArray(array $params): self
     {
         $token = new self();
         foreach ($params as $property => $value) {
-            $token->$property = $value;
+            $token->{$property} = $value;
         }
 
         return $token;

@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,56 +22,56 @@ class UserProfiles
     protected $id;
 
     /**
-     * @var \App\Entity\User
+     * @var User
      * @ORM\OneToOne(targetEntity="User", inversedBy="profile")
      * @ORM\JoinColumn(name="id", referencedColumnName="id", nullable=false)
      */
     protected $user;
 
     /**
-     * @var null|string
+     * @var string|null
      * @ORM\Column(type="string", nullable=true)
      */
     protected $name;
 
     /**
-     * @var null|string
+     * @var string|null
      * @ORM\Column(type="string", nullable=true)
      */
     protected $surname;
 
     /**
-     * @var null|int
+     * @var int|null
      * @ORM\Column(type="smallint", nullable=true)
      */
     protected $gender;
 
     /**
-     * @var null|\DateTime
+     * @var DateTime|null
      * @ORM\Column(type="date", nullable=true)
      */
     protected $birthday;
 
     /**
-     * @var null|string
+     * @var string|null
      * @ORM\Column(type="string", nullable=true)
      */
     protected $website;
 
     /**
-     * @var null|string
+     * @var string|null
      * @ORM\Column(type="string", nullable=true)
      */
     protected $picture;
 
     /**
-     * @var null|int
+     * @var int|null
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $active_address;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var Collection
      * @ORM\OneToMany(targetEntity="UserAddress", mappedBy="userProfile", cascade={"persist", "remove"},
      *                                            orphanRemoval=true)
      */
@@ -81,7 +83,7 @@ class UserProfiles
     }
 
     /**
-     * @return int
+     * @return int The ID
      */
     public function getId(): int
     {
@@ -89,7 +91,7 @@ class UserProfiles
     }
 
     /**
-     * @return \App\Entity\User
+     * @return User The user
      */
     public function getUser(): User
     {
@@ -97,7 +99,7 @@ class UserProfiles
     }
 
     /**
-     * @param \App\Entity\User $user
+     * @param User $user The user
      *
      * @return $this
      */
@@ -109,7 +111,7 @@ class UserProfiles
     }
 
     /**
-     * @return null|string
+     * @return string|null The first name
      */
     public function getName(): ?string
     {
@@ -117,7 +119,7 @@ class UserProfiles
     }
 
     /**
-     * @param null|string $name
+     * @param string|null $name The first name
      *
      * @return $this
      */
@@ -129,7 +131,7 @@ class UserProfiles
     }
 
     /**
-     * @return null|string
+     * @return string|null The last name
      */
     public function getSurname(): ?string
     {
@@ -137,7 +139,7 @@ class UserProfiles
     }
 
     /**
-     * @param null|string $surname
+     * @param string|null $surname The last name
      *
      * @return $this
      */
@@ -149,7 +151,7 @@ class UserProfiles
     }
 
     /**
-     * @return null|int
+     * @return int|null The gender
      */
     public function getGender(): ?int
     {
@@ -157,7 +159,7 @@ class UserProfiles
     }
 
     /**
-     * @param null|int $gender
+     * @param int|null $gender The gender
      *
      * @return $this
      */
@@ -169,19 +171,19 @@ class UserProfiles
     }
 
     /**
-     * @return null|\DateTime
+     * @return DateTime|null The birth date
      */
-    public function getBirthday(): ?\DateTime
+    public function getBirthday(): ?DateTime
     {
         return $this->birthday;
     }
 
     /**
-     * @param null|\DateTime $birthday
+     * @param DateTime|null $birthday The birth date
      *
      * @return $this
      */
-    public function setBirthday(\DateTime $birthday = null): self
+    public function setBirthday(DateTime $birthday = null): self
     {
         $this->birthday = $birthday;
 
@@ -189,7 +191,7 @@ class UserProfiles
     }
 
     /**
-     * @return null|string
+     * @return string|null The website
      */
     public function getWebsite(): ?string
     {
@@ -197,7 +199,7 @@ class UserProfiles
     }
 
     /**
-     * @param null|string $website
+     * @param string|null $website The website
      *
      * @return $this
      */
@@ -209,7 +211,7 @@ class UserProfiles
     }
 
     /**
-     * @return null|string
+     * @return string|null The profile picture URI
      */
     public function getPicture(): ?string
     {
@@ -217,7 +219,7 @@ class UserProfiles
     }
 
     /**
-     * @param null|string $picture
+     * @param string|null $picture The profile picture URI
      *
      * @return $this
      */
@@ -229,7 +231,7 @@ class UserProfiles
     }
 
     /**
-     * @return null|int
+     * @return int|null The active address
      */
     public function getActiveAddress(): ?int
     {
@@ -237,7 +239,7 @@ class UserProfiles
     }
 
     /**
-     * @param null|int $activeAddress
+     * @param int|null $activeAddress The active address
      *
      * @return $this
      */
@@ -249,7 +251,7 @@ class UserProfiles
     }
 
     /**
-     * @return \App\Entity\UserAddress[]
+     * @return UserAddress[] All the addresses
      */
     public function getAddresses(): array
     {
@@ -257,7 +259,7 @@ class UserProfiles
     }
 
     /**
-     * @param \App\Entity\UserAddress $address
+     * @param UserAddress $address The address
      *
      * @return $this
      */
@@ -270,7 +272,7 @@ class UserProfiles
     }
 
     /**
-     * @param \App\Entity\UserAddress $address
+     * @param UserAddress $address The address
      *
      * @return $this
      */
@@ -284,7 +286,7 @@ class UserProfiles
     }
 
     /**
-     * @return array
+     * @return array All the user info in one array
      */
     public function toArray(): array
     {

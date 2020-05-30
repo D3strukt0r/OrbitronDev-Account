@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,19 +32,19 @@ class Token
     protected $job;
 
     /**
-     * @var null|\DateTime
+     * @var DateTime|null
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $expires;
 
     /**
-     * @var null|array
+     * @var array|null
      * @ORM\Column(type="array", nullable=true)
      */
     protected $optional_info;
 
     /**
-     * @return int
+     * @return int The ID
      */
     public function getId(): int
     {
@@ -51,7 +52,7 @@ class Token
     }
 
     /**
-     * @return string
+     * @return string The token
      */
     public function getToken(): string
     {
@@ -59,7 +60,7 @@ class Token
     }
 
     /**
-     * @param string $token
+     * @param string $token The token
      *
      * @return $this
      */
@@ -71,7 +72,7 @@ class Token
     }
 
     /**
-     * @return string
+     * @return string The job to do
      */
     public function getJob(): string
     {
@@ -79,7 +80,7 @@ class Token
     }
 
     /**
-     * @param string $job
+     * @param string $job The job to do
      *
      * @return $this
      */
@@ -91,19 +92,19 @@ class Token
     }
 
     /**
-     * @return \DateTime|null
+     * @return DateTime|null The expiration date
      */
-    public function getExpires(): ?\DateTime
+    public function getExpires(): ?DateTime
     {
         return $this->expires;
     }
 
     /**
-     * @param \DateTime|null $expires
+     * @param DateTime|null $expires The expiration date
      *
      * @return $this
      */
-    public function setExpires(\DateTime $expires = null): self
+    public function setExpires(DateTime $expires = null): self
     {
         $this->expires = $expires;
 
@@ -111,7 +112,7 @@ class Token
     }
 
     /**
-     * @return array|null
+     * @return array|null Additional optional info
      */
     public function getOptionalInfo(): ?array
     {
@@ -119,7 +120,7 @@ class Token
     }
 
     /**
-     * @param array|null $optional_info
+     * @param array|null $optional_info Additional optional info
      *
      * @return $this
      */

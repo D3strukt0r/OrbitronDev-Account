@@ -143,6 +143,7 @@ class EditAccountType extends AbstractType
                 [
                     'label' => 'panel.form.update_profile.send.label',
                 ]
-            );
+            )
+        ;
     }
 }

@@ -9,6 +9,7 @@
         "ext-iconv": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
+        "ext-openssl": "*",
         "bshaffer/oauth2-server-php": "^1.11",
         "google/recaptcha": "^1.2",
         "imagine/imagine": "^1.2",

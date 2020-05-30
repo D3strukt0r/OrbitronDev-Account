@@ -40,13 +40,13 @@ class UserSubscription
     protected $activated_at;
 
     /**
-     * @var null|DateTime
+     * @var DateTime|null
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $expires_at;
 
     /**
-     * @return int
+     * @return int The ID
      */
     public function getId(): int
     {
@@ -54,7 +54,7 @@ class UserSubscription
     }
 
     /**
-     * @return User
+     * @return User The user
      */
     public function getUser(): User
     {
@@ -62,7 +62,7 @@ class UserSubscription
     }
 
     /**
-     * @param User $user
+     * @param User $user The user
      *
      * @return $this
      */
@@ -74,7 +74,7 @@ class UserSubscription
     }
 
     /**
-     * @return SubscriptionType
+     * @return SubscriptionType The subscription type
      */
     public function getSubscription(): SubscriptionType
     {
@@ -82,7 +82,7 @@ class UserSubscription
     }
 
     /**
-     * @param SubscriptionType $subscription
+     * @param SubscriptionType $subscription The subscription type
      *
      * @return $this
      */
@@ -94,7 +94,7 @@ class UserSubscription
     }
 
     /**
-     * @return DateTime
+     * @return DateTime When the subscription was activated
      */
     public function getActivatedAt(): DateTime
     {
@@ -102,7 +102,7 @@ class UserSubscription
     }
 
     /**
-     * @param DateTime $activatedAt
+     * @param DateTime $activatedAt When the subscription was activated
      *
      * @return $this
      */
@@ -114,7 +114,7 @@ class UserSubscription
     }
 
     /**
-     * @return null|DateTime
+     * @return DateTime|null When the subscription expires
      */
     public function getExpiresAt(): ?DateTime
     {
@@ -122,7 +122,7 @@ class UserSubscription
     }
 
     /**
-     * @param null|DateTime $expiresAt
+     * @param DateTime|null $expiresAt When the subscription expires
      *
      * @return $this
      */
@@ -134,7 +134,7 @@ class UserSubscription
     }
 
     /**
-     * @return int|null
+     * @return int|null How many days are left in his subscription, or null if not subscribed
      */
     public function getRemainingDays(): ?int
     {
@@ -151,7 +151,7 @@ class UserSubscription
     }
 
     /**
-     * @return bool
+     * @return bool Whether the user has a running subscription
      */
     public function hasSubscription(): bool
     {
@@ -163,7 +163,7 @@ class UserSubscription
     }
 
     /**
-     * @return array
+     * @return array All the user info in one array
      */
     public function toArray(): array
     {

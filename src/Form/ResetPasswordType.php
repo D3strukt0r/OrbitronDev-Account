@@ -54,6 +54,7 @@ class ResetPasswordType extends AbstractType
                 [
                     'label' => 'forgot.form_reset.send.label',
                 ]
-            );
+            )
+        ;
     }
 }

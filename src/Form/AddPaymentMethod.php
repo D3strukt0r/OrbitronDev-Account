@@ -35,6 +35,7 @@ class AddPaymentMethod extends AbstractType
                 [
                     'label' => 'panel.form.add_address.send.label',
                 ]
-            );
+            )
+        ;
     }
 }

@@ -135,7 +135,8 @@ class OAuthController extends AbstractController
         /** @var OAuthClient $clientInfo */
         $clientInfo = $entityManager->getRepository(OAuthClient::class)->findOneBy(
             ['client_identifier' => $request->query->get('client_id')]
-        );
+        )
+        ;
 
         $scopes = [];
         $scopeList = $request->query->has('scope') ? $request->query->get('scope') : null;
@@ -233,7 +234,7 @@ class OAuthController extends AbstractController
             foreach ($functionProcess as $key => $item) {
                 $functionProcess[$key] = ucfirst($item);
             }
-            $function = 'scope' . implode('', $functionProcess);
+            $function = 'scope'.implode('', $functionProcess);
 
             // Call function
             $data = $this->{$function}($user);

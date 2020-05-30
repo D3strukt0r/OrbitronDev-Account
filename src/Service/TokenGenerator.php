@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Token;
+use DateTime;
 use Doctrine\Persistence\ObjectManager;
 
 class TokenGenerator
@@ -58,9 +59,9 @@ class TokenGenerator
     }
 
     /**
-     * @param string         $job
-     * @param null|\DateTime $validUntil
-     * @param null|array     $information
+     * @param string        $job
+     * @param DateTime|null $validUntil
+     * @param array|null    $information
      *
      * @return string
      */
@@ -74,7 +75,8 @@ class TokenGenerator
                 ->setToken($token)
                 ->setJob($job)
                 ->setExpires($validUntil)
-                ->setOptionalInfo($information);
+                ->setOptionalInfo($information)
+            ;
 
             $this->em->persist($newToken);
             $this->em->flush();
@@ -130,7 +132,7 @@ class TokenGenerator
     }
 
     /**
-     * @return bool|null|string
+     * @return bool|string|null
      */
     public function getJob()
     {
@@ -149,7 +151,7 @@ class TokenGenerator
     }
 
     /**
-     * @return array|bool|null|string
+     * @return array|bool|string|null
      */
     public function getInformation()
     {

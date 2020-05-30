@@ -55,6 +55,7 @@ class ForgotType extends AbstractType
                 [
                     'label' => 'forgot.form.send.label',
                 ]
-            );
+            )
+        ;
     }
 }

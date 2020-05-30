@@ -37,7 +37,7 @@ class SubscriptionType
     protected $permissions;
 
     /**
-     * @return int
+     * @return int The ID
      */
     public function getId(): int
     {
@@ -45,7 +45,7 @@ class SubscriptionType
     }
 
     /**
-     * @return string
+     * @return string The title
      */
     public function getTitle(): string
     {
@@ -53,7 +53,7 @@ class SubscriptionType
     }
 
     /**
-     * @param string $title
+     * @param string $title The title
      *
      * @return $this
      */
@@ -65,7 +65,7 @@ class SubscriptionType
     }
 
     /**
-     * @return int
+     * @return int The price
      */
     public function getPrice(): int
     {
@@ -73,7 +73,7 @@ class SubscriptionType
     }
 
     /**
-     * @param int $price
+     * @param int $price The price
      *
      * @return $this
      */
@@ -85,7 +85,7 @@ class SubscriptionType
     }
 
     /**
-     * @return array
+     * @return array The permissions
      */
     public function getPermissions(): array
     {
@@ -93,7 +93,7 @@ class SubscriptionType
     }
 
     /**
-     * @param array $permissions
+     * @param array $permissions The permissions
      *
      * @return $this
      */
@@ -105,7 +105,7 @@ class SubscriptionType
     }
 
     /**
-     * @return array
+     * @return array An array of all the attributes in the object
      */
     public function toArray(): array
     {

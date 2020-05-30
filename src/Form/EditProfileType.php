@@ -94,7 +94,8 @@ class EditProfileType extends AbstractType
                 [
                     'label' => 'panel.form.update_profile.send.label',
                 ]
-            );
+            )
+        ;
     }
 
     /**

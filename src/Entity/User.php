@@ -78,7 +78,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     protected $developer_status = false;
 
     /**
-     * @var null|int
+     * @var int|null
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $preferred_payment_method;
@@ -142,7 +142,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return int
+     * @return int The ID
      */
     public function getId(): int
     {
@@ -150,7 +150,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return string
+     * @return string The username
      */
     public function getUsername(): string
     {
@@ -158,7 +158,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @param string $username
+     * @param string $username The username
      *
      * @return $this
      */
@@ -170,7 +170,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return string
+     * @return string The password
      */
     public function getPassword(): string
     {
@@ -178,10 +178,10 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @param string $password
+     * @param string $password The password
      *
-     * @return $this
      * @throws Exception
+     * @return $this
      */
     public function setPassword(string $password): self
     {
@@ -197,9 +197,9 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @param string $password
+     * @param string $password The password
      *
-     * @return bool
+     * @return bool Whether the password is correct or not
      */
     public function verifyPassword(string $password): bool
     {
@@ -207,7 +207,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return string
+     * @return string The email
      */
     public function getEmail(): string
     {
@@ -227,7 +227,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return bool
+     * @return bool Whether the email has been verified
      */
     public function isEmailVerified(): bool
     {
@@ -235,7 +235,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @param bool $emailVerified
+     * @param bool $emailVerified Whether the email has been verified
      *
      * @return $this
      */
@@ -247,7 +247,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return DateTime
+     * @return DateTime The creation date
      */
     public function getCreatedOn(): DateTime
     {
@@ -255,7 +255,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @param DateTime $createdOn
+     * @param DateTime $createdOn The creation date
      *
      * @return $this
      */
@@ -267,7 +267,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return string
+     * @return string The IP address when the user was created
      */
     public function getCreatedIp(): string
     {
@@ -287,7 +287,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return DateTime
+     * @return DateTime The date the user was last online
      */
     public function getLastOnlineAt(): DateTime
     {
@@ -295,7 +295,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @param DateTime $lastOnlineAt
+     * @param DateTime $lastOnlineAt The date the user was last online
      *
      * @return $this
      */
@@ -307,7 +307,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return string
+     * @return string The IP address when the user was last online
      */
     public function getLastIp(): string
     {
@@ -315,7 +315,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @param string $lastIp
+     * @param string $lastIp The IP address when the user was last online
      *
      * @return $this
      */
@@ -327,7 +327,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return bool
+     * @return bool Whether the user is a developer
      */
     public function getDeveloperStatus(): bool
     {
@@ -335,7 +335,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @param bool $developerStatus
+     * @param bool $developerStatus Whether the user is a developer
      *
      * @return $this
      */
@@ -347,7 +347,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return int|null
+     * @return int|null The preferred payment method
      */
     public function getPreferredPaymentMethod(): ?int
     {
@@ -355,7 +355,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @param int|null $preferredPaymentMethod
+     * @param int|null $preferredPaymentMethod The preferred payment method
      *
      * @return $this
      */
@@ -375,7 +375,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @param UserPaymentMethods $paymentMethod
+     * @param UserPaymentMethods $paymentMethod The payment method
      *
      * @return $this
      */
@@ -388,7 +388,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @param UserPaymentMethods $paymentMethod
+     * @param UserPaymentMethods $paymentMethod The payment method
      *
      * @return $this
      */
@@ -402,7 +402,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return UserProfiles
+     * @return UserProfiles The profile
      */
     public function getProfile(): UserProfiles
     {
@@ -410,7 +410,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @param UserProfiles $profile
+     * @param UserProfiles $profile The profile
      *
      * @return $this
      */
@@ -422,7 +422,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return UserSubscription
+     * @return UserSubscription The subscription
      */
     public function getSubscription(): UserSubscription
     {
@@ -430,7 +430,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @param UserSubscription $subscription
+     * @param UserSubscription $subscription The subscription
      *
      * @return $this
      */
@@ -474,7 +474,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return bool
+     * @return bool Whether the user is currently online
      */
     public function isOnline(): bool
     {
@@ -482,7 +482,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @param bool $online
+     * @param bool $online Whether the user is currently online
      *
      * @return $this
      */
@@ -494,7 +494,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return string|null
+     * @return string|null The salt
      */
     public function getSalt(): ?string
     {
@@ -506,7 +506,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     /**
      * Returns the roles or permissions granted to the user for security.
      *
-     * @return array
+     * @return array All the roles
      */
     public function getRoles(): array
     {
@@ -520,7 +520,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @param array $roles
+     * @param array $roles The roles assigned to the user
      *
      * @return $this
      */
@@ -541,9 +541,9 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return string
-     * @see \Serializable::serialize()
+     * @return string The serialized user information
      *
+     * @see \Serializable::serialize()
      */
     public function serialize(): string
     {
@@ -562,7 +562,6 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
      * @param $serialized
      *
      * @see \Serializable::unserialize()
-     *
      */
     public function unserialize($serialized)
     {
@@ -576,7 +575,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
     }
 
     /**
-     * @return array
+     * @return array An array of all the attributes in the object
      */
     public function toArray(): array
     {

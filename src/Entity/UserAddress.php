@@ -26,37 +26,37 @@ class UserAddress
     protected $userProfile;
 
     /**
-     * @var null|string
+     * @var string|null
      * @ORM\Column(type="string", nullable=true)
      */
     protected $street;
 
     /**
-     * @var null|string
+     * @var string|null
      * @ORM\Column(type="string", nullable=true)
      */
     protected $house_number;
 
     /**
-     * @var null|string
+     * @var string|null
      * @ORM\Column(type="string", nullable=true)
      */
     protected $zip_code;
 
     /**
-     * @var null|string
+     * @var string|null
      * @ORM\Column(type="string", nullable=true)
      */
     protected $city;
 
     /**
-     * @var null|string
+     * @var string|null
      * @ORM\Column(type="string", nullable=true)
      */
     protected $country;
 
     /**
-     * @return int
+     * @return int The ID
      */
     public function getId(): int
     {
@@ -64,7 +64,7 @@ class UserAddress
     }
 
     /**
-     * @return UserProfiles
+     * @return UserProfiles The user profile
      */
     public function getUserProfile(): UserProfiles
     {
@@ -72,7 +72,7 @@ class UserAddress
     }
 
     /**
-     * @param UserProfiles $userProfile
+     * @param UserProfiles $userProfile The user profile
      *
      * @return $this
      */
@@ -84,7 +84,7 @@ class UserAddress
     }
 
     /**
-     * @return null|string
+     * @return string|null The street
      */
     public function getStreet(): ?string
     {
@@ -92,7 +92,7 @@ class UserAddress
     }
 
     /**
-     * @param null|string $street
+     * @param string|null $street The street
      *
      * @return $this
      */
@@ -104,7 +104,7 @@ class UserAddress
     }
 
     /**
-     * @return null|string
+     * @return string|null The house number
      */
     public function getHouseNumber(): ?string
     {
@@ -112,7 +112,7 @@ class UserAddress
     }
 
     /**
-     * @param null|string $houseNumber
+     * @param string|null $houseNumber The house number
      *
      * @return $this
      */
@@ -124,7 +124,7 @@ class UserAddress
     }
 
     /**
-     * @return null|string
+     * @return string|null The zip code
      */
     public function getZipCode(): ?string
     {
@@ -132,7 +132,7 @@ class UserAddress
     }
 
     /**
-     * @param null|string $zipCode
+     * @param string|null $zipCode The zip code
      *
      * @return $this
      */
@@ -144,7 +144,7 @@ class UserAddress
     }
 
     /**
-     * @return null|string
+     * @return string|null The city
      */
     public function getCity(): ?string
     {
@@ -152,7 +152,7 @@ class UserAddress
     }
 
     /**
-     * @param null|string $city
+     * @param string|null $city The city
      *
      * @return $this
      */
@@ -164,7 +164,7 @@ class UserAddress
     }
 
     /**
-     * @return null|string
+     * @return string|null The country
      */
     public function getCountry(): ?string
     {
@@ -172,7 +172,7 @@ class UserAddress
     }
 
     /**
-     * @param null|string $country
+     * @param string|null $country The country
      *
      * @return $this
      */
@@ -184,7 +184,7 @@ class UserAddress
     }
 
     /**
-     * @return array
+     * @return array An array of all the attributes in the object
      */
     public function toArray(): array
     {

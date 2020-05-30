@@ -51,7 +51,7 @@ class OAuthClient extends EncryptableFieldEntity
     /**
      * Get id.
      *
-     * @return string
+     * @return string The ID
      */
     public function getId(): string
     {
@@ -61,7 +61,7 @@ class OAuthClient extends EncryptableFieldEntity
     /**
      * Get client_identifier.
      *
-     * @return string
+     * @return string The client ID
      */
     public function getClientIdentifier(): string
     {
@@ -71,7 +71,7 @@ class OAuthClient extends EncryptableFieldEntity
     /**
      * Set client_identifier.
      *
-     * @param string $clientIdentifier
+     * @param string $clientIdentifier The client ID
      *
      * @return $this
      */
@@ -85,7 +85,7 @@ class OAuthClient extends EncryptableFieldEntity
     /**
      * Get client_secret.
      *
-     * @return string
+     * @return string The client's secret
      */
     public function getClientSecret(): string
     {
@@ -95,11 +95,12 @@ class OAuthClient extends EncryptableFieldEntity
     /**
      * Set client_secret.
      *
-     * @param string $clientSecret
-     * @param bool   $encrypt
+     * @param string $clientSecret The client's secret
+     * @param bool   $encrypt      Whether to encrypt the client's secret
+     *
+     * @throws Exception
      *
      * @return OAuthClient
-     * @throws Exception
      */
     public function setClientSecret(string $clientSecret, bool $encrypt = false): self
     {
@@ -121,10 +122,10 @@ class OAuthClient extends EncryptableFieldEntity
     /**
      * Verify client's secret.
      *
-     * @param string $clientSecret
-     * @param bool   $encrypt
+     * @param string $clientSecret The client's secret
+     * @param bool   $encrypt      Whether the client's secret was encrypted
      *
-     * @return bool
+     * @return bool true when valid, false otherwise
      */
     public function verifyClientSecret(string $clientSecret, bool $encrypt = false): bool
     {
@@ -138,7 +139,7 @@ class OAuthClient extends EncryptableFieldEntity
     /**
      * Get redirect_uri.
      *
-     * @return string
+     * @return string The redirect URI
      */
     public function getRedirectUri(): string
     {
@@ -148,7 +149,7 @@ class OAuthClient extends EncryptableFieldEntity
     /**
      * Set redirect_uri.
      *
-     * @param string $redirectUri
+     * @param string $redirectUri The redirect URI
      *
      * @return $this
      */
@@ -162,7 +163,7 @@ class OAuthClient extends EncryptableFieldEntity
     /**
      * Get scopes.
      *
-     * @return array
+     * @return array An array of all the scopes
      */
     public function getScopes(): array
     {
@@ -172,7 +173,7 @@ class OAuthClient extends EncryptableFieldEntity
     /**
      * Set scopes.
      *
-     * @param array $scopes
+     * @param array $scopes An array of all the scopes
      *
      * @return $this
      */
@@ -184,7 +185,7 @@ class OAuthClient extends EncryptableFieldEntity
     }
 
     /**
-     * @param string $scope
+     * @param string $scope One scope
      *
      * @return $this
      */
@@ -198,7 +199,7 @@ class OAuthClient extends EncryptableFieldEntity
     }
 
     /**
-     * @param string $scope
+     * @param string $scope One scope
      *
      * @return $this
      */
@@ -216,7 +217,7 @@ class OAuthClient extends EncryptableFieldEntity
     /**
      * Get users (in charge).
      *
-     * @return int
+     * @return int The user ID of the user in charge
      */
     public function getUsers(): int
     {
@@ -226,7 +227,7 @@ class OAuthClient extends EncryptableFieldEntity
     /**
      * Set users (in charge).
      *
-     * @param int $users
+     * @param int $users The user ID of the user in charge
      *
      * @return $this
      */
@@ -240,7 +241,7 @@ class OAuthClient extends EncryptableFieldEntity
     /**
      * Get callbackUrl.
      *
-     * @return string
+     * @return string The callback URL
      */
     public function getCallbackUrl(): string
     {
@@ -250,7 +251,7 @@ class OAuthClient extends EncryptableFieldEntity
     /**
      * Set callbackUrl.
      *
-     * @param string $callbackUrl
+     * @param string $callbackUrl The callback URL
      *
      * @return $this
      */
@@ -262,7 +263,7 @@ class OAuthClient extends EncryptableFieldEntity
     }
 
     /**
-     * @return array
+     * @return array An array of all the attributes in the object
      */
     public function toArray(): array
     {

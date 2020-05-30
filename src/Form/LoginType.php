@@ -83,7 +83,8 @@ class LoginType extends AbstractType
                 [
                     'label' => 'login.form.login',
                 ]
-            );
+            )
+        ;
     }
 
     /**

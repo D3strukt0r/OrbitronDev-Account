@@ -61,7 +61,8 @@ class CreateDevApp extends AbstractType
                 [
                     'label' => 'panel.form.create_dev_app.send.label',
                 ]
-            );
+            )
+        ;
     }
 
     /**

@@ -31,14 +31,14 @@ class ApiController extends AbstractController
 
         $requestedWidth = $request->query->getInt('width', 1000);
         $requestedHeight = $request->query->getInt('height', 1000);
-        $rootPictureDir = $kernel->getProjectDir() . '/var/data/profile_pictures';
+        $rootPictureDir = $kernel->getProjectDir().'/var/data/profile_pictures';
         $pictureName = $user->getProfile()->getPicture();
 
         $imagine = new Imagine();
-        if (null !== $pictureName && file_exists($fileName = $rootPictureDir . '/' . $pictureName)) {
+        if (null !== $pictureName && file_exists($fileName = $rootPictureDir.'/'.$pictureName)) {
             $image = $imagine->open($fileName);
         } else {
-            $image = $imagine->open($kernel->getProjectDir() . '/public/img/user.jpg');
+            $image = $imagine->open($kernel->getProjectDir().'/public/img/user.jpg');
         }
         $boxSize = $image->getSize()->getHeight() > $image->getSize()->getWidth() ? $image->getSize()->getHeight(
         ) : $image->getSize()->getWidth();
@@ -82,17 +82,17 @@ class ApiController extends AbstractController
         }
 
         // Generate a unique name for the file before saving it
-        $fileName = md5(uniqid()) . '.' . $file->guessExtension();
+        $fileName = md5(uniqid()).'.'.$file->guessExtension();
 
         // Prepare the directory
-        $directory = $this->get('kernel')->getProjectDir() . '/var/data/profile_pictures';
+        $directory = $this->get('kernel')->getProjectDir().'/var/data/profile_pictures';
         if (!file_exists($directory)) {
             mkdir($directory, 0777, true);
         }
 
         // Remove old picture
         $oldPictureName = $user->getProfile()->getPicture();
-        $oldPicture = realpath($directory . '/' . $oldPictureName);
+        $oldPicture = realpath($directory.'/'.$oldPictureName);
         if ((null !== $oldPictureName || (is_string($oldPictureName) && $oldPictureName > 0)) && file_exists(
                 $oldPicture
             ) && is_writable($oldPicture)) {
@@ -115,7 +115,7 @@ class ApiController extends AbstractController
         // and session.upload_progress.name:
         $session = $this->get('session');
 
-        $s = $session->get('upload_progress_' . (int) ($request->query->get('PHP_SESSION_UPLOAD_PROGRESS')));
+        $s = $session->get('upload_progress_'.(int) ($request->query->get('PHP_SESSION_UPLOAD_PROGRESS')));
         $progress = [
             'lengthComputable' => true,
             'loaded' => $s['bytes_processed'],
@@ -144,13 +144,13 @@ class ApiController extends AbstractController
         }
 
         if (null !== $key) {
-            if (is_callable('\\App\\Controller\\Panel\\' . $list[$key]['view'])) {
+            if (is_callable('\\App\\Controller\\Panel\\'.$list[$key]['view'])) {
                 $view = $list[$key]['view'];
             }
         }
 
         return $this->forward(
-            'App\\Controller\\Panel\\' . $view,
+            'App\\Controller\\Panel\\'.$view,
             [
                 'request' => $request,
             ]

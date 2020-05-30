@@ -36,30 +36,33 @@ class SetupController extends AbstractController
                 $application->run(new ArrayInput(['command' => 'doctrine:schema:create', '--force']), new NullOutput());
                 $output .= '[ <span style="color:green">OK</span> ] Database updated<br />';
             } catch (\Exception $exception) {
-                $output .= '[<span style="color:red">FAIL</span>] Database updated (' . $exception->getMessage(
-                    ) . ')<br />';
+                $output .= '[<span style="color:red">FAIL</span>] Database updated ('.$exception->getMessage(
+                    ).')<br />';
             }
             try {
                 $sessionHandlerService->createTable();
                 $output .= '[ <span style="color:green">OK</span> ] Session table added<br />';
             } catch (\Exception $exception) {
-                $output .= '[<span style="color:red">FAIL</span>] Session table added (' . $exception->getMessage(
-                    ) . ')<br />';
+                $output .= '[<span style="color:red">FAIL</span>] Session table added ('.$exception->getMessage(
+                    ).')<br />';
             }
             try {
                 $subscriptions = [];
                 $subscriptions[] = (new SubscriptionType())
                     ->setTitle('Basic')
                     ->setPrice('0')
-                    ->setPermissions([]);
+                    ->setPermissions([])
+                ;
                 $subscriptions[] = (new SubscriptionType())
                     ->setTitle('Premium')
                     ->setPrice('10')
-                    ->setPermissions(['web_service', 'support']);
+                    ->setPermissions(['web_service', 'support'])
+                ;
                 $subscriptions[] = (new SubscriptionType())
                     ->setTitle('Enterprise')
                     ->setPrice('30')
-                    ->setPermissions(['web_service', 'web_service_multiple', 'support']);
+                    ->setPermissions(['web_service', 'web_service_multiple', 'support'])
+                ;
 
                 foreach ($subscriptions as $item) {
                     $em->persist($item);
@@ -67,8 +70,8 @@ class SetupController extends AbstractController
                 $em->flush();
                 $output .= '[ <span style="color:green">OK</span> ] Default subscription types added<br />';
             } catch (\Exception $exception) {
-                $output .= '[<span style="color:red">FAIL</span>] Default subscription types added (' . $exception->getMessage(
-                    ) . ')<br />';
+                $output .= '[<span style="color:red">FAIL</span>] Default subscription types added ('.$exception->getMessage(
+                    ).')<br />';
             }
             try {
                 $scope = [];
@@ -76,47 +79,56 @@ class SetupController extends AbstractController
                     ->setScope('user:id')
                     ->setName('User ID')
                     ->setDescription('Your unique user id')
-                    ->setDefault(true);
+                    ->setDefault(true)
+                ;
                 $scope[] = (new OAuthScope())
                     ->setScope('user:username')
                     ->setName('Username')
                     ->setDescription('Your unique username')
-                    ->setDefault(false);
+                    ->setDefault(false)
+                ;
                 $scope[] = (new OAuthScope())
                     ->setScope('user:email')
                     ->setName('Email address')
                     ->setDescription('Your email address')
-                    ->setDefault(false);
+                    ->setDefault(false)
+                ;
                 $scope[] = (new OAuthScope())
                     ->setScope('user:name')
                     ->setName('Profile -> First name')
                     ->setDescription('Your first name')
-                    ->setDefault(false);
+                    ->setDefault(false)
+                ;
                 $scope[] = (new OAuthScope())
                     ->setScope('user:surname')
                     ->setName('Profile -> Surname')
                     ->setDescription('Your surname')
-                    ->setDefault(false);
+                    ->setDefault(false)
+                ;
                 $scope[] = (new OAuthScope())
                     ->setScope('user:birthday')
                     ->setName('Profile -> Birthday')
                     ->setDescription('Your birthday')
-                    ->setDefault(false);
+                    ->setDefault(false)
+                ;
                 $scope[] = (new OAuthScope())
                     ->setScope('user:activeaddresses')
                     ->setName('Profile -> Default address')
                     ->setDescription('The current default address (requires access to all addresses)')
-                    ->setDefault(false);
+                    ->setDefault(false)
+                ;
                 $scope[] = (new OAuthScope())
                     ->setScope('user:addresses')
                     ->setName('Profile -> All addresses')
                     ->setDescription('All your saved addresses')
-                    ->setDefault(false);
+                    ->setDefault(false)
+                ;
                 $scope[] = (new OAuthScope())
                     ->setScope('user:subscription')
                     ->setName('Subscription status')
                     ->setDescription('Your current subscription status')
-                    ->setDefault(false);
+                    ->setDefault(false)
+                ;
 
                 foreach ($scope as $item) {
                     $em->persist($item);
@@ -124,12 +136,12 @@ class SetupController extends AbstractController
                 $em->flush();
                 $output .= '[ <span style="color:green">OK</span> ] Default OAuth2 scopes added<br />';
             } catch (\Exception $exception) {
-                $output .= '[<span style="color:red">FAIL</span>] Default OAuth2 scopes added (' . $exception->getMessage(
-                    ) . ')<br />';
+                $output .= '[<span style="color:red">FAIL</span>] Default OAuth2 scopes added ('.$exception->getMessage(
+                    ).')<br />';
             }
 
             return new Response(
-                '<body style="background-color: black;color: white;"><pre>' . $output . '</pre></body>'
+                '<body style="background-color: black;color: white;"><pre>'.$output.'</pre></body>'
             );
         }
         throw $this->createNotFoundException('The given key is wrong');

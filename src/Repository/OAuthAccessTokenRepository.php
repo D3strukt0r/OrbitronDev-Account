@@ -23,10 +23,10 @@ class OAuthAccessTokenRepository extends EntityRepository implements AccessToken
 
     public function setAccessToken($oauthToken, $clientIdentifier, $userEmail, $expires, $scope = null)
     {
-        /** @var \App\Entity\OAuthClient $client */
+        /** @var OAuthClient $client */
         $client = $this->_em->getRepository(OAuthClient::class)->findOneBy(['client_identifier' => $clientIdentifier]);
 
-        /** @var \App\Entity\User $user */
+        /** @var User $user */
         $user = $this->_em->getRepository(User::class)->findOneBy(['id' => $userEmail]);
 
         $token = OAuthAccessToken::fromArray(

@@ -97,7 +97,8 @@ class DeveloperController extends AbstractController
                 ->setClientSecret(TokenGenerator::createRandomToken(['use_openssl' => false]))
                 ->setRedirectUri($formData['redirect_uri'])
                 ->setScopes($formData['scopes'])
-                ->setUsers($user->getId());
+                ->setUsers($user->getId())
+            ;
 
             $entityManager->persist($addClient);
             $entityManager->flush();

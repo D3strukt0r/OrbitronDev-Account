@@ -60,7 +60,7 @@ class OAuthAuthorizationCode
     /**
      * Get id.
      *
-     * @return int
+     * @return int The ID
      */
     public function getId(): int
     {
@@ -70,7 +70,7 @@ class OAuthAuthorizationCode
     /**
      * Get code.
      *
-     * @return string
+     * @return string The code
      */
     public function getCode(): string
     {
@@ -80,7 +80,7 @@ class OAuthAuthorizationCode
     /**
      * Set code.
      *
-     * @param string $code
+     * @param string $code The code
      *
      * @return $this
      */
@@ -94,7 +94,7 @@ class OAuthAuthorizationCode
     /**
      * Get client_id.
      *
-     * @return string
+     * @return string The client ID
      */
     public function getClientId(): string
     {
@@ -104,7 +104,7 @@ class OAuthAuthorizationCode
     /**
      * Get user_identifier.
      *
-     * @return int
+     * @return int The user ID
      */
     public function getUserId(): int
     {
@@ -114,7 +114,7 @@ class OAuthAuthorizationCode
     /**
      * Get expires.
      *
-     * @return DateTime
+     * @return DateTime The expiration date
      */
     public function getExpires(): DateTime
     {
@@ -124,7 +124,7 @@ class OAuthAuthorizationCode
     /**
      * Set expires.
      *
-     * @param DateTime $expires
+     * @param DateTime $expires The expiration date
      *
      * @return $this
      */
@@ -138,7 +138,7 @@ class OAuthAuthorizationCode
     /**
      * Get redirect_uri.
      *
-     * @return string
+     * @return string The redirect URI
      */
     public function getRedirectUri(): string
     {
@@ -148,7 +148,7 @@ class OAuthAuthorizationCode
     /**
      * Set redirect_uri.
      *
-     * @param string $redirectUri
+     * @param string $redirectUri The redirect URI
      *
      * @return $this
      */
@@ -162,7 +162,7 @@ class OAuthAuthorizationCode
     /**
      * Get scope.
      *
-     * @return string
+     * @return string The scope
      */
     public function getScope(): string
     {
@@ -172,7 +172,7 @@ class OAuthAuthorizationCode
     /**
      * Set scope.
      *
-     * @param string $scope
+     * @param string $scope The scope
      *
      * @return $this
      */
@@ -186,7 +186,7 @@ class OAuthAuthorizationCode
     /**
      * Get client.
      *
-     * @return OAuthClient
+     * @return OAuthClient The OAuth client
      */
     public function getClient(): OAuthClient
     {
@@ -196,7 +196,7 @@ class OAuthAuthorizationCode
     /**
      * Set client.
      *
-     * @param OAuthClient|null $client
+     * @param OAuthClient|null $client The OAuth client
      *
      * @return $this
      */
@@ -210,7 +210,7 @@ class OAuthAuthorizationCode
     /**
      * Get user.
      *
-     * @return User
+     * @return User The user
      */
     public function getUser(): User
     {
@@ -220,7 +220,7 @@ class OAuthAuthorizationCode
     /**
      * Set user.
      *
-     * @param User|null $user
+     * @param User|null $user The user
      *
      * @return $this
      */
@@ -232,7 +232,7 @@ class OAuthAuthorizationCode
     }
 
     /**
-     * @return array
+     * @return array An array of all the attributes in the object
      */
     public function toArray(): array
     {
@@ -246,15 +246,15 @@ class OAuthAuthorizationCode
     }
 
     /**
-     * @param $params
+     * @param array $params All the attributes
      *
-     * @return self
+     * @return self An object initialized from the array's information
      */
-    public static function fromArray($params): self
+    public static function fromArray(array $params): self
     {
         $code = new self();
         foreach ($params as $property => $value) {
-            $code->$property = $value;
+            $code->{$property} = $value;
         }
 
         return $code;

@@ -54,7 +54,7 @@ class OAuthRefreshToken
     /**
      * Get id.
      *
-     * @return int
+     * @return int The ID
      */
     public function getId(): int
     {
@@ -64,7 +64,7 @@ class OAuthRefreshToken
     /**
      * Get refresh_token.
      *
-     * @return string
+     * @return string The refresh token
      */
     public function getRefreshToken(): string
     {
@@ -74,7 +74,7 @@ class OAuthRefreshToken
     /**
      * Set refresh_token.
      *
-     * @param string $refresh_token
+     * @param string $refresh_token The refresh token
      *
      * @return $this
      */
@@ -88,7 +88,7 @@ class OAuthRefreshToken
     /**
      * Get client_id.
      *
-     * @return string
+     * @return string The client ID
      */
     public function getClientId(): string
     {
@@ -98,7 +98,7 @@ class OAuthRefreshToken
     /**
      * Get user_identifier.
      *
-     * @return string
+     * @return string The user ID
      */
     public function getUserId(): string
     {
@@ -108,7 +108,7 @@ class OAuthRefreshToken
     /**
      * Get expires.
      *
-     * @return DateTime
+     * @return DateTime The expiration date
      */
     public function getExpires(): DateTime
     {
@@ -118,7 +118,7 @@ class OAuthRefreshToken
     /**
      * Set expires.
      *
-     * @param DateTime $expires
+     * @param DateTime $expires The expiration date
      *
      * @return $this
      */
@@ -132,7 +132,7 @@ class OAuthRefreshToken
     /**
      * Get scope.
      *
-     * @return string
+     * @return string The scopes
      */
     public function getScope(): string
     {
@@ -142,7 +142,7 @@ class OAuthRefreshToken
     /**
      * Set scope.
      *
-     * @param string $scope
+     * @param string $scope The scopes
      *
      * @return $this
      */
@@ -156,7 +156,7 @@ class OAuthRefreshToken
     /**
      * Get client.
      *
-     * @return OAuthClient
+     * @return OAuthClient The OAuth client
      */
     public function getClient(): OAuthClient
     {
@@ -166,7 +166,7 @@ class OAuthRefreshToken
     /**
      * Set client.
      *
-     * @param OAuthClient $client
+     * @param OAuthClient $client The OAuth client
      *
      * @return $this
      */
@@ -180,7 +180,7 @@ class OAuthRefreshToken
     /**
      * Get user.
      *
-     * @return User
+     * @return User The user
      */
     public function getUser(): User
     {
@@ -190,7 +190,7 @@ class OAuthRefreshToken
     /**
      * Set user.
      *
-     * @param User|null $user
+     * @param User|null $user The user
      *
      * @return $this
      */
@@ -202,7 +202,7 @@ class OAuthRefreshToken
     }
 
     /**
-     * @return array
+     * @return array An array of all the attributes in the object
      */
     public function toArray(): array
     {
@@ -216,15 +216,15 @@ class OAuthRefreshToken
     }
 
     /**
-     * @param $params
+     * @param array $params All the attributes
      *
-     * @return self
+     * @return self An object initialized from the array's information
      */
-    public static function fromArray($params): self
+    public static function fromArray(array $params): self
     {
         $token = new self();
         foreach ($params as $property => $value) {
-            $token->$property = $value;
+            $token->{$property} = $value;
         }
 
         return $token;

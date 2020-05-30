@@ -5,7 +5,6 @@ namespace App\Controller\Panel;
 use App\Entity\User;
 use App\Entity\UserPaymentMethods;
 use App\Form\AddPaymentMethod;
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -81,7 +80,8 @@ class PaymentController extends AbstractController
             $obj = (new UserPaymentMethods())
                 ->setUser($user)
                 ->setType($formData['type'])
-                ->setData(json_decode($formData['data'], true));
+                ->setData(json_decode($formData['data'], true))
+            ;
             $user->addPaymentMethod($obj);
 
             $entityManager = $this->getDoctrine()->getManager();

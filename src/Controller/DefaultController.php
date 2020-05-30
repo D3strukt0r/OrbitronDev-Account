@@ -49,8 +49,8 @@ class DefaultController extends AbstractController
     /**
      * @Route("/login", name="login")
      *
-     * @param Request             $request
-     * @param AuthenticationUtils $authUtils
+     * @param Request             $request   The request
+     * @param AuthenticationUtils $authUtils Authentication utilities
      *
      * @return RedirectResponse|Response
      */
@@ -100,12 +100,12 @@ class DefaultController extends AbstractController
     /**
      * @Route("/register", name="register")
      *
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param Request                  $request
-     * @param Swift_Mailer             $mailer
+     * @param EventDispatcherInterface $eventDispatcher The event dispatcher
+     * @param Request                  $request         The request
+     * @param Swift_Mailer             $mailer          The mailer
      *
-     * @return RedirectResponse|Response
      * @throws Exception
+     * @return RedirectResponse|Response
      */
     public function register(EventDispatcherInterface $eventDispatcher, Request $request, Swift_Mailer $mailer)
     {
@@ -132,22 +132,24 @@ class DefaultController extends AbstractController
                 ->setLastOnlineAt(new \DateTime())
                 ->setCreatedIp($request->getClientIp())
                 ->setLastIp($request->getClientIp())
-                ->setDeveloperStatus(false);
+                ->setDeveloperStatus(false)
+            ;
 
-            $userProfile = (new UserProfiles())
-                ->setUser($user);
+            $userProfile = (new UserProfiles())->setUser($user);
             $user->setProfile($userProfile);
 
             /** @var SubscriptionType $defaultSubscription */
             $defaultSubscription = $this->getDoctrine()->getRepository(SubscriptionType::class)->find(
                 AccountHelper::$settings['subscription']['default']
-            );
+            )
+            ;
 
             $userSubscription = (new UserSubscription())
                 ->setUser($user)
                 ->setSubscription($defaultSubscription)
                 ->setActivatedAt(new \DateTime())
-                ->setExpiresAt(new \DateTime());
+                ->setExpiresAt(new \DateTime())
+            ;
             $user->setSubscription($userSubscription);
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -171,7 +173,8 @@ class DefaultController extends AbstractController
                         ]
                     ),
                     'text/html'
-                );
+                )
+            ;
             $mailSent = $mailer->send($message);
 
             if ($mailSent) {
@@ -240,12 +243,12 @@ class DefaultController extends AbstractController
         }
 
         if (null !== $key) {
-            if (is_callable('\\App\\Controller\\Panel\\' . $list[$key]['view'])) {
+            if (is_callable('\\App\\Controller\\Panel\\'.$list[$key]['view'])) {
                 $view = $list[$key]['view'];
             }
         }
         return $this->forward(
-            'App\\Controller\\Panel\\' . $view,
+            'App\\Controller\\Panel\\'.$view,
             [
                 'navigation' => $navigationLinks,
                 'request' => $request,
@@ -271,14 +274,12 @@ class DefaultController extends AbstractController
         $function = implode('', $functionProcess);
         $function = lcfirst($function);
 
-        $result = $this->forward(
-            'App\\Controller\\ApiController::' . $function,
+        return $this->forward(
+            'App\\Controller\\ApiController::'.$function,
             [
                 'request' => $request,
             ]
         );
-
-        return $result;
     }
 
     /**
@@ -286,8 +287,8 @@ class DefaultController extends AbstractController
      *
      * @param Request $request
      *
-     * @return RedirectResponse|Response
      * @throws Exception
+     * @return RedirectResponse|Response
      */
     public function forgot(Request $request)
     {
@@ -377,7 +378,8 @@ class DefaultController extends AbstractController
                             ]
                         ),
                         'text/html'
-                    );
+                    )
+                ;
                 $this->get('mailer')->send($message);
 
                 // Email sent
@@ -386,7 +388,8 @@ class DefaultController extends AbstractController
                 // Email does not exist
                 $forgotForm->get('email')->addError(
                     new FormError('A user with this email does not exist.')
-                ); // TODO: Missing translation
+                )
+                ; // TODO: Missing translation
             }
         }
 
@@ -453,7 +456,8 @@ class DefaultController extends AbstractController
                         ]
                     ),
                     'text/html'
-                );
+                )
+            ;
             $this->get('mailer')->send($message);
 
             $this->addFlash('success', 'Email sent'); // TODO: Missing translation
