@@ -17,11 +17,6 @@
         <!-- ###+ doctrine/doctrine-bundle ### -->
         <server name="DATABASE_URL" value="sqlite:///var/data/test.sqlite" />
         <!-- ###- doctrine/doctrine-bundle ### -->
-
-        <!-- ###+ symfony/swiftmailer-bundle ### -->
-        <server name="MAILER_URL" value="null://localhost" />
-        <!-- ###- symfony/swiftmailer-bundle ### -->
-
         <!-- ###+ symfony/framework-bundle ### -->
         <server name="APP_ENV" value="test" force="true" />
         <server name="APP_DEBUG" value="1" />

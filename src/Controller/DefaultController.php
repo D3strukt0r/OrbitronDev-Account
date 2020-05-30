@@ -14,8 +14,6 @@ use App\Service\AccountHelper;
 use App\Service\AdminControlPanel;
 use App\Service\TokenGenerator;
 use Exception;
-use Swift_Mailer;
-use Swift_Message;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormError;
@@ -23,6 +21,10 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -102,13 +104,11 @@ class DefaultController extends AbstractController
      *
      * @param EventDispatcherInterface $eventDispatcher The event dispatcher
      * @param Request                  $request         The request
-     * @param Swift_Mailer             $mailer          The mailer
-     *
-     * @throws Exception
+     * @param MailerInterface          $mailer          The mailer
      *
      * @return RedirectResponse|Response
      */
-    public function register(EventDispatcherInterface $eventDispatcher, Request $request, Swift_Mailer $mailer)
+    public function register(EventDispatcherInterface $eventDispatcher, Request $request, MailerInterface $mailer)
     {
         //////////// TEST IF USER IS LOGGED IN ////////////
         /** @var User|null $user */
@@ -161,26 +161,24 @@ class DefaultController extends AbstractController
             $tokenGenerator = new TokenGenerator($entityManager);
             $token = $tokenGenerator->generateToken('confirm_email', (new \DateTime())->modify('+1 day'));
 
-            $message = (new Swift_Message())
-                ->setSubject('[Account] Email activation')
-                ->setFrom(['no-reply-account@orbitrondev.org' => 'OrbitronDev'])
-                ->setTo([$formData['email']])
-                ->setBody(
+            $message = (new Email())
+                ->from(new Address('no-reply-account@orbitrondev.org', 'OrbitronDev'))
+                ->to(new Address($formData['email']))
+                ->subject('[Account] Email activation')
+                ->html(
                     $this->renderView(
                         'mail/confirm-email.html.twig',
                         [
                             'email' => $formData['email'],
                             'token' => $token,
                         ]
-                    ),
-                    'text/html'
+                    )
                 )
             ;
-            $mailSent = $mailer->send($message);
-
-            if ($mailSent) {
+            try {
+                $mailer->send($message);
                 $this->addFlash('successful', 'register.confirmation_mail.sent');
-            } else {
+            } catch (TransportExceptionInterface $e) {
                 $this->addFlash('failed', 'register.confirmation_mail.not_sent');
             }
             $url = $request->query->has('page') ? urldecode($request->query->get('page')) : $this->generateUrl(
@@ -286,13 +284,14 @@ class DefaultController extends AbstractController
     /**
      * @Route("/forgot", name="forgot")
      *
-     * @param Request $request The request
+     * @param Request         $request The request
+     * @param MailerInterface $mailer  The mailer
      *
      * @throws Exception
      *
      * @return RedirectResponse|Response
      */
-    public function forgot(Request $request)
+    public function forgot(Request $request, MailerInterface $mailer)
     {
         //////////// TEST IF USER IS LOGGED IN ////////////
         /** @var User|null $user */
@@ -367,22 +366,24 @@ class DefaultController extends AbstractController
                     ['user_id' => $user->getId()]
                 );
 
-                $message = (new Swift_Message())
-                    ->setSubject('[Account] Reset password')
-                    ->setFrom(['no-reply-account@orbitrondev.org' => 'OrbitronDev'])
-                    ->setTo([$user->getEmail()])
-                    ->setBody(
+                $message = (new Email())
+                    ->from(new Address('no-reply-account@orbitrondev.org', 'OrbitronDev'))
+                    ->to(new Address($user->getEmail()))
+                    ->subject('[Account] Reset password')
+                    ->html(
                         $this->renderView(
                             'mail/reset-password.html.twig',
                             [
                                 'email' => $user->getEmail(),
                                 'token' => $token,
                             ]
-                        ),
-                        'text/html'
+                        )
                     )
                 ;
-                $this->get('mailer')->send($message);
+                try {
+                    $mailer->send($message);
+                } catch (TransportExceptionInterface $e) {
+                }
 
                 // Email sent
                 $this->addFlash('success', 'Email sent'); // TODO: Missing translation
@@ -407,11 +408,12 @@ class DefaultController extends AbstractController
     /**
      * @Route("/confirm-email", name="confirm")
      *
-     * @param Request $request The request
+     * @param Request         $request The request
+     * @param MailerInterface $mailer  The mailer
      *
      * @return Response
      */
-    public function confirm(Request $request)
+    public function confirm(Request $request, MailerInterface $mailer)
     {
         /** @var User|null $user */
         $user = $this->getUser();
@@ -445,24 +447,28 @@ class DefaultController extends AbstractController
             $tokenGenerator = new TokenGenerator($entityManager);
             $token = $tokenGenerator->generateToken('confirm_email', (new \DateTime())->modify('+1 day'));
 
-            $message = (new Swift_Message())
-                ->setSubject('[Account] Email activation')
-                ->setFrom(['no-reply-account@orbitrondev.org' => 'OrbitronDev'])
-                ->setTo([$user->getEmail()])
-                ->setBody(
+            $message = (new Email())
+                ->from(new Address('no-reply-account@orbitrondev.org', 'OrbitronDev'))
+                ->to(new Address($user->getEmail()))
+                ->subject('[Account] Email activation')
+                ->html(
                     $this->renderView(
                         'mail/confirm-email.html.twig',
                         [
                             'email' => $user->getEmail(),
                             'token' => $token,
                         ]
-                    ),
-                    'text/html'
+                    )
                 )
             ;
-            $this->get('mailer')->send($message);
-
-            $this->addFlash('success', 'Email sent'); // TODO: Missing translation
+            try {
+                $mailer->send($message);
+                // TODO: Missing translation
+                $this->addFlash('success', 'Email sent');
+            } catch (TransportExceptionInterface $e) {
+                // TODO: Missing translation
+                $this->addFlash('failed', 'Email not sent');
+            }
         }
 
         return $this->render(
