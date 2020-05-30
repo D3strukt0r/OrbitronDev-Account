@@ -1,4 +1,6 @@
 {
+    "name": "generation-2/account",
+    "description": "Account service of the Generation 2 software bundle",
     "type": "project",
     "license": "proprietary",
     "require": {
