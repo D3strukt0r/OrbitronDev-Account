@@ -46,7 +46,7 @@ services:
       ###< symfony/framework-bundle ###
 
       ###> symfony/mailer ###
-      # MAILER_DSN=smtp://localhost
+      MAILER_DSN: null://null
       ###< symfony/mailer ###
 
       ###> doctrine/doctrine-bundle ###
@@ -60,8 +60,9 @@ services:
       ###> google/recaptcha ###
       # To use Google Recaptcha, you must register a site on Recaptcha's admin panel:
       # https://www.google.com/recaptcha/admin
-      GOOGLE_RECAPTCHA_SITE_KEY: 
-      GOOGLE_RECAPTCHA_SECRET: 
+      # https://developers.google.com/recaptcha/docs/faq#id-like-to-run-automated-tests-with-recaptcha.-what-should-i-do
+      GOOGLE_RECAPTCHA_SITE_KEY: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
+      GOOGLE_RECAPTCHA_SECRET: 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
       ###< google/recaptcha ###
 
   web:
