@@ -17,6 +17,7 @@ class ConfirmEmailType extends AbstractType
                 [
                     'label' => 'confirm.form.send.label',
                 ]
-            );
+            )
+        ;
     }
 }

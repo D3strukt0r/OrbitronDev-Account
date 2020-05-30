@@ -16,7 +16,7 @@ class TokenGenerator
     /**
      * @var Token|null
      */
-    private $token = null;
+    private $token;
 
     /**
      * @var ObjectManager|null
@@ -31,8 +31,8 @@ class TokenGenerator
     /**
      * TokenGenerator constructor.
      *
-     * @param ObjectManager $entityManager
-     * @param string|null   $token
+     * @param ObjectManager $entityManager The entity manager
+     * @param string|null   $token         The token
      */
     public function __construct(ObjectManager $entityManager, $token = null)
     {
@@ -59,9 +59,9 @@ class TokenGenerator
     }
 
     /**
-     * @param string        $job
-     * @param DateTime|null $validUntil
-     * @param array|null    $information
+     * @param string        $job         The job
+     * @param DateTime|null $validUntil  Date until valid
+     * @param array|null    $information Additional information
      *
      * @return string
      */
@@ -87,24 +87,6 @@ class TokenGenerator
         }
 
         return null;
-    }
-
-    /**
-     * @return string
-     */
-    private function getRandomNumber()
-    {
-        $nbBytes = 32;
-        // try OpenSSL
-        if ($this->useOpenSsl) {
-            $bytes = openssl_random_pseudo_bytes($nbBytes, $strong);
-            if (false !== $bytes && true === $strong) {
-                return $bytes;
-            }
-            throw new \UnexpectedValueException('OpenSSL did not produce a secure random number.');
-        }
-
-        return hash('sha256', uniqid(mt_rand(), true), true);
     }
 
     /**
@@ -186,5 +168,23 @@ class TokenGenerator
         }
 
         return null;
+    }
+
+    /**
+     * @return string
+     */
+    private function getRandomNumber()
+    {
+        $nbBytes = 32;
+        // try OpenSSL
+        if ($this->useOpenSsl) {
+            $bytes = openssl_random_pseudo_bytes($nbBytes, $strong);
+            if (false !== $bytes && true === $strong) {
+                return $bytes;
+            }
+            throw new \UnexpectedValueException('OpenSSL did not produce a secure random number.');
+        }
+
+        return hash('sha256', uniqid(mt_rand(), true), true);
     }
 }

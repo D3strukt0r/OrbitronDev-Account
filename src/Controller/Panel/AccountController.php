@@ -160,6 +160,7 @@ class AccountController extends AbstractController
             $entityManager->flush();
 
             OAuthController::sendCallback($entityManager, $user);
+
             return $this->redirectToRoute('panel', ['page' => 'profile']);
         }
 

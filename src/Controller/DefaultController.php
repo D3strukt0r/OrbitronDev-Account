@@ -105,6 +105,7 @@ class DefaultController extends AbstractController
      * @param Swift_Mailer             $mailer          The mailer
      *
      * @throws Exception
+     *
      * @return RedirectResponse|Response
      */
     public function register(EventDispatcherInterface $eventDispatcher, Request $request, Swift_Mailer $mailer)
@@ -206,17 +207,16 @@ class DefaultController extends AbstractController
         );
     }
 
-
     /**
      * @Route("/p/{page}", name="panel")
      *
-     * @param KernelInterface $kernel
-     * @param Request         $request
-     * @param                 $page
+     * @param KernelInterface $kernel  The kernel
+     * @param Request         $request The request
+     * @param string          $page    The page
      *
      * @return Response
      */
-    public function panel(KernelInterface $kernel, Request $request, $page)
+    public function panel(KernelInterface $kernel, Request $request, string $page)
     {
         //////////// TEST IF USER IS LOGGED IN ////////////
         /** @var User|null $user */
@@ -247,6 +247,7 @@ class DefaultController extends AbstractController
                 $view = $list[$key]['view'];
             }
         }
+
         return $this->forward(
             'App\\Controller\\Panel\\'.$view,
             [
@@ -259,12 +260,12 @@ class DefaultController extends AbstractController
     /**
      * @Route("/api/{function}", name="api")
      *
-     * @param Request $request
-     * @param         $function
+     * @param Request $request  The request
+     * @param string  $function The function
      *
      * @return Response
      */
-    public function api(Request $request, $function)
+    public function api(Request $request, string $function)
     {
         // Get function name
         $functionProcess = explode('_', $function);
@@ -285,9 +286,10 @@ class DefaultController extends AbstractController
     /**
      * @Route("/forgot", name="forgot")
      *
-     * @param Request $request
+     * @param Request $request The request
      *
      * @throws Exception
+     *
      * @return RedirectResponse|Response
      */
     public function forgot(Request $request)
@@ -405,7 +407,7 @@ class DefaultController extends AbstractController
     /**
      * @Route("/confirm-email", name="confirm")
      *
-     * @param Request $request
+     * @param Request $request The request
      *
      * @return Response
      */

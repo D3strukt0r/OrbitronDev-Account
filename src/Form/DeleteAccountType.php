@@ -17,6 +17,7 @@ class DeleteAccountType extends AbstractType
                 [
                     'label' => 'panel.form.delete_account.send.label',
                 ]
-            );
+            )
+        ;
     }
 }

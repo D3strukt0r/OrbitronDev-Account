@@ -85,8 +85,12 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
 
     /**
      * @var Collection
-     * @ORM\OneToMany(targetEntity="UserPaymentMethods", mappedBy="user", cascade={"persist", "remove"},
-     *                                                   orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="UserPaymentMethods",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
      */
     protected $paymentMethods;
 
@@ -98,8 +102,12 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
 
     /**
      * @var UserSubscription
-     * @ORM\OneToOne(targetEntity="UserSubscription", mappedBy="user", cascade={"persist", "remove"},
-     *                                                orphanRemoval=true)
+     * @ORM\OneToOne(
+     *     targetEntity="UserSubscription",
+     *     mappedBy="user",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
      */
     protected $subscription;
 
@@ -181,6 +189,7 @@ class User extends EncryptableFieldEntity implements UserInterface, \Serializabl
      * @param string $password The password
      *
      * @throws Exception
+     *
      * @return $this
      */
     public function setPassword(string $password): self

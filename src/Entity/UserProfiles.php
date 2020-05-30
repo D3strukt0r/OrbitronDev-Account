@@ -72,8 +72,12 @@ class UserProfiles
 
     /**
      * @var Collection
-     * @ORM\OneToMany(targetEntity="UserAddress", mappedBy="userProfile", cascade={"persist", "remove"},
-     *                                            orphanRemoval=true)
+     * @ORM\OneToMany(
+     *     targetEntity="UserAddress",
+     *     mappedBy="userProfile",
+     *     cascade={"persist", "remove"},
+     *     orphanRemoval=true
+     * )
      */
     protected $addresses;
 

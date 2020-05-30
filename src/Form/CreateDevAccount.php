@@ -17,6 +17,7 @@ class CreateDevAccount extends AbstractType
                 [
                     'label' => 'panel.form.create_dev_account.send.label',
                 ]
-            );
+            )
+        ;
     }
 }
