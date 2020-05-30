@@ -1,3 +1,6 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
@@ -13,9 +16,15 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-        public: false       # Allows optimizing the container by removing unused services; this also means
+        #public: false       # Allows optimizing the container by removing unused services; this also means
                             # fetching services directly from the container via $container->get() won't work.
                             # The best practice is to be explicit about your dependencies anyway.
+
+    # Uncomment any lines below to activate that Twig extension
+    #Twig\Extension\ArrayExtension: ~
+    #Twig\Extension\DateExtension: ~
+    #Twig\Extension\IntlExtension: ~
+    #Twig\Extension\TextExtension: ~
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -57,10 +66,13 @@ services:
 
     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
         arguments:
-            # - 'mysql:dbname=mydatabase'
+            - '%env(DATABASE_URL)%'
+
+            # you can also use PDO configuration, but requires passing two arguments
+            # - 'mysql:dbname=mydatabase; host=myhost; port=myport'
             # - { db_username: myuser, db_password: mypassword }
 
             # If you're using Doctrine & want to re-use that connection, then:
             # comment-out the above 2 lines and uncomment the line below
-            - !service { class: PDO, factory: 'database_connection:getWrappedConnection' }
-            - { lock_mode: 1 }
+            #- !service { class: PDO, factory: 'database_connection:getWrappedConnection' }
+            #- { lock_mode: 1 }
