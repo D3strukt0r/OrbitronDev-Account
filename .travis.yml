@@ -21,12 +21,10 @@ env:
   global:
     - SYMFONY_PHPUNIT_DIR="$HOME/symfony-bridge/.phpunit"
 
-before_install:
-  - echo "memory_limit=2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
-
 install:
   - rm composer.lock
-  - composer install
+  # https://stackoverflow.com/questions/51341463/unable-to-change-travis-ci-php-memory-limit/51381888#comment89735616_51381888
+  - COMPOSER_MEMORY_LIMIT=-1 composer install
   - ./vendor/bin/simple-phpunit install
 
 script:
