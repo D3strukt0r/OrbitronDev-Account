@@ -154,7 +154,6 @@
       <extension name="ffmpeg" enabled="false" />
       <extension name="fileinfo" enabled="false" />
       <extension name="ftp" enabled="false" />
-      <extension name="gd" enabled="false" />
       <extension name="gearman" enabled="false" />
       <extension name="geoip" enabled="false" />
       <extension name="geos" enabled="false" />
@@ -177,7 +176,6 @@
       <extension name="libsodium" enabled="false" />
       <extension name="libxml" enabled="false" />
       <extension name="mailparse" enabled="false" />
-      <extension name="mbstring" enabled="false" />
       <extension name="mcrypt" enabled="false" />
       <extension name="memcache" enabled="false" />
       <extension name="memcached" enabled="false" />

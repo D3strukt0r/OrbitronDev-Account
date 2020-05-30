@@ -2,13 +2,21 @@
 
 set -eux
 
+# Get all php requirements
+# shellcheck disable=SC2086
 apk add --no-cache --virtual .build-deps \
     $PHPIZE_DEPS \
+	freetype-dev \
+	libjpeg-turbo-dev \
+	libpng-dev \
 	icu-dev
+docker-php-ext-configure gd --with-freetype --with-jpeg >/dev/null
 docker-php-ext-install -j "$(nproc)" \
+	gd \
 	intl \
 	opcache \
-	pdo_mysql
+	pdo_mysql \
+	>/dev/null
 
 # Find packages to keep, so we can safely delete dev packages
 RUN_DEPS="$(
@@ -56,7 +64,7 @@ cd /app
 chown www-data:www-data -R .
 find . -type d -exec chmod 755 {} \;
 find . -type f -exec chmod 644 {} \;
+chmod 755 bin/*
 
 # Cleanup
 rm -r /build
-#rm /usr/bin/composer

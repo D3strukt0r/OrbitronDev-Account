@@ -31,8 +31,8 @@ fi
 } >"$PHP_INI_DIR/conf.d/misc.ini"
 
 # Add custom upload limit
-if [[ ! -z "${UPLOAD_LIMIT}" ]]; then
-    echo "Adding the custom upload limit."
+if [[ -n "${UPLOAD_LIMIT}" ]]; then
+	echo "Adding the custom upload limit of $UPLOAD_LIMIT."
     {
         echo "upload_max_filesize = $UPLOAD_LIMIT"
         # TODO: "post_max_size" should be greater than "upload_max_filesize".
