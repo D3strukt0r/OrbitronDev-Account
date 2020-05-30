@@ -6,10 +6,6 @@ use Psr\Container\ContainerInterface;
 
 class AdminControlPanel
 {
-    private static $list = [];
-
-    private static $tree = [];
-
     const DEFAULT_GROUP = [
         'parent' => 'root',
         'id' => '',
@@ -29,6 +25,10 @@ class AdminControlPanel
             'tabindex' => -1,
         ],
     ];
+
+    private static $list = [];
+
+    private static $tree = [];
 
     /**
      * https://stackoverflow.com/a/27360654/4156752 (Thanks to Thunderstriker, arthur and basil).
@@ -58,9 +58,7 @@ class AdminControlPanel
             return $siblings;
         };
 
-        $tree = $fnBuilder($grouped['root']);
-
-        return $tree;
+        return $fnBuilder($grouped['root']);
     }
 
     public static function loadLibs(string $rootDir, ContainerInterface $container = null)
@@ -131,11 +129,14 @@ class AdminControlPanel
 
         if ('js' === $page_changer) {
             return 'href="javascript:ControlPanel.changePage(\''.$page_name.'\')" data-toggle="page"';
-        } elseif ('url_js' === $page_changer) {
+        }
+        if ('url_js' === $page_changer) {
             return 'href="javascript:ControlPanel.changePage(\''.$page_name.'\', true)" data-toggle="page"';
-        } elseif ('hash' === $page_changer) {
+        }
+        if ('hash' === $page_changer) {
             return 'href="#/'.$page_name.'"';
-        } elseif ('url' === $page_changer) {
+        }
+        if ('url' === $page_changer) {
             return 'href="https://account.orbitrondev.org/panel/'.$page_name.'"';
         }
 

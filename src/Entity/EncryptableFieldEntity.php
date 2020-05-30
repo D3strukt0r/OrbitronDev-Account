@@ -23,7 +23,7 @@ class EncryptableFieldEntity
      * @param string $encryptedValue
      * @param string $value
      *
-     * @return bool
+     * @return bool Whether the encrypted value corresponds the value
      */
     protected function verifyEncryptedFieldValue($encryptedValue, $value): bool
     {

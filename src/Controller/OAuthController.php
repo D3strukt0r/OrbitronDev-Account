@@ -32,8 +32,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class OAuthController extends AbstractController
 {
-    /** @var Server $oauthServer */
-    private $oauthServer = null;
+    /**
+     * @var Server
+     */
+    private $oauthServer;
 
     public function oauthServer()
     {
@@ -95,11 +97,12 @@ class OAuthController extends AbstractController
         // Add the "Refresh Token" grant type
         $this->oauthServer->addGrantType(
             new RefreshToken(
-                $refreshTokenStorage, [
-                                        // the refresh token grant request will have a "refresh_token" field
-                                        // with a new refresh token on each request
-                                        'always_issue_new_refresh_token' => true,
-                                    ]
+                $refreshTokenStorage,
+                [
+                    // the refresh token grant request will have a "refresh_token" field
+                    // with a new refresh token on each request
+                    'always_issue_new_refresh_token' => true,
+                ]
             )
         );
     }
@@ -107,7 +110,7 @@ class OAuthController extends AbstractController
     /**
      * @Route("/oauth/authorize", name="oauth_authorize")
      *
-     * @param Request $request
+     * @param Request $request The request
      *
      * @return RedirectResponse|Response
      */
@@ -197,7 +200,7 @@ class OAuthController extends AbstractController
     /**
      * @Route("/oauth/resource", name="oauth_resource")
      *
-     * @param Request $request
+     * @param Request $request The request
      *
      * @return JsonResponse
      */
@@ -244,6 +247,31 @@ class OAuthController extends AbstractController
         }
 
         return $this->json($responseData);
+    }
+
+    public static function sendCallback(ObjectManager $em, User $user, $data = [])
+    {
+        $websites = $em->getRepository(OAuthAccessToken::class)->findBy(['user' => $user]);
+        $callbackList = [];
+        foreach ($websites as $website) {
+            if ($url = $website->getClient()->getCallbackUrl()) {
+                $callbackList[$website->getClientId()] = $url;
+            }
+        }
+        foreach ($callbackList as $service => $url) {
+            $options = [
+                'http' => [
+                    'header' => "Content-type: application/x-www-form-urlencoded\r\n",
+                    'method' => 'POST',
+                    'content' => http_build_query($data),
+                ],
+            ];
+            $context = stream_context_create($options);
+            $result = @file_get_contents($url, false, $context);
+            if (false === $result) {
+                // TODO: Handle error
+            }
+        }
     }
 
     /**
@@ -355,30 +383,5 @@ class OAuthController extends AbstractController
     private function scopePaymentMethods($user)
     {
         return ['payment_methods' => $user->getPaymentMethods()];
-    }
-
-    public static function sendCallback(ObjectManager $em, User $user, $data = [])
-    {
-        $websites = $em->getRepository(OAuthAccessToken::class)->findBy(['user' => $user]);
-        $callbackList = [];
-        foreach ($websites as $website) {
-            if ($url = $website->getClient()->getCallbackUrl()) {
-                $callbackList[$website->getClientId()] = $url;
-            }
-        }
-        foreach ($callbackList as $service => $url) {
-            $options = [
-                'http' => [
-                    'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-                    'method' => 'POST',
-                    'content' => http_build_query($data)
-                ]
-            ];
-            $context = stream_context_create($options);
-            $result = @file_get_contents($url, false, $context);
-            if ($result === false) {
-                // TODO: Handle error
-            }
-        }
     }
 }

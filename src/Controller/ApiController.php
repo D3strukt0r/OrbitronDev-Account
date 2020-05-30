@@ -183,7 +183,8 @@ class ApiController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
 
             return $this->json(['username_updated']);
-        } elseif ('email' === $element) {
+        }
+        if ('email' === $element) {
             if (!$this->isCsrfTokenValid('edit_email', $csrf)) {
                 throw $this->createAccessDeniedException();
             }
