@@ -1,6 +1,11 @@
 language: php
 os: linux
 dist: bionic
+php:
+  - 7.2
+  - 7.3
+  - 7.4
+  
 services:
   - docker
 
@@ -15,30 +20,16 @@ cache:
 env:
   global:
     - SYMFONY_PHPUNIT_DIR="$HOME/symfony-bridge/.phpunit"
-    - SYMFONY_PHPUNIT_VERSION="6.5"
-
-matrix:
-  fast_finish: true
-  include:
-    - php: 7.2
-    - php: 7.3
-    - php: 7.4
-    - php: nightly
-  allow_failures:
-    - php: nightly
-
-before_install:
-  - '[[ "$TRAVIS_PHP_VERSION" == "nightly" ]] || phpenv config-rm xdebug.ini'
-  - composer self-update
 
 install:
+  - rm composer.lock
   - composer install
   - ./vendor/bin/simple-phpunit install
 
 script:
   - ./bin/phpunit
   # this checks that the source code follows the Symfony Code Syntax rules
-  - '[[ "$TRAVIS_PHP_VERSION" == "nightly" ]] || ./vendor/bin/php-cs-fixer fix --diff --dry-run -v'
+  - ./vendor/bin/php-cs-fixer fix --diff --dry-run -v
   # this checks that the YAML config files contain no syntax errors
   - ./bin/console lint:yaml config --parse-tags
   # this checks that the Twig template files contain no syntax errors
@@ -52,3 +43,6 @@ script:
   - composer validate --strict
   # this checks that Doctrine's mapping configurations are valid
   - ./bin/console doctrine:schema:validate --skip-sync -vvv --no-interaction
+
+after_success:
+  - if [[ "$TRAVIS_PHP_VERSION" == "7.4" ]]; then ./docker/build/travis.sh; fi
