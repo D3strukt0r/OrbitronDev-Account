@@ -2,7 +2,21 @@
     "name": "generation-2/account",
     "description": "Account service of the Generation 2 software bundle",
     "type": "project",
-    "license": "proprietary",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Manuele Vaccari",
+            "email": "manuele.vaccari@gmail.com",
+            "homepage": "https://github.com/D3strukt0r",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "email": "manuele.vaccari@gmail.com",
+        "source": "https://github.com/D3strukt0r/generation-2-account-api",
+        "issues": "https://github.com/D3strukt0r/generation-2-account-api/issues",
+        "wiki": "https://github.com/D3strukt0r/generation-2-account-api/wiki"
+    },
     "require": {
         "php": "^7.2.5",
         "ext-ctype": "*",
