@@ -129,14 +129,11 @@ class AdminControlPanel
 
         if ('js' === $page_changer) {
             return 'href="javascript:ControlPanel.changePage(\''.$page_name.'\')" data-toggle="page"';
-        }
-        if ('url_js' === $page_changer) {
+        } elseif ('url_js' === $page_changer) {
             return 'href="javascript:ControlPanel.changePage(\''.$page_name.'\', true)" data-toggle="page"';
-        }
-        if ('hash' === $page_changer) {
+        } elseif ('hash' === $page_changer) {
             return 'href="#/'.$page_name.'"';
-        }
-        if ('url' === $page_changer) {
+        } elseif ('url' === $page_changer) {
             return 'href="https://account.orbitrondev.org/panel/'.$page_name.'"';
         }
 
