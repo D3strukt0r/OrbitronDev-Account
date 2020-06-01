@@ -61,7 +61,7 @@ fi
 
 # Get all vendors
 cd /app
-if [[ "$DEV" == "true" ]]; then
+if [[ "$ENV" == "prod" ]]; then
     composer install --prefer-dist --no-interaction --no-plugins --no-scripts --no-suggest --optimize-autoloader
 else
     composer install --prefer-dist --no-dev --no-interaction --no-plugins --no-scripts --no-suggest --optimize-autoloader
@@ -72,7 +72,7 @@ chown www-data:www-data -R .
 find . -type d -exec chmod 755 {} \;
 find . -type f -exec chmod 644 {} \;
 chmod 755 bin/*
-./bin/console cache:warmup
+./bin/console cache:warmup --env="$ENV"
 
 # Cleanup
 rm -r /build

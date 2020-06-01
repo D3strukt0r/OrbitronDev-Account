@@ -3,7 +3,7 @@
 # ---------
 FROM php:7.4-fpm-alpine AS php
 
-ARG DEV=false
+ARG ENV=prod
 
 COPY docker/bin/php /usr/local/bin
 COPY docker/build/php /build

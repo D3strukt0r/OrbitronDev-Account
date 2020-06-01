@@ -30,7 +30,7 @@ services:
       context: .
       target: php
       args:
-        DEV: "true"
+        ENV: "dev"
     depends_on:
       - db
     networks:
