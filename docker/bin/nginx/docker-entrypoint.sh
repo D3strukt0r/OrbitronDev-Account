@@ -2,18 +2,12 @@
 
 set -eu
 
-# If the user does not pass php-fpm, call whatever he wants to use (e. g. /bin/bash)
-if [[ $1 != "nginx" ]]; then
-    exec "$@"
-    exit
-fi
-
 # Prepare nginx
 # https://github.com/docker-library/docs/issues/496#issuecomment-287927576
 envsubst "$(printf '${%s} ' $(bash -c "compgen -A variable"))" </etc/nginx/nginx.template >/etc/nginx/nginx.conf
 if [[ $USE_HTTPS == "true" ]]; then
     if [[ ! -f "/data/certs/website.crt" || ! -f "/data/certs/website.key" ]]; then
-        echo "Creating SSL certificate ..."
+        # Create certificates
         openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out website.crt -keyout website.key -subj "/C=/ST=/L=/O=/OU=/CN="
 
         if [[ ! -d /data/certs ]]; then
@@ -31,8 +25,7 @@ if [[ $USE_HTTPS == "true" ]]; then
         fi
     fi
 
-    # Link files
-    echo "Linking certificates to /etc/ssl/certs/* ..."
+    # Link certificates
     if [[ -f /etc/ssl/certs/website.crt ]]; then
         rm /etc/ssl/certs/website.crt
     fi
@@ -42,12 +35,12 @@ if [[ $USE_HTTPS == "true" ]]; then
     ln -s /data/certs/website.crt /etc/ssl/certs/website.crt
     ln -s /data/certs/website.key /etc/ssl/certs/website.key
 
-    echo "Enabling HTTPS for nginx ..."
+    # Enable HTTPS
     if [[ ! -f /etc/nginx/conf.d/default-ssl.conf ]]; then
         envsubst "$(printf '${%s} ' $(bash -c "compgen -A variable"))" </etc/nginx/conf.d/default-ssl.template >/etc/nginx/conf.d/default-ssl.conf
     fi
 else
-    echo "Enabling HTTP for nginx ..."
+    # Enable HTTP
     envsubst "$(printf '${%s} ' $(bash -c "compgen -A variable"))" </etc/nginx/conf.d/default.template >/etc/nginx/conf.d/default.conf
 fi
 

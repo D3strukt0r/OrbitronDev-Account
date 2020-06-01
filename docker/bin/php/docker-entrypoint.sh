@@ -2,12 +2,6 @@
 
 set -eu
 
-# If the user does not pass php-fpm, call whatever he wants to use (e. g. /bin/bash)
-if [[ $1 != "php-fpm" ]]; then
-    exec "$@"
-    exit
-fi
-
 # Setup php
 if [[ "$APP_ENV" == "dev" ]]; then
     cp "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
@@ -15,6 +9,7 @@ else
     cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 fi
 
+# Add recommended options
 {
     echo "opcache.revalidate_freq=0"
     if [[ "$APP_ENV" != "dev" ]]; then
@@ -27,17 +22,22 @@ fi
 } >"$PHP_INI_DIR/conf.d/opcache.ini"
 {
     echo "max_execution_time = 120"
-    echo "memory_limit = 256M"
 } >"$PHP_INI_DIR/conf.d/misc.ini"
 
 # Add custom upload limit
-if [[ -n "${UPLOAD_LIMIT}" ]]; then
-	echo "Adding the custom upload limit of $UPLOAD_LIMIT."
-    {
-        echo "upload_max_filesize = $UPLOAD_LIMIT"
-        # TODO: "post_max_size" should be greater than "upload_max_filesize".
-        echo "post_max_size = $UPLOAD_LIMIT"
-    } >"$PHP_INI_DIR/conf.d/upload-limit.ini"
+UPLOAD_LIMIT=${UPLOAD_LIMIT:="10M"}
+{
+	# TODO: Maximum Upload size is defined by the smallest of the 3 following variables
+	echo "memory_limit = 256M"
+	echo "upload_max_filesize = $UPLOAD_LIMIT"
+	# TODO: "post_max_size" should be greater than "upload_max_filesize".
+	echo "post_max_size = $UPLOAD_LIMIT"
+} >"$PHP_INI_DIR/conf.d/upload-limit.ini"
+
+# Link storage/
+if [[ ! -d /data ]]; then
+	mkdir /data
 fi
+ln -sf /data ./var/data
 
 exec "$@"

@@ -41,15 +41,8 @@ apk add --no-cache git
 wget https://get.symfony.com/cli/installer -O - | bash
 mv /root/.symfony/bin/symfony /usr/local/bin/symfony
 
-# Get all vendors
-cd /build/src
-if [[ "$DEV" == "true" ]]; then
-    composer install --prefer-dist --no-interaction --no-plugins --no-scripts --no-suggest --optimize-autoloader
-else
-    composer install --prefer-dist --no-dev --no-interaction --no-plugins --no-scripts --no-suggest --optimize-autoloader
-fi
-
 # Copy the final app to /app
+cd /build/src
 mkdir /app
 mv ./bin /app
 mv ./config /app
@@ -57,10 +50,24 @@ mv ./public /app
 mv ./src /app
 mv ./templates /app
 mv ./translations /app
-mv ./vendor /app
+if [[ -d ./vendor ]]; then
+	mv ./vendor /app
+fi
+mv ./.env /app
+mv ./composer.json /app
+if [[ -f ./composer.lock ]]; then
+	mv ./composer.lock /app
+fi
+
+# Get all vendors
+cd /app
+if [[ "$DEV" == "true" ]]; then
+    composer install --prefer-dist --no-interaction --no-plugins --no-scripts --no-suggest --optimize-autoloader
+else
+    composer install --prefer-dist --no-dev --no-interaction --no-plugins --no-scripts --no-suggest --optimize-autoloader
+fi
 
 # Fix permission
-cd /app
 chown www-data:www-data -R .
 find . -type d -exec chmod 755 {} \;
 find . -type f -exec chmod 644 {} \;
