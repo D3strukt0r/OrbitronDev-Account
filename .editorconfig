@@ -51,6 +51,10 @@ indent_size = 4
 indent_style = space
 indent_size = 2
 
+[.scrutinizer.yml]
+indent_style = space
+indent_size = 2
+
 [composer.json]
 indent_style = space
 indent_size = 4

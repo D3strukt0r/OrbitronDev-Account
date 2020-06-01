@@ -8,9 +8,9 @@ fi
 
 REPO_PHP=generation-2-account-api-php
 if [[ "$TRAVIS_BRANCH" == "develop" ]]; then
-	docker build --target php --build-arg DEV="true" -t "$REPO_PHP" .
+	docker build --target php --build-arg "ENV=dev" -t "$REPO_PHP" .
 else
-	docker build --target php -t "$REPO_PHP" .
+	docker build --target php --build-arg "ENV=prod" -t "$REPO_PHP" .
 fi
 
 REPO_NGINX=generation-2-account-api-nginx
