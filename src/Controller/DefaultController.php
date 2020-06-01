@@ -26,6 +26,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -208,13 +209,14 @@ class DefaultController extends AbstractController
     /**
      * @Route("/p/{page}", name="panel")
      *
-     * @param KernelInterface $kernel  The kernel
-     * @param Request         $request The request
-     * @param string          $page    The page
+     * @param KernelInterface       $kernel       The kernel
+     * @param Request               $request      The request
+     * @param TokenStorageInterface $tokenStorage The token storage
+     * @param string                $page         The page
      *
      * @return Response
      */
-    public function panel(KernelInterface $kernel, Request $request, string $page)
+    public function panel(KernelInterface $kernel, Request $request, TokenStorageInterface $tokenStorage, string $page)
     {
         //////////// TEST IF USER IS LOGGED IN ////////////
         /** @var User|null $user */
@@ -224,7 +226,7 @@ class DefaultController extends AbstractController
         }
         //////////// END TEST IF USER IS LOGGED IN ////////////
 
-        AdminControlPanel::loadLibs($kernel->getProjectDir(), $this->container);
+        AdminControlPanel::loadLibs($kernel->getProjectDir(), $tokenStorage);
 
         $navigationLinks = AdminControlPanel::getTree();
 

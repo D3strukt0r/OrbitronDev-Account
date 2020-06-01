@@ -8,16 +8,16 @@ use App\Entity\User;
 use App\Form\CreateDevAccount;
 use App\Form\CreateDevApp;
 use App\Service\TokenGenerator;
-use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class DeveloperController extends AbstractController
 {
-    public static function __setupNavigation(ContainerInterface $container)
+    public static function __setupNavigation(TokenStorageInterface $tokenStorage)
     {
         /** @var User $user */
-        $user = $container->get('security.token_storage')->getToken()->getUser();
+        $user = $tokenStorage->getToken()->getUser();
 
         return [
             [

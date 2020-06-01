@@ -65,6 +65,7 @@ chown www-data:www-data -R .
 find . -type d -exec chmod 755 {} \;
 find . -type f -exec chmod 644 {} \;
 chmod 755 bin/*
+./bin/console cache:warmup
 
 # Cleanup
 rm -r /build

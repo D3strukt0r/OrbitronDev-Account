@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use Psr\Container\ContainerInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class AdminControlPanel
 {
@@ -61,7 +61,7 @@ class AdminControlPanel
         return $fnBuilder($grouped['root']);
     }
 
-    public static function loadLibs(string $rootDir, ContainerInterface $container = null)
+    public static function loadLibs(string $rootDir, TokenStorageInterface $tokenStorage = null)
     {
         $libraryDir = $rootDir.'/src/Controller/Panel';
 
@@ -78,7 +78,7 @@ class AdminControlPanel
         ksort(self::$list);
 
         foreach (self::$list as $class) {
-            $subTree = call_user_func($class.'::__setupNavigation', $container);
+            $subTree = call_user_func($class.'::__setupNavigation', $tokenStorage);
 
             $isMulti = function ($arr) {
                 foreach ($arr as $v) {

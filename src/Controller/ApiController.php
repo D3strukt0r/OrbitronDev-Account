@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Service\AdminControlPanel;
-use Doctrine\Common\Persistence\ObjectManager;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\Point;
@@ -12,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class ApiController extends AbstractController
 {
@@ -55,7 +55,7 @@ class ApiController extends AbstractController
         exit;
     }
 
-    public function updateProfilePic(ObjectManager $em, Request $request)
+    public function updateProfilePic(KernelInterface $kernel, Request $request)
     {
         // Method has to be post (So that an image can be sent)
         if ('POST' !== $request->getMethod()) {
@@ -63,8 +63,9 @@ class ApiController extends AbstractController
         }
 
         // Find user
+        $entityManager = $this->getDoctrine()->getManager();
         /** @var User|null $user */
-        $user = $em->find(User::class, $request->query->getInt('user_id'));
+        $user = $entityManager->getRepository(User::class)->find($request->query->getInt('user_id'));
         if (null === $user) {
             throw $this->createNotFoundException('User not found');
         }
@@ -85,7 +86,7 @@ class ApiController extends AbstractController
         $fileName = md5(uniqid()).'.'.$file->guessExtension();
 
         // Prepare the directory
-        $directory = $this->get('kernel')->getProjectDir().'/var/data/profile_pictures';
+        $directory = $kernel->getProjectDir().'/var/data/profile_pictures';
         if (!file_exists($directory)) {
             mkdir($directory, 0777, true);
         }
@@ -104,7 +105,7 @@ class ApiController extends AbstractController
 
         // Update db with new picture
         $user->getProfile()->setPicture($fileName);
-        $em->flush();
+        $entityManager->flush();
 
         return $this->json(['success' => true]);
     }
@@ -125,11 +126,11 @@ class ApiController extends AbstractController
         return $this->json($progress);
     }
 
-    public function panelPages(Request $request)
+    public function panelPages(Request $request, TokenStorageInterface $tokenStorage)
     {
         $page = $request->query->get('p');
 
-        AdminControlPanel::loadLibs($this->get('kernel')->getProjectDir(), $this->container);
+        AdminControlPanel::loadLibs($this->get('kernel')->getProjectDir(), $tokenStorage);
 
         $view = 'AdminDefault::notFound';
 
