@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="PROJECT" libraries="{animate.css, appear, bootstrap, bootstrap-select, chartist, cookieconsent, flatpickr, font-awesome, hamburgers, html5shiv, jquery, jquery-migrate, jquery.maskedinput, js-cookie, malihu-custom-scrollbar-plugin, noty, pace-js, popper.js, respond.js, simple-line-icons, smoothscroll-for-websites, sweetalert, table-edits}" />
+    <file url="PROJECT" libraries="{animate.css, appear, bootstrap, bootstrap-select, chartist, cookieconsent, cropperjs, flatpickr, font-awesome, hamburgers, html5shiv, jquery, jquery-migrate, jquery.maskedinput, js-cookie, malihu-custom-scrollbar-plugin, noty, pace-js, popper.js, respond.js, simple-line-icons, smoothscroll-for-websites, sweetalert, table-edits}" />
   </component>
 </project>

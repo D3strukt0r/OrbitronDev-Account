@@ -149,5 +149,6 @@
     <orderEntry type="library" name="js-cookie" level="application" />
     <orderEntry type="library" name="jquery-migrate" level="application" />
     <orderEntry type="library" name="table-edits" level="application" />
+    <orderEntry type="library" name="cropperjs" level="application" />
   </component>
 </module>

@@ -13,6 +13,7 @@ use App\Form\ResetPasswordType;
 use App\Service\AccountHelper;
 use App\Service\AdminControlPanel;
 use App\Service\TokenGenerator;
+use DateTime;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -130,8 +131,8 @@ class DefaultController extends AbstractController
                 ->setPassword($formData['password'])
                 ->setEmail($formData['email'])
                 ->setEmailVerified(false)
-                ->setCreatedOn(new \DateTime())
-                ->setLastOnlineAt(new \DateTime())
+                ->setCreatedOn(new DateTime())
+                ->setLastOnlineAt(new DateTime())
                 ->setCreatedIp($request->getClientIp())
                 ->setLastIp($request->getClientIp())
                 ->setDeveloperStatus(false)
@@ -149,8 +150,8 @@ class DefaultController extends AbstractController
             $userSubscription = (new UserSubscription())
                 ->setUser($user)
                 ->setSubscription($defaultSubscription)
-                ->setActivatedAt(new \DateTime())
-                ->setExpiresAt(new \DateTime())
+                ->setActivatedAt(new DateTime())
+                ->setExpiresAt(new DateTime())
             ;
             $user->setSubscription($userSubscription);
 
@@ -160,7 +161,7 @@ class DefaultController extends AbstractController
 
             // Send verification email
             $tokenGenerator = new TokenGenerator($entityManager);
-            $token = $tokenGenerator->generateToken('confirm_email', (new \DateTime())->modify('+1 day'));
+            $token = $tokenGenerator->generateToken('confirm_email', (new DateTime())->modify('+1 day'));
 
             $message = (new Email())
                 ->from(new Address('no-reply-account@orbitrondev.org', 'OrbitronDev'))
@@ -364,7 +365,7 @@ class DefaultController extends AbstractController
                 $tokenGenerator = new TokenGenerator($entityManager);
                 $token = $tokenGenerator->generateToken(
                     'reset_password',
-                    (new \DateTime())->modify('+1 day'),
+                    (new DateTime())->modify('+1 day'),
                     ['user_id' => $user->getId()]
                 );
 
@@ -447,7 +448,7 @@ class DefaultController extends AbstractController
         $sendEmailForm->handleRequest($request);
         if ($sendEmailForm->isSubmitted()) {
             $tokenGenerator = new TokenGenerator($entityManager);
-            $token = $tokenGenerator->generateToken('confirm_email', (new \DateTime())->modify('+1 day'));
+            $token = $tokenGenerator->generateToken('confirm_email', (new DateTime())->modify('+1 day'));
 
             $message = (new Email())
                 ->from(new Address('no-reply-account@orbitrondev.org', 'OrbitronDev'))

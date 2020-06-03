@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\OAuthClient;
 use App\Entity\OAuthRefreshToken;
 use App\Entity\User;
+use DateTime;
 use Doctrine\ORM\EntityRepository;
 use OAuth2\Storage\RefreshTokenInterface;
 
@@ -34,7 +35,7 @@ class OAuthRefreshTokenRepository extends EntityRepository implements RefreshTok
                 'refresh_token' => $refreshToken,
                 'client' => $client,
                 'user' => $user,
-                'expires' => (new \DateTime())->setTimestamp($expires),
+                'expires' => (new DateTime())->setTimestamp($expires),
                 'scope' => $scope,
             ]
         );

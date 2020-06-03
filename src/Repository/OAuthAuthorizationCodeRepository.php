@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\OAuthAuthorizationCode;
 use App\Entity\OAuthClient;
 use App\Entity\User;
+use DateTime;
 use Doctrine\ORM\EntityRepository;
 use OAuth2\Storage\AuthorizationCodeInterface;
 
@@ -35,7 +36,7 @@ class OAuthAuthorizationCodeRepository extends EntityRepository implements Autho
                 'client' => $client,
                 'user' => $user,
                 'redirect_uri' => $redirectUri,
-                'expires' => (new \DateTime())->setTimestamp($expires),
+                'expires' => (new DateTime())->setTimestamp($expires),
                 'scope' => $scope,
             ]
         );

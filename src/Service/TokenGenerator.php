@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Token;
 use DateTime;
 use Doctrine\Persistence\ObjectManager;
+use UnexpectedValueException;
 
 class TokenGenerator
 {
@@ -107,7 +108,7 @@ class TokenGenerator
             if (false !== $bytes && true === $strong) {
                 return $bytes;
             }
-            throw new \UnexpectedValueException('OpenSSL did not produce a secure random number.');
+            throw new UnexpectedValueException('OpenSSL did not produce a secure random number.');
         }
 
         return hash('sha256', uniqid(mt_rand(), true));
@@ -182,7 +183,7 @@ class TokenGenerator
             if (false !== $bytes && true === $strong) {
                 return $bytes;
             }
-            throw new \UnexpectedValueException('OpenSSL did not produce a secure random number.');
+            throw new UnexpectedValueException('OpenSSL did not produce a secure random number.');
         }
 
         return hash('sha256', uniqid(mt_rand(), true), true);

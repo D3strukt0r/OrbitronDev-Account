@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\OAuthAccessToken;
 use App\Entity\OAuthClient;
 use App\Entity\User;
+use DateTime;
 use Doctrine\ORM\EntityRepository;
 use OAuth2\Storage\AccessTokenInterface;
 
@@ -34,7 +35,7 @@ class OAuthAccessTokenRepository extends EntityRepository implements AccessToken
                 'token' => $oauthToken,
                 'client' => $client,
                 'user' => $user,
-                'expires' => (new \DateTime())->setTimestamp($expires),
+                'expires' => (new DateTime())->setTimestamp($expires),
                 'scope' => $scope,
             ]
         );

@@ -20,12 +20,6 @@ services:
                             # fetching services directly from the container via $container->get() won't work.
                             # The best practice is to be explicit about your dependencies anyway.
 
-    # Uncomment any lines below to activate that Twig extension
-    #Twig\Extension\ArrayExtension: ~
-    #Twig\Extension\DateExtension: ~
-    #Twig\Extension\IntlExtension: ~
-    #Twig\Extension\TextExtension: ~
-
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
