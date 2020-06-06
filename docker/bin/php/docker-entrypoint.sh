@@ -15,7 +15,7 @@ fi
     if [[ "$APP_ENV" != "dev" ]]; then
         echo "opcache.validate_timestamps = 0"
     fi
-    echo "opcache.max_accelerated_files = $(find /app -type f -print | grep -c php)"
+    echo "opcache.max_accelerated_files = $(find -L /app -type f -print | grep -c php)"
     echo "opcache.memory_consumption = 192"
     echo "opcache.interned_strings_buffer = 16"
     echo "opcache.fast_shutdown = 1"
