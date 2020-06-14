@@ -48,7 +48,8 @@ Create ONE account where all the information is stored, only ONCE.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing
+purposes. See deployment for notes on how to deploy the project on a live system.
 
 ### Prerequisites
 
@@ -91,6 +92,7 @@ MAILER_URL=... (To send emails)
 
 ## Built With
 
+* [PHP](https://www.php.net) - Programming Language
 * [Composer](https://getcomposer.org) - PHP Package manager
 * [Symfony](https://symfony.com) - PHP Framework
 * [SwiftMailer](https://swiftmailer.symfony.com) - PHP Mailer
@@ -99,6 +101,8 @@ MAILER_URL=... (To send emails)
 * [ReCaptcha](https://www.google.com/recaptcha) - Captcha service from Google
 * [Bootstrap](https://getbootstrap.com) - Theme used in this service
 * [Unify](https://wrapbootstrap.com/theme/unify-responsive-website-template-WB0412697) - Theme used in this service
+* [Travis CI](https://travis-ci.com) - Automatic CI (Testing) / CD (Deployment)
+* [Docker](https://www.docker.com) - Building a Container for the Server
 
 ## Contributing
 
