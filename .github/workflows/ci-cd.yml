@@ -78,12 +78,12 @@ jobs:
       - name: Install PhpUnit
         run: ./vendor/bin/simple-phpunit install
         env:
-          - SYMFONY_PHPUNIT_DIR: "$HOME/symfony-bridge/.phpunit"
+          SYMFONY_PHPUNIT_DIR: "$HOME/symfony-bridge/.phpunit"
 
       - name: Run tests
         run: ./bin/phpunit
         env:
-          - SYMFONY_PHPUNIT_DIR: "$HOME/symfony-bridge/.phpunit"
+          SYMFONY_PHPUNIT_DIR: "$HOME/symfony-bridge/.phpunit"
 
       - name: Check if source code follows the Symfony Code Syntax rules
         run: ./vendor/bin/php-cs-fixer fix --diff --dry-run -v
