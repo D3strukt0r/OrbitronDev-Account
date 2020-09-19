@@ -1,6 +1,6 @@
 {
-    "name": "generation-2/account",
-    "description": "Account service of the Generation 2 software bundle",
+    "name": "d3strukt0r/openid-api-old",
+    "description": "A central user management",
     "type": "project",
     "license": "GPL-3.0-or-later",
     "authors": [
@@ -13,9 +13,9 @@
     ],
     "support": {
         "email": "manuele.vaccari@gmail.com",
-        "source": "https://github.com/D3strukt0r/generation-2-account-api",
-        "issues": "https://github.com/D3strukt0r/generation-2-account-api/issues",
-        "wiki": "https://github.com/D3strukt0r/generation-2-account-api/wiki"
+        "source": "https://github.com/D3strukt0r/openid-api-old",
+        "issues": "https://github.com/D3strukt0r/openid-api-old/issues",
+        "wiki": "https://github.com/D3strukt0r/openid-api-old/wiki"
     },
     "require": {
         "php": "^7.2.5",
@@ -59,6 +59,7 @@
     "require-dev": {
         "dama/doctrine-test-bundle": "^6.3",
         "friendsofphp/php-cs-fixer": "^2.16",
+        "squizlabs/php_codesniffer": "^3.5",
         "symfony/debug-pack": "*",
         "symfony/maker-bundle": "^1.0",
         "symfony/profiler-pack": "*",

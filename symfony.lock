@@ -2,6 +2,9 @@
     "bshaffer/oauth2-server-php": {
         "version": "v1.11.1"
     },
+    "composer/package-versions-deprecated": {
+        "version": "1.11.99"
+    },
     "composer/semver": {
         "version": "1.5.1"
     },
@@ -202,6 +205,18 @@
         },
         "files": [
             "./config/packages/security_checker.yaml"
+        ]
+    },
+    "squizlabs/php_codesniffer": {
+        "version": "3.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "3.0",
+            "ref": "0dc9cceda799fd3a08b96987e176a261028a3709"
+        },
+        "files": [
+            "./phpcs.xml.dist"
         ]
     },
     "symfony/apache-pack": {
