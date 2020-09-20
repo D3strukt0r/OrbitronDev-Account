@@ -118,7 +118,7 @@ class AdminControlPanel
     /**
      * TODO: This is a new function, integrate it in HTML.
      *
-     * @param string $page_name
+     * @param string $page_name The name of the page
      *
      * @return string
      */
