@@ -4,18 +4,18 @@ Create ONE account where all the information is stored, only ONCE.
 
 Project
 
-[![License](https://img.shields.io/github/license/D3strukt0r/openid-api-old)][license]
-[![Docker Stars](https://img.shields.io/docker/stars/d3strukt0r/openid-api-old-nginx.svg?label=docker%20stars%20(nginx))][docker-nginx]
-[![Docker Pulls](https://img.shields.io/docker/pulls/d3strukt0r/openid-api-old-nginx.svg?label=docker%20pulls%20(nginx))][docker-nginx]
-[![Docker Stars](https://img.shields.io/docker/stars/d3strukt0r/openid-api-old-php.svg?label=docker%20stars%20(php))][docker-php]
-[![Docker Pulls](https://img.shields.io/docker/pulls/d3strukt0r/openid-api-old-php.svg?label=docker%20pulls%20(php))][docker-php]
+[![License](https://img.shields.io/github/license/D3strukt0r/openid)][license]
+[![Docker Stars](https://img.shields.io/docker/stars/d3strukt0r/openid-api-nginx.svg?label=docker%20stars%20(nginx))][docker-nginx]
+[![Docker Pulls](https://img.shields.io/docker/pulls/d3strukt0r/openid-api-nginx.svg?label=docker%20pulls%20(nginx))][docker-nginx]
+[![Docker Stars](https://img.shields.io/docker/stars/d3strukt0r/openid-api-php.svg?label=docker%20stars%20(php))][docker-php]
+[![Docker Pulls](https://img.shields.io/docker/pulls/d3strukt0r/openid-api-php.svg?label=docker%20pulls%20(php))][docker-php]
 
 master-branch (alias stable, latest)
 
-[![GH Action CI/CD](https://github.com/D3strukt0r/openid-api-old/workflows/CI/CD/badge.svg?branch=master)][gh-action]
-[![Coveralls](https://img.shields.io/coveralls/github/D3strukt0r/openid-api-old/master)][coveralls]
-[![Scrutinizer build status](https://img.shields.io/scrutinizer/build/g/D3strukt0r/openid-api-old/master?label=scrutinizer%20build)][scrutinizer]
-[![Scrutinizer code quality](https://img.shields.io/scrutinizer/quality/g/D3strukt0r/openid-api-old/master?label=scrutinizer%20code%20quality)][scrutinizer]
+[![GH Action CI/CD](https://github.com/D3strukt0r/openid/workflows/CI/CD/badge.svg?branch=master)][gh-action]
+[![Coveralls](https://img.shields.io/coveralls/github/D3strukt0r/openid/master)][coveralls]
+[![Scrutinizer build status](https://img.shields.io/scrutinizer/build/g/D3strukt0r/openid/master?label=scrutinizer%20build)][scrutinizer]
+[![Scrutinizer code quality](https://img.shields.io/scrutinizer/quality/g/D3strukt0r/openid/master?label=scrutinizer%20code%20quality)][scrutinizer]
 [![Codacy grade](https://img.shields.io/codacy/grade/6cb0a9563bc9441b937d5246c895a082/master?label=codacy%20code%20quality)][codacy]
 
 <!-- develop-branch (alias nightly) -->
@@ -40,7 +40,7 @@ A step by step series of examples that tell you have to get a development env ru
 Clone the project from github
 
 ```shell
-git clone https://github.com/D3strukt0r/openid-api-old.git
+git clone https://github.com/D3strukt0r/openid.git
 ```
 
 Setup the project with composer
@@ -82,13 +82,13 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/D3strukt0r/openid-api-old/tags).
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/D3strukt0r/openid/tags).
 
 ## Authors
 
 -   **Manuele Vaccari** - [D3strukt0r](https://github.com/D3strukt0r) - _Initial work_
 
-See also the list of [contributors](https://github.com/D3strukt0r/openid-api-old/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/D3strukt0r/openid/contributors) who participated in this project.
 
 ## License
 
@@ -100,10 +100,10 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 -   Inspiration
 -   etc
 
-[license]: https://github.com/D3strukt0r/openid-api-old/blob/master/LICENSE.txt
-[docker-nginx]: https://hub.docker.com/repository/docker/d3strukt0r/openid-api-old-nginx
-[docker-php]: https://hub.docker.com/repository/docker/d3strukt0r/openid-api-old-php
-[gh-action]: https://github.com/D3strukt0r/openid-api-old/actions
-[coveralls]: https://coveralls.io/github/D3strukt0r/openid-api-old
-[scrutinizer]: https://scrutinizer-ci.com/g/D3strukt0r/openid-api-old/
-[codacy]: https://app.codacy.com/manual/D3strukt0r/openid-api-old/dashboard
+[license]: https://github.com/D3strukt0r/openid/blob/master/LICENSE.txt
+[docker-nginx]: https://hub.docker.com/repository/docker/d3strukt0r/openid-api-nginx
+[docker-php]: https://hub.docker.com/repository/docker/d3strukt0r/openid-api-php
+[gh-action]: https://github.com/D3strukt0r/openid/actions
+[coveralls]: https://coveralls.io/github/D3strukt0r/openid
+[scrutinizer]: https://scrutinizer-ci.com/g/D3strukt0r/openid/
+[codacy]: https://app.codacy.com/manual/D3strukt0r/openid/dashboard

@@ -1,8 +1,8 @@
 name: CI/CD
 
 env:
-  IMAGE_NAME_PHP: openid-api-old-php
-  IMAGE_NAME_NGINX: openid-api-old-nginx
+  IMAGE_NAME_PHP: openid-api-php
+  IMAGE_NAME_NGINX: openid-api-nginx
 
 on:
   push:

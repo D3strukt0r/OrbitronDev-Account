@@ -1,5 +1,5 @@
 {
-    "name": "d3strukt0r/openid-api-old",
+    "name": "d3strukt0r/openid-api",
     "description": "A central user management",
     "type": "project",
     "license": "GPL-3.0-or-later",
@@ -13,9 +13,9 @@
     ],
     "support": {
         "email": "manuele.vaccari@gmail.com",
-        "source": "https://github.com/D3strukt0r/openid-api-old",
-        "issues": "https://github.com/D3strukt0r/openid-api-old/issues",
-        "wiki": "https://github.com/D3strukt0r/openid-api-old/wiki"
+        "source": "https://github.com/D3strukt0r/openid",
+        "issues": "https://github.com/D3strukt0r/openid/issues",
+        "wiki": "https://github.com/D3strukt0r/openid/wiki"
     },
     "require": {
         "php": "^7.2.5",
