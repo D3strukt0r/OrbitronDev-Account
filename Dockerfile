@@ -13,9 +13,6 @@ FROM php:${PHP_VERSION}-fpm-alpine AS php
 
 WORKDIR /app
 
-# hadolint ignore=DL3022
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
 RUN set -eux; \
 	\
     apk update; \
@@ -75,6 +72,29 @@ RUN set -eux; \
     # Remove building tools for smaller container size
     apk del .build-deps
 
+RUN set -eux; \
+    \
+    # Install composer
+    curl -fsSL -o composer-setup.php https://getcomposer.org/installer; \
+    EXPECTED_CHECKSUM="$(curl -fsSL https://composer.github.io/installer.sig)"; \
+    ACTUAL_CHECKSUM="$(php -r "echo hash_file('sha384', 'composer-setup.php');")"; \
+    \
+    if [ "$EXPECTED_CHECKSUM" != "$ACTUAL_CHECKSUM" ]; then \
+        >&2 echo 'ERROR: Invalid installer checksum'; \
+        rm composer-setup.php; \
+        exit 1; \
+    fi; \
+    \
+    php composer-setup.php --quiet; \
+    rm composer-setup.php; \
+    mv composer.phar /usr/bin/composer; \
+    \
+    # Install Symfony CLI
+    curl -fsSL -o symfony-setup.sh https://get.symfony.com/cli/installer; \
+    chmod +x symfony-setup.sh; \
+    ./symfony-setup.sh --install-dir /usr/local/bin; \
+    rm symfony-setup.sh
+
 COPY . .
 
 RUN set -eux; \
@@ -82,10 +102,6 @@ RUN set -eux; \
     \
     # Set default php configuration
     ln -s "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"; \
-    \
-    # Install Symfony tool
-    wget https://get.symfony.com/cli/installer -O - | bash; \
-    mv /root/.symfony/bin/symfony /usr/local/bin/symfony; \
     \
     # Prevent the reinstallation of vendors at every changes in the source code
     composer install --prefer-dist --no-dev --no-interaction --no-plugins --no-scripts --no-progress --no-suggest --optimize-autoloader; \
@@ -101,7 +117,7 @@ RUN set -eux; \
     ./bin/console cache:warmup --env="prod"
 
 # https://github.com/renatomefi/php-fpm-healthcheck
-RUN wget -O /usr/local/bin/php-fpm-healthcheck https://raw.githubusercontent.com/renatomefi/php-fpm-healthcheck/master/php-fpm-healthcheck; \
+RUN curl -fsSL -o /usr/local/bin/php-fpm-healthcheck https://raw.githubusercontent.com/renatomefi/php-fpm-healthcheck/master/php-fpm-healthcheck; \
     chmod +x /usr/local/bin/php-fpm-healthcheck; \
     echo 'pm.status_path = /status' >> /usr/local/etc/php-fpm.d/zz-docker.conf
 HEALTHCHECK --interval=10s --timeout=3s --retries=3 CMD ["php-fpm-healthcheck"]

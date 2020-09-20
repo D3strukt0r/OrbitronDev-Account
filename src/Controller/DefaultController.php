@@ -164,7 +164,7 @@ class DefaultController extends AbstractController
             $token = $tokenGenerator->generateToken('confirm_email', (new DateTime())->modify('+1 day'));
 
             $message = (new Email())
-                ->from(new Address('no-reply-account@orbitrondev.org', 'OrbitronDev'))
+                ->from(new Address('no-reply-openid@manuele-vaccari.ch', 'OpenID'))
                 ->to(new Address($formData['email']))
                 ->subject('[Account] Email activation')
                 ->html(
@@ -370,7 +370,7 @@ class DefaultController extends AbstractController
                 );
 
                 $message = (new Email())
-                    ->from(new Address('no-reply-account@orbitrondev.org', 'OrbitronDev'))
+                    ->from(new Address('no-reply-openid@manuele-vaccari.ch', 'OpenID'))
                     ->to(new Address($user->getEmail()))
                     ->subject('[Account] Reset password')
                     ->html(
@@ -451,7 +451,7 @@ class DefaultController extends AbstractController
             $token = $tokenGenerator->generateToken('confirm_email', (new DateTime())->modify('+1 day'));
 
             $message = (new Email())
-                ->from(new Address('no-reply-account@orbitrondev.org', 'OrbitronDev'))
+                ->from(new Address('no-reply-openid@manuele-vaccari.ch', 'OpenID'))
                 ->to(new Address($user->getEmail()))
                 ->subject('[Account] Email activation')
                 ->html(

@@ -89,7 +89,7 @@
                                 <span class="u-check-icon-checkbox-v6 g-absolute-centered--y g-left-0">
                                     <i class="fa g-rounded-2" data-check-icon="&#xf00c"></i>
                                 </span>
-                                {{ register_form.terms.vars.label|trans|replace({'%link%': '<a href="https://www.orbitrondev.org/terms-of-service">', '%/link%': '</a>', '%link2%': '<a href="https://www.orbitrondev.org/privacy-policy">', '%/link2%': '</a>'})|raw }}
+                                {{ register_form.terms.vars.label|trans|replace({'%link%': '<a href="' ~ path('tos') ~ '">', '%/link%': '</a>', '%link2%': '<a href="' ~ path('privacy') ~ '">', '%/link2%': '</a>'})|raw }}
                             </label>
                             <div></div>
                             <small class="form-control-feedback">{{ form_errors(register_form.terms) }}</small>

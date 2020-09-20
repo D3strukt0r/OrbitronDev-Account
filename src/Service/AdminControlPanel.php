@@ -122,7 +122,7 @@ class AdminControlPanel
      *
      * @return string
      */
-    public static function changePage($page_name)
+    public static function changePage(string $page_name)
     {
         // Choose between 'href', 'hash', 'url' or 'url_js'
         $page_changer = 'url_js';
@@ -134,7 +134,7 @@ class AdminControlPanel
         } elseif ('hash' === $page_changer) {
             return 'href="#/' . $page_name . '"';
         } elseif ('url' === $page_changer) {
-            return 'href="https://account.orbitrondev.org/panel/' . $page_name . '"';
+            return 'href="/p/' . $page_name . '"';
         }
 
         return '';

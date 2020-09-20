@@ -1,6 +1,6 @@
 general:
-    title: 'OrbitronDev Account'
-    copyright: '© 2013-2018 OrbitronDev. All rights reserved.'
+    title: 'OpenID'
+    copyright: '© 2013-2018 Manuele Vaccari. All rights reserved.'
 login:
     title: 'Login'
     form:
