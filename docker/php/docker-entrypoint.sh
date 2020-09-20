@@ -184,38 +184,44 @@ if [ "$1" = 'php-fpm' ] || [ "$1" = 'php' ]; then
 
     # ----------------------------------------
 
-#    entrypoint_note 'Waiting for db to be ready'
-#
-#    if [ -z "$DB_PORT" ]; then
-#        if [ "$DB_DRIVER" = "mysql" ]; then
-#            DB_PORT=3306
-#        elif [ "$DB_DRIVER" = "pgsql" ]; then
-#            DB_PORT=5432
-#        fi
-#    fi
-#
-#    ATTEMPTS_LEFT_TO_REACH_DATABASE=60
-#    if [ "$DB_DRIVER" = "mysql" ]; then
-#        until [ $ATTEMPTS_LEFT_TO_REACH_DATABASE = 0 ] || mysql --host="$DB_SERVER" --port="$DB_PORT" --user="$DB_USER" --password="$DB_PASSWORD" -e "SELECT 1" >/dev/null 2>&1; do
-#            sleep 1
-#            ATTEMPTS_LEFT_TO_REACH_DATABASE=$((ATTEMPTS_LEFT_TO_REACH_DATABASE - 1))
-#            entrypoint_warn "Still waiting for db to be ready... Or maybe the db is not reachable. $ATTEMPTS_LEFT_TO_REACH_DATABASE attempts left"
-#        done
-#    elif [ "$DB_DRIVER" = "pgsql" ]; then
-#        until [ $ATTEMPTS_LEFT_TO_REACH_DATABASE = 0 ] || pg_isready --host="$DB_SERVER" --port="$DB_PORT" --username="$DB_USER" --dbname="$DB_DATABASE" >/dev/null 2>&1; do
-#            sleep 1
-#            ATTEMPTS_LEFT_TO_REACH_DATABASE=$((ATTEMPTS_LEFT_TO_REACH_DATABASE - 1))
-#            entrypoint_warn "Still waiting for db to be ready... Or maybe the db is not reachable. $ATTEMPTS_LEFT_TO_REACH_DATABASE attempts left"
-#        done
-#    else
-#        entrypoint_error 'Database not supported! Use either MySQL or PostgreSQL'
-#    fi
-#
-#    if [ $ATTEMPTS_LEFT_TO_REACH_DATABASE = 0 ]; then
-#        entrypoint_error 'The db is not up or not reachable'
-#    else
-#        entrypoint_note 'The db is now ready and reachable'
-#    fi
+    entrypoint_note 'Waiting for db to be ready'
+
+    if [ -z "${DATABASE_URL}" ]; then
+        entrypoint_error "DATABASE_URL has to be set"
+    fi
+
+    # https://unix.stackexchange.com/questions/83926/how-to-download-a-file-using-just-bash-and-nothing-else-no-curl-wget-perl-et
+    # shellcheck disable=SC2034
+    read -r protocol server path <<<"${DATABASE_URL//// }"
+    read -r user server <<<"${server//@/ }"
+    DB_DRIVER=${protocol//:/} # Remove the : at the end
+    DB_HOST=${server//:*}
+    DB_PORT=${server//*:}
+    DB_USER=${user//:*}
+    DB_PASSWORD=${user//*:}
+
+    if [[ x"${HOST}" == x"${PORT}" ]]; then
+        if [ "$DB_DRIVER" = "mysql" ]; then
+            DB_PORT=3306
+        fi
+    fi
+
+    ATTEMPTS_LEFT_TO_REACH_DATABASE=60
+    if [ "$DB_DRIVER" = "mysql" ]; then
+        until [ $ATTEMPTS_LEFT_TO_REACH_DATABASE = 0 ] || mysql --host="$DB_HOST" --port="$DB_PORT" --user="$DB_USER" --password="$DB_PASSWORD" -e "SELECT 1" >/dev/null 2>&1; do
+            sleep 1
+            ATTEMPTS_LEFT_TO_REACH_DATABASE=$((ATTEMPTS_LEFT_TO_REACH_DATABASE - 1))
+            entrypoint_warn "Still waiting for db to be ready... Or maybe the db is not reachable. $ATTEMPTS_LEFT_TO_REACH_DATABASE attempts left"
+        done
+    else
+        entrypoint_error 'Database not supported! Use MySQL'
+    fi
+
+    if [ $ATTEMPTS_LEFT_TO_REACH_DATABASE = 0 ]; then
+        entrypoint_error 'The db is not up or not reachable'
+    else
+        entrypoint_note 'The db is now ready and reachable'
+    fi
 
     # ----------------------------------------
 

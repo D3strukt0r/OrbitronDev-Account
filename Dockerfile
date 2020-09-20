@@ -13,6 +13,7 @@ FROM php:${PHP_VERSION}-fpm-alpine AS php
 
 WORKDIR /app
 
+# hadolint ignore=DL3018
 RUN set -eux; \
 	\
     apk update; \
