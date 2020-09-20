@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/openid-api-old.iml" filepath="$PROJECT_DIR$/.idea/openid-api-old.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/openid.iml" filepath="$PROJECT_DIR$/.idea/openid.iml" />
     </modules>
   </component>
 </project>
