@@ -40,7 +40,7 @@ A step by step series of examples that tell you have to get a development env ru
 Clone the project from github
 
 ```shell
-git clone https://github.com/D3strukt0r/service-account
+git clone https://github.com/D3strukt0r/openid-api-old.git
 ```
 
 Setup the project with composer
