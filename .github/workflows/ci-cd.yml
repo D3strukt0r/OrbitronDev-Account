@@ -75,15 +75,14 @@ jobs:
       - name: Install dependencies
         run: COMPOSER_MEMORY_LIMIT=-1 composer install --prefer-dist --no-interaction --no-plugins --no-scripts --no-progress --no-suggest
 
+      - name: Set PhpUnit path
+        run: echo "::set-env name=SYMFONY_PHPUNIT_DIR::$HOME/symfony-bridge/.phpunit"
+
       - name: Install PhpUnit
         run: ./vendor/bin/simple-phpunit install
-        env:
-          SYMFONY_PHPUNIT_DIR: "$HOME/symfony-bridge/.phpunit"
 
       - name: Run tests
         run: ./bin/phpunit
-        env:
-          SYMFONY_PHPUNIT_DIR: "$HOME/symfony-bridge/.phpunit"
 
       - name: Check if source code follows the PSR-12 Syntax rules
         run: ./vendor/bin/phpcs
