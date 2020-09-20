@@ -60,7 +60,8 @@ class OAuthController extends AbstractController
                 'access_token' => $accessTokenStorage,
                 'authorization_code' => $authorizationCodeStorage,
                 'refresh_token' => $refreshTokenStorage,
-            ], [
+            ],
+            [
                 'refresh_token_lifetime' => 2419200,
             ]
         );
@@ -169,8 +170,13 @@ class OAuthController extends AbstractController
         $is_authorized = $request->request->has('authorized');
         $this->oauthServer->handleAuthorizeRequest($requestOAuth, $responseOAuth, $is_authorized, $user->getId());
         // if ($is_authorized) {
-        //     // this is only here so that you get to see your code in the cURL request. Otherwise, we'd redirect back to the client
-        //     $code = substr($responseOAuth->getHttpHeader('Location'), strpos($responseOAuth->getHttpHeader('Location'), 'code=') + 5, 40);
+        //     // this is only here so that you get to see your code in the cURL request.
+        //     // Otherwise, we'd redirect back to the client
+        //     $code = substr(
+        //         $responseOAuth->getHttpHeader('Location'),
+        //         strpos($responseOAuth->getHttpHeader('Location'), 'code=') + 5,
+        //         40
+        //     );
         //     exit("SUCCESS! Authorization Code: $code");
         // }
         $responseOAuth->send();
@@ -213,7 +219,8 @@ class OAuthController extends AbstractController
         // Handle a request to a resource and authenticate the access token
         $scopeRequired = $request->query->has('scope') ? $request->query->get('scope') : null;
         if (!$this->oauthServer->verifyResourceRequest($requestOAuth, $responseOAuth, $scopeRequired)) {
-            // if the scope required is different from what the token allows, this will send a "401 insufficient_scope" error
+            // If the scope required is different from what the token allows, this will send a "401 insufficient_scope"
+            // error
             $responseOAuth->send();
             exit;
         }
@@ -237,7 +244,7 @@ class OAuthController extends AbstractController
             foreach ($functionProcess as $key => $item) {
                 $functionProcess[$key] = ucfirst($item);
             }
-            $function = 'scope'.implode('', $functionProcess);
+            $function = 'scope' . implode('', $functionProcess);
 
             // Call function
             $data = $this->{$function}($user);

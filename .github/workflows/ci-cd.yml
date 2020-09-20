@@ -85,6 +85,9 @@ jobs:
         env:
           SYMFONY_PHPUNIT_DIR: "$HOME/symfony-bridge/.phpunit"
 
+      - name: Check if source code follows the PSR-12 Syntax rules
+        run: ./vendor/bin/phpcs
+
       - name: Check if source code follows the Symfony Code Syntax rules
         run: ./vendor/bin/php-cs-fixer fix --diff --dry-run -v
 

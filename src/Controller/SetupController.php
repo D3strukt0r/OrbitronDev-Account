@@ -36,15 +36,15 @@ class SetupController extends AbstractController
                 $application->run(new ArrayInput(['command' => 'doctrine:schema:create', '--force']), new NullOutput());
                 $output .= '[ <span style="color:green">OK</span> ] Database updated<br />';
             } catch (\Exception $exception) {
-                $output .= '[<span style="color:red">FAIL</span>] Database updated ('.$exception->getMessage(
-                    ).')<br />';
+                $output .= '[<span style="color:red">FAIL</span>] Database updated (' . $exception->getMessage(
+                ) . ')<br />';
             }
             try {
                 $sessionHandlerService->createTable();
                 $output .= '[ <span style="color:green">OK</span> ] Session table added<br />';
             } catch (\Exception $exception) {
-                $output .= '[<span style="color:red">FAIL</span>] Session table added ('.$exception->getMessage(
-                    ).')<br />';
+                $output .= '[<span style="color:red">FAIL</span>] Session table added (' . $exception->getMessage(
+                ) . ')<br />';
             }
             try {
                 $subscriptions = [];
@@ -70,8 +70,8 @@ class SetupController extends AbstractController
                 $em->flush();
                 $output .= '[ <span style="color:green">OK</span> ] Default subscription types added<br />';
             } catch (\Exception $exception) {
-                $output .= '[<span style="color:red">FAIL</span>] Default subscription types added ('.$exception->getMessage(
-                    ).')<br />';
+                $output .= '[<span style="color:red">FAIL</span>] Default subscription types added (' .
+                    $exception->getMessage() . ')<br />';
             }
             try {
                 $scope = [];
@@ -136,12 +136,12 @@ class SetupController extends AbstractController
                 $em->flush();
                 $output .= '[ <span style="color:green">OK</span> ] Default OAuth2 scopes added<br />';
             } catch (\Exception $exception) {
-                $output .= '[<span style="color:red">FAIL</span>] Default OAuth2 scopes added ('.$exception->getMessage(
-                    ).')<br />';
+                $output .= '[<span style="color:red">FAIL</span>] Default OAuth2 scopes added (' .
+                    $exception->getMessage() . ')<br />';
             }
 
             return new Response(
-                '<body style="background-color: black;color: white;"><pre>'.$output.'</pre></body>'
+                '<body style="background-color: black;color: white;"><pre>' . $output . '</pre></body>'
             );
         }
         throw $this->createNotFoundException('The given key is wrong');

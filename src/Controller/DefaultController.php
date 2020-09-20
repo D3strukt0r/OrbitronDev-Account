@@ -244,13 +244,13 @@ class DefaultController extends AbstractController
         }
 
         if (null !== $key) {
-            if (is_callable('\\App\\Controller\\Panel\\'.$list[$key]['view'])) {
+            if (is_callable('\\App\\Controller\\Panel\\' . $list[$key]['view'])) {
                 $view = $list[$key]['view'];
             }
         }
 
         return $this->forward(
-            'App\\Controller\\Panel\\'.$view,
+            'App\\Controller\\Panel\\' . $view,
             [
                 'navigation' => $navigationLinks,
                 'request' => $request,
@@ -277,7 +277,7 @@ class DefaultController extends AbstractController
         $function = lcfirst($function);
 
         return $this->forward(
-            'App\\Controller\\ApiController::'.$function,
+            'App\\Controller\\ApiController::' . $function,
             [
                 'request' => $request,
             ]
