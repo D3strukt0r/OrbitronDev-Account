@@ -91,7 +91,7 @@ See also the list of [contributors](https://github.com/D3strukt0r/openid/contrib
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0 - see the [LICENSE.txt](LICENSE.txt) file for details
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE.txt](LICENSE.txt) file for details.
 
 ## Acknowledgments
 

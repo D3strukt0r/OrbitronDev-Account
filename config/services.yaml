@@ -4,73 +4,73 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-  locale: 'en'
-  recaptcha.enabled: true
-  recaptcha.verify_host: false
-  recaptcha.ajax: false
-  google_recaptcha_secret: '%env(GOOGLE_RECAPTCHA_SECRET)%'
-  google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
+    locale: 'en'
+    recaptcha.enabled: true
+    recaptcha.verify_host: false
+    recaptcha.ajax: false
+    google_recaptcha_secret: '%env(GOOGLE_RECAPTCHA_SECRET)%'
+    google_recaptcha_site_key: '%env(GOOGLE_RECAPTCHA_SITE_KEY)%'
 
 services:
-  # default configuration for services in *this* file
-  _defaults:
-    autowire: true      # Automatically injects dependencies in your services.
-    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-    #public: false      # Allows optimizing the container by removing unused services; this also means
-                        # fetching services directly from the container via $container->get() won't work.
-                        # The best practice is to be explicit about your dependencies anyway.
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        #public: false      # Allows optimizing the container by removing unused services; this also means
+                            # fetching services directly from the container via $container->get() won't work.
+                            # The best practice is to be explicit about your dependencies anyway.
 
-  # makes classes in src/ available to be used as services
-  # this creates a service per class whose id is the fully-qualified class name
-  App\:
-    resource: '../src/'
-    exclude:
-      - '../src/DependencyInjection/'
-      - '../src/Entity/'
-      - '../src/Kernel.php'
-      - '../src/Tests/'
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+            - '../src/Tests/'
 
-  # controllers are imported separately to make sure services can be injected
-  # as action arguments even if you don't extend any base controller class
-  App\Controller\:
-    resource: '../src/Controller/'
-    tags: [ 'controller.service_arguments' ]
-  App\Controller\Panel\:
-    resource: '../src/Controller/Panel/'
-    tags: [ 'controller.service_arguments' ]
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller/'
+        tags: [ 'controller.service_arguments' ]
+    App\Controller\Panel\:
+        resource: '../src/Controller/Panel/'
+        tags: [ 'controller.service_arguments' ]
 
-  # add more service definitions when explicit configuration is needed
-  # please note that last definitions always *replace* previous ones
-  recaptcha.form.type:
-    class: App\Form\Type\ReCaptchaType
-    public: true
-    arguments:
-      - '%google_recaptcha_site_key%'
-      - '%recaptcha.enabled%'
-      - '%recaptcha.ajax%'
-    tags:
-      - { name: form.type }
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+    recaptcha.form.type:
+        class: App\Form\Type\ReCaptchaType
+        public: true
+        arguments:
+            - '%google_recaptcha_site_key%'
+            - '%recaptcha.enabled%'
+            - '%recaptcha.ajax%'
+        tags:
+            - { name: form.type }
 
-  recaptcha.validator.true:
-    class: App\Validator\Constraints\ReCaptchaTrueValidator
-    public: true
-    arguments:
-      - '%recaptcha.enabled%'
-      - '%google_recaptcha_secret%'
-      - '@request_stack'
-      - '%recaptcha.verify_host%'
-    tags:
-      - { name: validator.constraint_validator, alias: 'recaptcha.true' }
+    recaptcha.validator.true:
+        class: App\Validator\Constraints\ReCaptchaTrueValidator
+        public: true
+        arguments:
+            - '%recaptcha.enabled%'
+            - '%google_recaptcha_secret%'
+            - '@request_stack'
+            - '%recaptcha.verify_host%'
+        tags:
+            - { name: validator.constraint_validator, alias: 'recaptcha.true' }
 
-  Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
-    arguments:
-      - '%env(DATABASE_URL)%'
+    Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler:
+        arguments:
+            - '%env(DATABASE_URL)%'
 
-      # you can also use PDO configuration, but requires passing two arguments
-      # - 'mysql:dbname=mydatabase; host=myhost; port=myport'
-      # - { db_username: myuser, db_password: mypassword }
+            # you can also use PDO configuration, but requires passing two arguments
+            # - 'mysql:dbname=mydatabase; host=myhost; port=myport'
+            # - { db_username: myuser, db_password: mypassword }
 
-      # If you're using Doctrine & want to re-use that connection, then:
-      # comment-out the above 2 lines and uncomment the line below
-      #- !service { class: PDO, factory: 'database_connection:getWrappedConnection' }
-      #- { lock_mode: 1 }
+            # If you're using Doctrine & want to re-use that connection, then:
+            # comment-out the above 2 lines and uncomment the line below
+            #- !service { class: PDO, factory: 'database_connection:getWrappedConnection' }
+            #- { lock_mode: 1 }
