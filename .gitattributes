@@ -286,15 +286,3 @@ Procfile text
 *.php eol=lf
 
 .github export-ignore
-.idea export-ignore
-docker export-ignore
-tests export-ignore
-.dockerignore export-ignore
-.editorconfig export-ignore
-.php_cs.dist export-ignore
-.scrutinizer.yml export-ignore
-docker-compose.yml export-ignore
-Dockerfile export-ignore
-phpcs.xml.dist export-ignore
-phpunit.xml.dist export-ignore
-Procfile export-ignore

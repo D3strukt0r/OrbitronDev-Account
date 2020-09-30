@@ -18,7 +18,13 @@ master-branch (alias stable, latest)
 [![Scrutinizer code quality](https://img.shields.io/scrutinizer/quality/g/D3strukt0r/openid/master?label=scrutinizer%20code%20quality)][scrutinizer]
 [![Codacy grade](https://img.shields.io/codacy/grade/6cb0a9563bc9441b937d5246c895a082/master?label=codacy%20code%20quality)][codacy]
 
-<!-- develop-branch (alias nightly) -->
+develop-branch (alias nightly)
+
+[![GH Action CI/CD](https://github.com/D3strukt0r/openid/workflows/CI/CD/badge.svg?branch=develop)][gh-action]
+[![Coveralls](https://img.shields.io/coveralls/github/D3strukt0r/openid/develop)][coveralls]
+[![Scrutinizer build status](https://img.shields.io/scrutinizer/build/g/D3strukt0r/openid/develop?label=scrutinizer%20build)][scrutinizer]
+[![Scrutinizer code quality](https://img.shields.io/scrutinizer/quality/g/D3strukt0r/openid/develop?label=scrutinizer%20code%20quality)][scrutinizer]
+[![Codacy grade](https://img.shields.io/codacy/grade/6cb0a9563bc9441b937d5246c895a082/develop?label=codacy%20code%20quality)][codacy]
 
 ## Getting Started
 
@@ -28,9 +34,8 @@ These instructions will get you a copy of the project up and running on your loc
 
 What things you need to install the software and how to install them
 
--   Webserver (PHP 7.2+)
+-   Webserver (PHP 7.4+)
 -   Database (e. g. MySql)
--   Mail server
 
 ### Installing
 
@@ -51,22 +56,15 @@ composer install --no-dev --optimize-autoloader
 Next, rename `.env.dist` to `.env` and change following parameters:
 
 ```shell
-RECAPTCHA_PUBLIC_KEY=... # ReCaptcha
-RECAPTCHA_PRIVATE_KEY=... # ReCaptcha
-
-APP_ENV=prod
-APP_SECRET=...
-
-DATABASE_URL=... # Accessing databse
-MAILER_URL=... # To send emails
+TODO
 ```
 
 ## Built With
 
 -   [PHP](https://www.php.net) - Programming Language
 -   [Composer](https://getcomposer.org) - PHP Package manager
+-   [API Platform](https://api-platform.com/) - Framework
 -   [Symfony](https://symfony.com) - PHP Framework
--   [SwiftMailer](https://swiftmailer.symfony.com) - PHP Mailer
 -   [Doctrine](https://www.doctrine-project.org) - PHP Database accessing
 -   [Twig](https://twig.symfony.com) - PHP Templating service
 -   [ReCaptcha](https://www.google.com/recaptcha) - Captcha service from Google

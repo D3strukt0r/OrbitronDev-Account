@@ -51,3 +51,14 @@ indent_size = 2
 
 [composer.{json,lock}]
 indent_size = 4
+
+## JavaScript specific ##
+[*.js]
+indent_size = 2
+
+## Other specific ##
+[*.feature]
+indent_size = 2
+
+[*.vcl]
+indent_size = 2

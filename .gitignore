@@ -1,13 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/linux,macos,windows,composer,phpstorm,git
-# Edit at https://www.toptal.com/developers/gitignore?templates=linux,macos,windows,composer,phpstorm,git
-
-### Composer ###
-composer.phar
-/vendor/
-
-# Commit your application's lock file https://getcomposer.org/doc/01-basic-usage.md#commit-your-composer-lock-file-to-version-control
-# You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
-# composer.lock
+# Created by https://www.toptal.com/developers/gitignore/api/linux,macos,windows,phpstorm,git
+# Edit at https://www.toptal.com/developers/gitignore?templates=linux,macos,windows,phpstorm,git
 
 ### Git ###
 # Created by git for backups. To disable backups in Git:
@@ -196,31 +188,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.toptal.com/developers/gitignore/api/linux,macos,windows,composer,phpstorm,git
+# End of https://www.toptal.com/developers/gitignore/api/linux,macos,windows,phpstorm,git
 
-###> symfony/framework-bundle ###
-/.env.local
-/.env.local.php
-/.env.*.local
-/config/secrets/prod/prod.decrypt.private.php
-/public/bundles/
-/src/.preload.php
-/var/
-/vendor/
-###< symfony/framework-bundle ###
-
-###> symfony/phpunit-bridge ###
-.phpunit
-.phpunit.result.cache
-/phpunit.xml
-###< symfony/phpunit-bridge ###
-
-###> friendsofphp/php-cs-fixer ###
-/.php_cs
-/.php_cs.cache
-###< friendsofphp/php-cs-fixer ###
-
-###> squizlabs/php_codesniffer ###
-/.phpcs-cache
-/phpcs.xml
-###< squizlabs/php_codesniffer ###
+/.env
+/docker-compose.override.yaml
+/docker-compose.override.yml

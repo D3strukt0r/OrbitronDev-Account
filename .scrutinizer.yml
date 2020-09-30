@@ -8,7 +8,7 @@ build:
           # https://scrutinizer-ci.com/docs/tools/php/php-scrutinizer
           - php-scrutinizer-run
           # https://scrutinizer-ci.com/docs/tools/php/code-sniffer/
-          - phpcs-run --standard=phpcs.xml.dist
+          - phpcs-run --standard=api/phpcs.xml.dist
 #          - command: 'vendor/bin/phpunit --coverage-clover=coverage.clover'
 #            coverage:
 #            file: 'coverage.clover'
@@ -22,11 +22,11 @@ build:
 # https://scrutinizer-ci.com/docs/reviews/excluding_files_from_analysis
 filter:
   excluded_paths:
-    - 'bin/*'
-    - 'tests/*'
-    - 'public/assets/*'
-    - 'public/assets-admin/*'
-    - 'public/vendor/*'
+    - 'api/bin/*'
+    - 'api/tests/*'
+    - 'api/public/assets/*'
+    - 'api/public/assets-admin/*'
+    - 'api/public/vendor/*'
     - '*.min.js'
 
 checks:
